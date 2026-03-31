@@ -109,6 +109,13 @@
         .cart-item-title { font-weight: 600; }
         .cart-item-price { color: #666; font-size: 0.9rem; }
 
+        .login-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
+            z-index: 999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 20px;
+        }
+
         /* Footer */
         footer {
             background-color: var(--text-dark); color: rgba(255,255,255,0.8);
@@ -153,7 +160,19 @@
     </div>
 
     <!-- Konten Utama: Order Online -->
-    <main class="container mb-5">
+    <main class="container mb-5 position-relative">
+        <div class="login-overlay text-center p-4" id="loginProtectOverlay">
+            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
+                <i class="bi bi-lock-fill fs-1 text-kopi"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Akses Terbatas</h3>
+            <p class="text-secondary mb-4" style="max-width: 400px;">Untuk melakukan pemesanan online dan fasilitas, Anda wajib <strong>masuk/login</strong> ke sistem.</p>
+            <a href="login.html" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
+            <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
+                [Mode Pratinjau: Sembunyikan Dialog]
+            </button>
+        </div>
+
         <div class="row g-4">
             
             <!-- Daftar Produk -->
@@ -306,6 +325,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('loginProtectOverlay').style.display = 'none';
+            }
+
             const products = document.querySelectorAll('.product-card');
             const cartItemsContainer = document.getElementById('cart-items');
             const emptyCartMsg = document.getElementById('empty-cart-msg');
