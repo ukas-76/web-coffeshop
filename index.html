@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi Kenangan Kita | Beranda</title>
+
+    <!-- Menggunakan Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font yang lebih modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-coffee: #5c3d2e;
+            --secondary-coffee: #d4b59d;
+            --accent-coffee: #8c6239;
+            --bg-warm: #fdfbf7;
+            --text-dark: #2d2420;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Utilities */
+        .text-kopi { color: var(--primary-coffee) !important; }
+        .bg-kopi { background-color: var(--primary-coffee) !important; color: white; }
+        .bg-kopi-light { background-color: var(--secondary-coffee) !important; color: var(--text-dark); }
+        
+        /* Navbar */
+        .navbar-custom {
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 0 0.5rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-coffee);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--primary-coffee);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 80%;
+        }
+
+        /* Buttons */
+        .btn-kopi {
+            background-color: var(--primary-coffee);
+            color: white;
+            border: 2px solid var(--primary-coffee);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-kopi:hover {
+            background-color: transparent;
+            color: var(--primary-coffee);
+        }
+        
+        .btn-outline-kopi {
+            background-color: transparent;
+            color: var(--primary-coffee);
+            border: 2px solid var(--primary-coffee);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-kopi:hover {
+            background-color: var(--primary-coffee);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero-carousel {
+            height: 85vh;
+            min-height: 600px;
+            border-radius: 0 0 40px 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .hero-item {
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(45, 36, 32, 0.9) 0%, rgba(45, 36, 32, 0.4) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Features */
+        .section-title {
+            font-weight: 800;
+            color: var(--primary-coffee);
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.5px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background-color: var(--secondary-coffee);
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; 
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, white 0%, var(--bg-warm) 100%);
+            border-radius: 24px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(92, 61, 46, 0.08);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background-color: var(--bg-warm);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary-coffee);
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon-wrapper {
+            background-color: var(--primary-coffee);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-coffee) 0%, var(--accent-coffee) 100%);
+            border-radius: 30px;
+            padding: 4rem 2rem;
+            color: white;
+            text-align: center;
+            margin-top: 5rem;
+            box-shadow: 0 20px 40px rgba(92, 61, 46, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: rgba(255,255,255,0.8);
+            margin-top: auto;
+            border-top: 5px solid var(--primary-coffee);
+            padding-top: 4rem !important;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-coffee);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Modern -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-3 fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="index.html">
+                <i class="bi bi-cup-hot-fill fs-3"></i>
+                Kenangan Kita
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-kopi"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Tentang Kami</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Katalog Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservasi.html">Reservasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="order.html">Pesan Online</a>
+                    </li>
+                </ul>
+                <div class="d-flex mt-3 mt-lg-0 gap-3 align-items-center">
+                    <a class="btn btn-outline-kopi px-4 py-2 rounded-pill" href="login.html">Masuk</a>
+                    <a class="btn btn-kopi px-4 py-2 rounded-pill" href="login-admin.html">Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Konten Utama -->
+    <main style="padding-top: 76px;">
+        <!-- Hero Section Bergeser / Carousel -->
+        <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner h-100">
+                <!-- Slide 1 -->
+                <div class="carousel-item active h-100">
+                    <div class="hero-item" style="background-image: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="hero-overlay"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 text-white">
+                                    <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Kopi Asli Nusantara</span>
+                                    <h1 class="display-3 hero-title">Harmoni Rasa dalam<br>Setiap Sesapan</h1>
+                                    <p class="hero-subtitle">Menciptakan ruang hangat untuk setiap cerita. Temukan kopi favoritmu dan buat kenangan manis tak terlupakan bersama kami.</p>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <a href="reservasi.html" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
+                                            <i class="bi bi-calendar-check me-2"></i> Pesan Meja
+                                        </a>
+                                        <a href="menu.html" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-bold">
+                                            Lihat Menu <i class="bi bi-arrow-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item h-100">
+                    <div class="hero-item" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="hero-overlay"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 text-white">
+                                    <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Suasana Nyaman</span>
+                                    <h1 class="display-3 hero-title">Estetika Maksimal<br>Setiap Sudutnya</h1>
+                                    <p class="hero-subtitle">Spot nongkrong yang instagramable, nyaman, dan bikin betah berlama-lama. Cocok untuk kerja produktif atau bersantai bersama teman tercinta.</p>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <a href="about.html" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
+                                            Kenali Kami Lebih Dekat <i class="bi bi-arrow-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-item h-100">
+                    <div class="hero-item" style="background-image: url('https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                        <div class="hero-overlay"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 text-white">
+                                    <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Keahlian Barista</span>
+                                    <h1 class="display-3 hero-title">Karya Tangan<br>Penuh Ketelitian</h1>
+                                    <p class="hero-subtitle">Nikmati sensasi dari racikan tangan dingin barista andalan kami. Setiap gelas adalah karya seni untuk Anda.</p>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <a href="menu.html" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
+                                            Jelajahi Rasa <i class="bi bi-arrow-right ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+                <span class="visually-hidden">Sebelumnya</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+                <span class="visually-hidden">Selanjutnya</span>
+            </button>
+        </div>
+
+        <div class="container mb-5">
+            <!-- Section Header -->
+            <div class="text-center mb-5">
+                <h2 class="section-title h1">Promo & Event Terkini</h2>
+                <p class="text-muted lead mx-auto mt-3" style="max-width: 600px;">Jangan lewatkan penawaran spesial dan keseruan acara di Kopi Kenangan Kita minggu ini.</p>
+            </div>
+
+            <!-- Promo & Event Grid -->
+            <div class="row g-4 justify-content-center">
+                <!-- Promo 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1498654200943-1088dd4438ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Promo Happy Hour" style="height: 220px; object-fit: cover;">
+                        <div class="card-body p-4 position-relative bg-white pt-5">
+                            <span class="badge bg-danger rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-clock me-1"></i> Promo Terbatas</span>
+                            <h4 class="fw-bold text-dark mb-2">Pesta Happy Hour</h4>
+                            <p class="text-muted small mb-4">Nikmati diskon 30% untuk semua varian Classic Espresso setiap hari kerja pukul 14.00 - 16.00 WIB waktu setempat.</p>
+                            <a href="#" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Klaim Promo <i class="bi bi-ticket-perforated ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Live Music" style="height: 220px; object-fit: cover;">
+                        <div class="card-body p-4 position-relative bg-white pt-5">
+                            <span class="badge bg-kopi rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-calendar-event me-1"></i> Sabtu Malam</span>
+                            <h4 class="fw-bold text-dark mb-2">Akustik Senja Ria</h4>
+                            <p class="text-muted small mb-4">Habiskan malam minggumu dengan lantunan musik akustik langsung dari musisi lokal sambil menikmati kopi hangat.</p>
+                            <a href="reservasi.html" class="btn btn-kopi rounded-pill fw-bold w-100">Reservasi Meja <i class="bi bi-calendar-check ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Buy 1 Get 1" style="height: 220px; object-fit: cover;">
+                        <div class="card-body p-4 position-relative bg-white pt-5">
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-star-fill me-1"></i> Khusus Member</span>
+                            <h4 class="fw-bold text-dark mb-2">Beli 1 Dapat 2</h4>
+                            <p class="text-muted small mb-4">Spesial member terdaftar! Beli varian Kopsus Aren apa saja dan dapatkan gratis satu porsi rasa yang sama.</p>
+                            <a href="login.html" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Daftar Member <i class="bi bi-person-plus ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section mx-auto" style="max-width: 900px;">
+                <div class="cta-content">
+                    <h2 class="fw-bold h1 mb-3">Siap Menikmati Seduhan Kami?</h2>
+                    <p class="lead mb-4 opacity-75">Jelajahi beragam pilihan menu kopi, teh, dan hidangan pendamping spesial kami.</p>
+                    <a href="menu.html" class="btn btn-light text-kopi btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">
+                        Menuju Katalog Menu <i class="bi bi-book ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 mt-5">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6 text-center text-md-start">
+                    <h4 class="fw-bold mb-3 text-white d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                        <i class="bi bi-cup-hot-fill"></i> Kopi Kenangan Kita
+                    </h4>
+                    <p class="text-white-50">Menyajikan secangkir kehangatan dan sejuta kenangan setiap harinya untuk meramaikan harimu.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0 pl-md-5">
+                    <h5 class="text-white mb-3 fw-bold">Kontak & Lokasi</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> Jl. Sudirman No 123, Kota Kopi</li>
+                        <li class="mb-2"><i class="bi bi-clock me-2"></i> Buka Setiap Hari: 08.00 - 23.00 WIB</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> +62 812-3456-7890</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12 text-center text-lg-end">
+                    <h5 class="text-white mb-3 fw-bold">Ikuti Kami</h5>
+                    <div class="social-links d-flex justify-content-center justify-content-lg-end">
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="border-secondary opacity-25">
+            <div class="text-center mt-4 pb-0 mb-0">
+                <small class="text-white-50">
+                    &copy; 2026 Kopi Kenangan Kita. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Efek untuk membuat navbar memiliki shadow saat di-scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-custom');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-sm');
+                navbar.style.backgroundColor = 'rgba(253, 251, 247, 1)';
+            } else {
+                navbar.classList.remove('shadow-sm');
+                navbar.style.backgroundColor = 'rgba(253, 251, 247, 0.95)';
+            }
+        });
+    </script>
+</body>
+
+</html>

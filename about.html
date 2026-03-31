@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentang Kami | Kopi Kenangan Kita</title>
+
+    <!-- Menggunakan Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-coffee: #5c3d2e;
+            --secondary-coffee: #d4b59d;
+            --accent-coffee: #8c6239;
+            --bg-warm: #fdfbf7;
+            --text-dark: #2d2420;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Utilities */
+        .text-kopi { color: var(--primary-coffee) !important; }
+        .bg-kopi { background-color: var(--primary-coffee) !important; color: white; }
+        
+        /* Navbar */
+        .navbar-custom {
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand { font-weight: 800; letter-spacing: -0.5px; font-size: 1.5rem; }
+        .nav-link { font-weight: 600; color: var(--text-dark); margin: 0 0.5rem; position: relative; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-coffee); }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; background-color: var(--primary-coffee);
+            transition: all 0.3s ease; transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* Buttons */
+        .btn-kopi { background-color: var(--primary-coffee); color: white; border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-kopi:hover { background-color: transparent; color: var(--primary-coffee); }
+        .btn-outline-kopi { background-color: transparent; color: var(--primary-coffee); border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-outline-kopi:hover { background-color: var(--primary-coffee); color: white; }
+
+        /* General Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-coffee) 0%, var(--accent-coffee) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(92, 61, 46, 0.15);
+        }
+        .page-header::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); z-index: 0;
+        }
+        .header-content { position: relative; z-index: 1; }
+
+        /* Feature Card */
+        .feature-card {
+            background: white; border-radius: 24px; padding: 2.5rem 2rem; height: 100%;
+            border: 1px solid rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(92, 61, 46, 0.08); }
+        .feature-icon-wrapper {
+            width: 70px; height: 70px; background-color: var(--bg-warm); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
+            color: var(--primary-coffee); font-size: 2rem; transition: all 0.3s ease;
+        }
+        .feature-card:hover .feature-icon-wrapper { background-color: var(--primary-coffee); color: white; transform: scale(1.1); }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark); color: rgba(255,255,255,0.8);
+            margin-top: auto; border-top: 5px solid var(--primary-coffee); padding-top: 4rem !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Modern -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-3 fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="index.html">
+                <i class="bi bi-cup-hot-fill fs-3"></i> Kenangan Kita
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-kopi"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="about.html">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link" href="menu.html">Katalog Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reservasi.html">Reservasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="order.html">Pesan Online</a></li>
+                </ul>
+                <div class="d-flex mt-3 mt-lg-0 gap-3 align-items-center">
+                    <a class="btn btn-outline-kopi px-4 py-2 rounded-pill" href="login.html">Masuk</a>
+                    <a class="btn btn-kopi px-4 py-2 rounded-pill" href="login-admin.html">Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Halaman -->
+    <div class="page-header mb-5" style="margin-top: 76px;">
+        <div class="container header-content">
+            <h1 class="display-4 fw-bold mb-3">Tentang Kami</h1>
+            <p class="lead opacity-75 mx-auto" style="max-width: 600px;">Cerita di balik secangkir rasa yang mengubah hari Anda.</p>
+        </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <main class="container mb-5">
+
+        <div class="row align-items-center mb-5 g-5">
+            <div class="col-md-6 mb-4 mb-md-0 position-relative">
+                <div class="position-absolute w-100 h-100 bg-kopi rounded-4 shadow-sm" style="top: -15px; left: -15px; z-index: 0; opacity: 0.2;"></div>
+                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&w=800&q=80"
+                    alt="Suasana Cafe" class="img-fluid rounded-4 shadow-lg position-relative" style="z-index: 1;">
+            </div>
+            <div class="col-md-6 ps-md-5">
+                <h3 class="fw-bold text-kopi mb-3">Berawal dari Mimpi Kecil</h3>
+                <p class="text-secondary" style="line-height: 1.8;">Kopi Kenangan Kita didirikan pada tahun 2024 dari ketertarikan mendalam akan biji
+                    kopi lokal Nusantara. Kami percaya bahwa setiap tetes kopi memiliki ceritanya masing-masing dan
+                    mampu mendekatkan mereka yang meminumnya.</p>
+                <p class="text-secondary" style="line-height: 1.8;">Desain interior kami yang hangat dan nyaman sengaja dibuat sedemikian rupa agar
+                    setiap orang merasa seperti di rumah sendiri. Entah Anda datang untuk bekerja, bertemu sahabat, atau
+                    sekadar menyendiri bersama buku favorit.</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 mb-5 pt-4">
+            <span class="badge bg-kopi text-white mb-2 px-3 py-2 rounded-pill shadow-sm">Filosofi</span>
+            <h2 class="fw-bold text-kopi">Nilai Inti Kami</h2>
+            <div class="mt-3 mb-4 mx-auto" style="width: 60px; height: 4px; background-color: var(--secondary-coffee); border-radius: 2px;"></div>
+        </div>
+        
+        <div class="row g-4 text-center justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-tree"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Kualitas Terbaik</h4>
+                    <p class="text-muted mb-0">Hanya menggunakan biji kopi pilihan terbaik yang diambil secara etis langsung dari petani lokal.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-emoji-smile"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Kenyamanan Ramah</h4>
+                    <p class="text-muted mb-0">Pelayanan hangat dengan senyuman tulus yang menyambut kedatangan setiap pelanggan kami layaknya keluarga.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Inovasi Rasa</h4>
+                    <p class="text-muted mb-0">Terus bereksperimen menciptakan menu-menu pendamping kopi yang pas di lidah penikmat masa kini.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 mt-5">
+        <div class="container text-center">
+            <h4 class="fw-bold mb-3 text-white d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-cup-hot-fill px-2"></i> Kopi Kenangan Kita
+            </h4>
+            <p class="text-white-50 mb-2">Menyajikan secangkir kehangatan setiap harinya.</p>
+            <p class="text-white-50 small mb-4">Jl. Sudirman No 123, Kota Kopi</p>
+            
+            <hr class="border-secondary opacity-25">
+            <div class="mt-4 pb-0 mb-0">
+                <small class="text-white-50">
+                    &copy; 2026 Kopi Kenangan Kita. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Menu | Kopi Kenangan Kita</title>
+
+    <!-- Menggunakan Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-coffee: #5c3d2e;
+            --secondary-coffee: #d4b59d;
+            --accent-coffee: #8c6239;
+            --bg-warm: #fdfbf7;
+            --text-dark: #2d2420;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Utilities */
+        .text-kopi { color: var(--primary-coffee) !important; }
+        .bg-kopi { background-color: var(--primary-coffee) !important; color: white; }
+        
+        /* Navbar */
+        .navbar-custom {
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand { font-weight: 800; letter-spacing: -0.5px; font-size: 1.5rem; }
+        .nav-link { font-weight: 600; color: var(--text-dark); margin: 0 0.5rem; position: relative; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-coffee); }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; background-color: var(--primary-coffee);
+            transition: all 0.3s ease; transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* Buttons */
+        .btn-kopi { background-color: var(--primary-coffee); color: white; border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-kopi:hover { background-color: transparent; color: var(--primary-coffee); }
+        .btn-outline-kopi { background-color: transparent; color: var(--primary-coffee); border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-outline-kopi:hover { background-color: var(--primary-coffee); color: white; }
+
+        /* General Header with Background Image */
+        .page-header {
+            background-image: linear-gradient(rgba(45, 36, 32, 0.8), rgba(92, 61, 46, 0.85)), url('https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0 80px 0;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(92, 61, 46, 0.15);
+        }
+
+        /* Menu Card */
+        .menu-card {
+            background: white; border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.05); overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; display: flex; flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+        .menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(92, 61, 46, 0.1); }
+        .menu-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .menu-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .menu-price { font-weight: 800; color: var(--primary-coffee); font-size: 1.25rem; }
+
+        /* Nav Pills Custom (Tab Menu) */
+        .nav-pills .nav-link {
+            color: var(--text-dark); font-weight: 600; border-radius: 50px;
+            padding: 12px 24px; transition: all 0.3s ease; border: 2px solid transparent;
+        }
+        .nav-pills .nav-link:hover { background-color: rgba(92, 61, 46, 0.05); }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: var(--primary-coffee); color: white;
+            box-shadow: 0 5px 15px rgba(92, 61, 46, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark); color: rgba(255,255,255,0.8);
+            margin-top: auto; border-top: 5px solid var(--primary-coffee); padding-top: 4rem !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Modern -->
+    <nav class="navbar navbar-expand-lg navbar-custom py-3 fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="index.html">
+                <i class="bi bi-cup-hot-fill fs-3"></i> Kenangan Kita
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1 text-kopi"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="menu.html">Katalog Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reservasi.html">Reservasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="order.html">Pesan Online</a></li>
+                </ul>
+                <div class="d-flex mt-3 mt-lg-0 gap-3 align-items-center">
+                    <a class="btn btn-outline-kopi px-4 py-2 rounded-pill" href="login.html">Masuk</a>
+                    <a class="btn btn-kopi px-4 py-2 rounded-pill" href="login-admin.html">Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Halaman -->
+    <div class="page-header mb-5" style="margin-top: 76px;">
+        <div class="container">
+            <h1 class="fw-bold display-4 mb-3">Katalog Rasa</h1>
+            <p class="lead opacity-90 mx-auto" style="max-width: 600px;">Eksplorasi pilihan kopi terbaik dan makanan pendamping khas cafe kami.</p>
+        </div>
+    </div>
+
+    <!-- Konten Utama: Tabs & Cards -->
+    <main class="container mb-5">
+
+        <!-- Tab Kategori -->
+        <ul class="nav nav-pills justify-content-center mb-5 gap-2" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-kopi-tab" data-bs-toggle="pill" data-bs-target="#pills-kopi" type="button" role="tab">
+                    <i class="bi bi-cup-hot me-2"></i> Base Kopi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-nonkopi-tab" data-bs-toggle="pill" data-bs-target="#pills-nonkopi" type="button" role="tab">
+                    <i class="bi bi-cup-straw me-2"></i> Non-Kopi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-makanan-tab" data-bs-toggle="pill" data-bs-target="#pills-makanan" type="button" role="tab">
+                    <i class="bi bi-cake2 me-2"></i> Makanan
+                </button>
+            </li>
+        </ul>
+
+        <!-- Isi Konten Berdasarkan Tab -->
+        <div class="tab-content" id="pills-tabContent">
+
+            <!-- Tab Kategori Kopi -->
+            <div class="tab-pane fade show active" id="pills-kopi" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&w=600&q=80" alt="Espresso" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Classic Espresso</h4>
+                                <p class="text-muted mb-4 small">Sari pati kopi 30ml yang kuat dan pekat. Cocok buat melek seharian.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 18.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&w=600&q=80" alt="Cappuccino" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Cappuccino Hangat</h4>
+                                <p class="text-muted mb-4 small">Keseimbangan sempurna antara espresso, susu, dan busa susu (foam) lembut di atasnya.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 26.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card border border-warning" style="box-shadow: 0 0 0 1px #ffc107;">
+                            <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&w=600&q=80" alt="Kopi Susu Gula Aren" class="menu-img">
+                            <div class="menu-content">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h4 class="fw-bold mb-0">Kopsus Kenangan</h4>
+                                    <span class="badge bg-warning text-dark rounded-pill py-2 px-3 fw-bold"><i class="bi bi-star-fill me-1"></i> Terlaris</span>
+                                </div>
+                                <p class="text-muted mb-4 small">Signature kami. Kopi susu dengan sentuhan manisnya gula aren lokal asli Nusantara.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 24.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Kategori Non Kopi -->
+            <div class="tab-pane fade" id="pills-nonkopi" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&w=600&q=80" alt="Matcha" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Matcha Sakura Latte</h4>
+                                <p class="text-muted mb-4 small">Teh hijau bubuk premium khas jepang diseduh bersama susu segar.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 28.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1579954115545-a95e78619bc9?ixlib=rb-4.0.3&w=600&q=80" alt="Choco Latte" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Belgian Chocolate</h4>
+                                <p class="text-muted mb-4 small">Cokelat Belgia kental yang manis dan sedikit pahit, sangat cocok untuk relaksasi.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 25.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Kategori Makanan -->
+            <div class="tab-pane fade" id="pills-makanan" role="tabpanel">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?ixlib=rb-4.0.3&w=600&q=80" alt="Croissant" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Butter Croissant</h4>
+                                <p class="text-muted mb-4 small">Roti bulan sabit dengan tekstur kulit renyah dan bagian dalam yang sangat lembut berserat putih.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 20.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="menu-card">
+                            <img src="https://images.unsplash.com/photo-1621236378699-859efab60411?ixlib=rb-4.0.3&w=600&q=80" alt="Brownies" class="menu-img">
+                            <div class="menu-content">
+                                <h4 class="fw-bold mb-2">Fudgy Brownies</h4>
+                                <p class="text-muted mb-4 small">Potongan kue coklat pekat yang padat dan "chewy". Paling mantap disajikan saat masih hangat.</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="menu-price">Rp 18.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 mb-3 p-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, rgba(253, 251, 247, 1) 0%, rgba(212, 181, 157, 0.2) 100%); border: 1px solid rgba(92, 61, 46, 0.1);">
+            <div class="mb-3">
+                <i class="bi bi-geo-alt-fill fs-1 text-kopi"></i>
+            </div>
+            <h3 class="fw-bold mb-3">Siap menikmati hidangan langsung di tempat?</h3>
+            <p class="text-muted mx-auto" style="max-width: 500px;">Amankan meja terbaik di sudut favorit Kopi Kenangan Kita dengan memesan tempat lebih awal.</p>
+            <a href="reservasi.html" class="btn btn-kopi mt-3 fw-bold px-5 py-3 rounded-pill btn-lg shadow-sm">
+                Mulai Reservasi Meja <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-5 mt-5">
+        <div class="container text-center">
+            <h4 class="fw-bold mb-3 text-white d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-cup-hot-fill px-2"></i> Kopi Kenangan Kita
+            </h4>
+            <p class="text-white-50 mb-2">Menyajikan secangkir kehangatan setiap harinya.</p>
+            <p class="text-white-50 small mb-4">Jl. Sudirman No 123, Kota Kopi</p>
+            
+            <hr class="border-secondary opacity-25">
+            <div class="mt-4 pb-0 mb-0">
+                <small class="text-white-50">
+                    &copy; 2026 Kopi Kenangan Kita. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
