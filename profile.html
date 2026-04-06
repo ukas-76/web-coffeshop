@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopi Kenangan Kita | Profil Saya</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-coffee: #5c3d2e;
+            --secondary-coffee: #d4b59d;
+            --accent-coffee: #8c6239;
+            --bg-warm: #fdfbf7;
+            --text-dark: #2d2420;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Utilities */
+        .text-kopi { color: var(--primary-coffee) !important; }
+        .bg-kopi { background-color: var(--primary-coffee) !important; color: white; }
+        .bg-kopi-light { background-color: rgba(92, 61, 46, 0.05) !important; }
+        
+        /* Navbar dengan efek kaca (Glassmorphism) */
+        .navbar-custom {
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(92, 61, 46, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand { font-weight: 800; letter-spacing: -0.5px; font-size: 1.5rem; }
+        .nav-link { font-weight: 600; color: var(--text-dark); margin: 0 0.5rem; position: relative; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-coffee); }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; background-color: var(--primary-coffee);
+            transition: all 0.3s ease; transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+        /* Buttons */
+        .btn-kopi { background-color: var(--primary-coffee); color: white; border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-kopi:hover { background-color: transparent; color: var(--primary-coffee); }
+        .btn-outline-kopi { background-color: transparent; color: var(--primary-coffee); border: 2px solid var(--primary-coffee); font-weight: 600; transition: all 0.3s ease; }
+        .btn-outline-kopi:hover { background-color: var(--primary-coffee); color: white; }
+        
+        .btn-danger-custom { background-color: #dc3545; color: white; border: 2px solid #dc3545; font-weight: 600; transition: all 0.3s ease; }
+        .btn-danger-custom:hover { background-color: transparent; color: #dc3545; }
+
+        /* Profile Layout */
+        .profile-cover {
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary-coffee), var(--primary-coffee));
+            border-radius: 20px;
+            margin-bottom: -80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-cover::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        }
+
+        .profile-avatar-container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid var(--bg-warm);
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        
+        .avatar-edit-btn {
+            position: absolute;
+            bottom: 10px;
+            right: calc(50% - 60px);
+            background-color: var(--primary-coffee);
+            color: white;
+            border: 3px solid var(--bg-warm);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-edit-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--accent-coffee);
+        }
+
+        /* Card Styles */
+        .card-custom {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(92, 61, 46, 0.05);
+            background-color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            box-shadow: 0 8px 25px rgba(92, 61, 46, 0.1);
+        }
+
+        /* Profile Menu */
+        .profile-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .profile-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-menu-link i {
+            font-size: 1.25rem;
+            color: var(--accent-coffee);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-menu-link:hover, .profile-menu-link.active {
+            background-color: var(--bg-warm);
+            color: var(--primary-coffee);
+            transform: translateX(5px);
+        }
+        
+        .profile-menu-link:hover i, .profile-menu-link.active i {
+            color: var(--primary-coffee);
+        }
+
+        /* Forms */
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid rgba(92, 61, 46, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(92, 61, 46, 0.1);
+            border-color: var(--primary-coffee);
+        }
+        
+        .input-group-text {
+            border-radius: 12px;
+            border: 1px solid rgba(92, 61, 46, 0.15);
+            background-color: var(--bg-warm);
+            color: var(--primary-coffee);
+        }
+
+        /* Stats Badge */
+        .stat-badge {
+            background-color: var(--bg-warm);
+            border: 1px solid rgba(92, 61, 46, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-badge:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary-coffee);
+            background-color: white;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-coffee);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark); color: rgba(255,255,255,0.8);
+            margin-top: auto; border-top: 5px solid var(--primary-coffee); padding-top: 3rem;
+        }
+        
+        /* Reward Tier */
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 15px;
+            background: linear-gradient(135deg, #ffd700, #ffb300);
+            color: #4a3500;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="index.html">
+                <i class="bi bi-cup-hot-fill fs-3"></i> Kenangan Kita
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="bi bi-list fs-1 text-kopi"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Tentang Kami</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Katalog Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reservasi.html">Reservasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="order.html">Pesan Online</a>
+                    </li>
+                </ul>
+                <div class="d-flex mt-3 mt-lg-0 align-items-center gap-3">
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=40" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-white shadow-sm">
+                            <span class="ms-2 fw-bold text-dark d-none d-lg-inline">Budi Santoso</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 p-2" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item rounded-3 mb-1 bg-kopi-light text-kopi fw-bold" href="profile.html"><i class="bi bi-person-circle me-2"></i>Profil Saya</a></li>
+                            <li><a class="dropdown-item rounded-3 mb-1" href="order.html"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item rounded-3 text-danger" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5 flex-grow-1">
+        
+        <!-- Profile Header -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="profile-cover shadow-sm"></div>
+                <div class="profile-avatar-container">
+                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=150" alt="Profil Pengguna" class="profile-avatar">
+                    <div class="avatar-edit-btn" title="Ubah Foto Profil">
+                        <i class="bi bi-camera-fill"></i>
+                    </div>
+                    <h2 class="fw-bold mt-3 mb-1">Budi Santoso</h2>
+                    <p class="text-secondary mb-2">budi.santoso@example.com <span class="mx-2">•</span> +628123456789</p>
+                    <div class="tier-badge">
+                        <i class="bi bi-star-fill"></i> Gold Member
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sidebar Navigation -->
+            <div class="col-lg-3">
+                <div class="card-custom p-3 h-100">
+                    <ul class="profile-menu">
+                        <li>
+                            <a href="#" class="profile-menu-link active">
+                                <i class="bi bi-person-fill"></i> Informasi Pribadi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="profile-menu-link">
+                                <i class="bi bi-bag-heart-fill"></i> Riwayat Pesanan
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="profile-menu-link">
+                                <i class="bi bi-calendar-check-fill"></i> Riwayat Reservasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="profile-menu-link">
+                                <i class="bi bi-star-fill"></i> Poin & Hadiah
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="profile-menu-link">
+                                <i class="bi bi-gear-fill"></i> Pengaturan Akun
+                            </a>
+                        </li>
+                        <li class="mt-4 border-top pt-3">
+                            <a href="index.html" class="profile-menu-link text-danger">
+                                <i class="bi bi-box-arrow-right text-danger"></i> Keluar
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9">
+                <!-- Highlight Stats -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-badge">
+                            <div class="stat-value">1,250</div>
+                            <div class="stat-label">Poin Kenangan</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-badge">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Total Pesanan</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-badge">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Reservasi Mendatang</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Profile -->
+                <div class="card-custom p-4 p-md-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-0 text-kopi">Informasi Pribadi</h4>
+                        <button class="btn btn-outline-kopi rounded-pill px-4 py-2 btn-sm"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                    </div>
+
+                    <form>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Nama Depan</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" value="Budi" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Nama Belakang</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" value="Santoso" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Email Registrasi</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" value="budi.santoso@example.com" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Nomor Telepon / WhatsApp</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" class="form-control" value="+628123456789" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Alamat Default Pengiriman</label>
+                                <div class="input-group">
+                                    <span class="input-group-text align-items-start pt-3"><i class="bi bi-geo-alt"></i></span>
+                                    <textarea class="form-control" rows="3" readonly>Jl. Sudirman No. 45, Kebayoran Baru, Jakarta Selatan, 12190</textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Tanggal Lahir</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                    <input type="date" class="form-control" value="1995-08-15" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">Jenis Kelamin</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                                    <select class="form-select" disabled>
+                                        <option value="l" selected>Laki-laki</option>
+                                        <option value="p">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Buttons (Hidden as default state is read-only. Normally toggled by JS) -->
+                            <!--
+                            <div class="col-12 mt-4 text-end">
+                                <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-pill me-2">Batal</button>
+                                <button type="submit" class="btn btn-kopi px-4 py-2 rounded-pill shadow-sm">Simpan Perubahan</button>
+                            </div>
+                            -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4 mt-5">
+        <div class="container">
+            <p class="text-white-50 mb-0">
+                &copy; 2026 Kopi Kenangan Kita. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger px-1"></i> untuk Anda.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
