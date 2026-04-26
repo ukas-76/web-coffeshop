@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin | Kopi Kenangan Kita</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --admin-dark: #1e1b1a;
+            /* Sangat gelap, sedikit coklat */
+            --admin-accent: #d4b59d;
+            --admin-card: #2d2420;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--admin-dark);
+            background-image: radial-gradient(circle at top right, rgba(212, 181, 157, 0.1) 0%, transparent 40%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .login-card {
+            background: var(--admin-card);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .text-admin {
+            color: var(--admin-accent);
+        }
+
+        .bg-admin {
+            background-color: var(--admin-dark);
+            color: white;
+        }
+
+        .btn-admin {
+            background-color: var(--admin-accent);
+            color: var(--admin-dark);
+            border: 2px solid var(--admin-accent);
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin:hover {
+            background-color: transparent;
+            color: var(--admin-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 181, 157, 0.2);
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white !important;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-control:focus {
+            border-color: var(--admin-accent);
+            box-shadow: 0 0 0 0.25rem rgba(212, 181, 157, 0.25);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="login-card mx-auto p-4 p-md-5 position-relative overflow-hidden">
+            <!-- Dekorasi latar belakang card -->
+            <div class="position-absolute"
+                style="top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(212, 181, 157, 0.05); border-radius: 50%; filter: blur(20px);">
+            </div>
+
+            <div class="text-center mb-5 position-relative z-1">
+                <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3"
+                    style="width: 70px; height: 70px; background: rgba(212, 181, 157, 0.1); color: var(--admin-accent);">
+                    <i class="bi bi-shield-lock-fill fs-2"></i>
+                </div>
+                <h3 class="fw-bold mb-1 text-white">Lorem ipsum dolor sit amet</h3>
+                <p class="text-white-50 small">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+
+            <form action="{{ url('/admin/dashboard') }}" class="position-relative z-1">
+                <!-- Input Username / ID Pegawai -->
+                <div class="mb-4">
+                    <label for="adminId" class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">ID
+                        Pegawai / Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text border-0"
+                            style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i
+                                class="bi bi-person-badge"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0" id="adminId"
+                            placeholder="Contoh: ADM-001" required>
+                    </div>
+                </div>
+
+                <!-- Input Password -->
+                <div class="mb-5">
+                    <label for="password"
+                        class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">Kata Sandi</label>
+                    <div class="input-group">
+                        <span class="input-group-text border-0"
+                            style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i
+                                class="bi bi-key"></i></span>
+                        <input type="password" class="form-control border-start-0 ps-0" id="password"
+                            placeholder="Masukkan kata sandi otorisasi" required>
+                    </div>
+                </div>
+
+                <!-- Tombol Login -->
+                <button type="submit"
+                    class="btn btn-admin w-100 py-3 mb-4 rounded-pill fw-bold text-uppercase shadow-sm">
+                    <i class="bi bi-unlock me-2"></i> Otorisasi Masuk
+                </button>
+            </form>
+
+            <div class="text-center mt-3 position-relative z-1">
+                <a href="{{ url('/') }}" class="text-white-50 text-decoration-none small transition-colors hover-white">
+                    <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
