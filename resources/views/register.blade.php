@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun Baru | Kopi Kenangan Kita</title>
+    <title>Daftar Akun Baru | Roastory</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -170,8 +170,8 @@
                         <div class="badge bg-white text-dark mb-3 rounded-pill px-3 py-2 fw-bold shadow-sm d-inline-block">
                             <i class="bi bi-gift-fill text-danger me-1"></i> Poin Gratis Pertama!
                         </div>
-                        <h2 class="fw-bold mb-2">Member Kopi Kenangan</h2>
-                        <p class="opacity-75 mb-0 ms-auto" style="max-width: 250px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod aliquip.</p>
+                        <h2 class="fw-bold mb-2">Member Roastory</h2>
+                        <p class="opacity-75 mb-0 ms-auto" style="max-width: 250px;">Bergabunglah dengan komunitas kami dan nikmati berbagai keuntungan serta promo eksklusif.</p>
                     </div>
                 </div>
 
@@ -198,7 +198,7 @@
 
                     // Auto login after reg
                     localStorage.setItem('isLoggedIn', 'true');
-                    alert('Registrasi berhasil! Selamat bergabung di Kopi Kenangan Kita.');
+                    alert('Registrasi berhasil! Selamat bergabung di Roastory.');
                     window.location.href = "{{ url('/') }}";
                 });
             }

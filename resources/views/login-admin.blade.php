@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin | Kopi Kenangan Kita</title>
+    <title>Login Admin | Roastory</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -103,8 +103,8 @@
                     style="width: 70px; height: 70px; background: rgba(212, 181, 157, 0.1); color: var(--admin-accent);">
                     <i class="bi bi-shield-lock-fill fs-2"></i>
                 </div>
-                <h3 class="fw-bold mb-1 text-white">Lorem ipsum dolor sit amet</h3>
-                <p class="text-white-50 small">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <h3 class="fw-bold mb-1 text-white">Kenikmatan Kopi Sejati</h3>
+                <p class="text-white-50 small">Silakan masuk ke akun Anda untuk melanjutkan dan menikmati kemudahan memesan kopi favorit Anda.</p>
             </div>
 
             <form action="{{ url('/admin/dashboard') }}" class="position-relative z-1">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pesan Online | Kopi Kenangan Kita')
+@section('title', 'Pesan Online | Roastory')
 
 @push('styles')
 <style>
@@ -66,7 +66,7 @@
 <div class="page-header mb-5" style="margin-top: 76px;">
     <div class="container">
         <h1 class="fw-bold display-5 mb-2">Layanan Delivery & Pick-Up</h1>
-        <p class="lead opacity-75">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p class="lead opacity-75">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
     </div>
 </div>
 
@@ -92,13 +92,13 @@
                 <h3 class="fw-bold text-kopi mb-0"><i class="bi bi-cup-hot me-2"></i> Kopi Favorit</h3>
             </div>
 
-            <div class="product-card" data-price="24000" data-name="Kopsus Kenangan (Aren)">
-                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&w=600&q=80" alt="Kopi Susu Aren" class="product-img">
+            <div class="product-card" data-price="24000" data-name="Kopsus Roastory (Aren)">
+                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Kopi Susu Aren" class="product-img">
                 <div class="product-info">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h4 class="product-title">Kopsus Kenangan (Aren)</h4>
-                            <p class="product-desc d-none d-sm-block">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <h4 class="product-title">Kopsus Roastory (Aren)</h4>
+                            <p class="product-desc d-none d-sm-block">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
                         </div>
                     </div>
                     <div class="mt-auto d-flex justify-content-between align-items-center">
@@ -113,12 +113,12 @@
             </div>
 
             <div class="product-card" data-price="26000" data-name="Cappuccino Hangat">
-                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&w=600&q=80" alt="Cappuccino" class="product-img">
+                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Cappuccino" class="product-img">
                 <div class="product-info">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h4 class="product-title">Cappuccino Hangat</h4>
-                            <p class="product-desc d-none d-sm-block">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <p class="product-desc d-none d-sm-block">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
                         </div>
                     </div>
                     <div class="mt-auto d-flex justify-content-between align-items-center">
@@ -132,35 +132,16 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-end mb-4 pt-3 border-bottom pb-2">
-                <h3 class="fw-bold text-kopi mb-0"><i class="bi bi-cup-straw me-2"></i> Spesial Non-Kopi</h3>
-            </div>
-
-            <div class="product-card" data-price="28000" data-name="Matcha Sakura Latte">
-                <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&w=600&q=80" alt="Matcha" class="product-img">
+            
+            <div class="product-card" data-price="20000" data-name="Americano Chill">
+                <img src="https://images.unsplash.com/photo-1551030173-122aabc4489c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Americano" class="product-img">
                 <div class="product-info">
-                    <h4 class="product-title">Matcha Sakura Latte</h4>
-                    <p class="product-desc d-none d-sm-block">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="product-price fs-5">Rp 28.000</span>
-                        <div class="d-flex align-items-center">
-                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
-                            <span class="qty-val">0</span>
-                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="product-title">Americano Chill</h4>
+                            <p class="product-desc d-none d-sm-block">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-end mb-4 pt-3 border-bottom pb-2">
-                <h3 class="fw-bold text-kopi mb-0"><i class="bi bi-cake2 me-2"></i> Camilan Pendamping</h3>
-            </div>
-
-            <div class="product-card" data-price="20000" data-name="Butter Croissant">
-                <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?ixlib=rb-4.0.3&w=600&q=80" alt="Croissant" class="product-img">
-                <div class="product-info">
-                    <h4 class="product-title">Butter Croissant</h4>
-                    <p class="product-desc d-none d-sm-block">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <div class="mt-auto d-flex justify-content-between align-items-center">
                         <span class="product-price fs-5">Rp 20.000</span>
                         <div class="d-flex align-items-center">
@@ -172,6 +153,129 @@
                 </div>
             </div>
 
+            <div class="product-card" data-price="28000" data-name="Caramel Macchiato">
+                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Caramel Macchiato" class="product-img">
+                <div class="product-info">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="product-title">Caramel Macchiato</h4>
+                            <p class="product-desc d-none d-sm-block">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 28.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-end mb-4 pt-3 border-bottom pb-2">
+                <h3 class="fw-bold text-kopi mb-0"><i class="bi bi-cup-straw me-2"></i> Spesial Non-Kopi</h3>
+            </div>
+
+            <div class="product-card" data-price="28000" data-name="Matcha Sakura Latte">
+                <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Matcha" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Matcha Sakura Latte</h4>
+                    <p class="product-desc d-none d-sm-block">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 28.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="product-card" data-price="26000" data-name="Red Velvet Latte">
+                <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Red Velvet" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Red Velvet Latte</h4>
+                    <p class="product-desc d-none d-sm-block">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 26.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-price="28000" data-name="Taro Frappe">
+                <img src="https://images.unsplash.com/photo-1556881286-fc6915169721?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Taro Frappe" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Taro Frappe</h4>
+                    <p class="product-desc d-none d-sm-block">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 28.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-end mb-4 pt-3 border-bottom pb-2">
+                <h3 class="fw-bold text-kopi mb-0"><i class="bi bi-cake2 me-2"></i> Camilan Pendamping</h3>
+            </div>
+
+            <div class="product-card" data-price="20000" data-name="Butter Croissant">
+                <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Croissant" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Butter Croissant</h4>
+                    <p class="product-desc d-none d-sm-block">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 20.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="product-card" data-price="30000" data-name="Classic Cheese Cake">
+                <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cheese Cake" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Classic Cheese Cake</h4>
+                    <p class="product-desc d-none d-sm-block">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 30.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-price="20000" data-name="Crispy French Fries">
+                <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="French Fries" class="product-img">
+                <div class="product-info">
+                    <h4 class="product-title">Crispy French Fries</h4>
+                    <p class="product-desc d-none d-sm-block">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="product-price fs-5">Rp 20.000</span>
+                        <div class="d-flex align-items-center">
+                            <button class="btn qty-btn minus-btn" type="button"><i class="bi bi-dash"></i></button>
+                            <span class="qty-val">0</span>
+                            <button class="btn qty-btn plus-btn" type="button"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Keranjang -->

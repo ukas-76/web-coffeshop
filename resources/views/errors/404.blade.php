@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Halaman Tidak Ditemukan | Kopi Kenangan Kita')
+@section('title', 'Halaman Tidak Ditemukan | Roastory')
 
 @push('styles')
 <style>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kopi Kenangan Kita | Beranda')
+@section('title', 'Roastory | Beranda')
 
 @push('styles')
 <style>
@@ -42,6 +42,11 @@
     letter-spacing: -1px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     margin-bottom: 1.5rem;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 10;
 }
 
 .hero-subtitle {
@@ -182,7 +187,7 @@
                             <div class="col-lg-8 text-white">
                                 <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Kopi Asli Nusantara</span>
                                 <h1 class="display-3 hero-title">Harmoni Rasa dalam<br>Setiap Sesapan</h1>
-                                <p class="hero-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <p class="hero-subtitle">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
                                 <div class="d-flex flex-wrap gap-3">
                                     <a href="{{ url('/reservasi') }}" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
                                         <i class="bi bi-calendar-check me-2"></i> Pesan Meja
@@ -208,7 +213,7 @@
                             <div class="col-lg-8 text-white">
                                 <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Suasana Nyaman</span>
                                 <h1 class="display-3 hero-title">Estetika Maksimal<br>Setiap Sudutnya</h1>
-                                <p class="hero-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                <p class="hero-subtitle">Dapatkan potongan harga spesial hingga 50% untuk semua varian kopi espresso-based setiap hari kerja pukul 14.00 - 17.00 WIB.</p>
                                 <div class="d-flex flex-wrap gap-3">
                                     <a href="{{ url('/about') }}" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
                                         Kenali Kami Lebih Dekat <i class="bi bi-arrow-right ms-2"></i>
@@ -231,7 +236,7 @@
                             <div class="col-lg-8 text-white">
                                 <span class="badge bg-kopi-light mb-3 px-3 py-2 rounded-pill shadow-sm">Keahlian Barista</span>
                                 <h1 class="display-3 hero-title">Karya Tangan<br>Penuh Ketelitian</h1>
-                                <p class="hero-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                <p class="hero-subtitle">Nikmati malam minggu yang syahdu dengan iringan live music akustik lokal terbaik sambil menyeruput secangkir kopi favorit Anda.</p>
                                 <div class="d-flex flex-wrap gap-3">
                                     <a href="{{ url('/menu') }}" class="btn btn-light text-kopi btn-lg px-4 py-3 rounded-pill fw-bold shadow">
                                         Jelajahi Rasa <i class="bi bi-arrow-right ms-2"></i>
@@ -259,7 +264,7 @@
         <!-- Section Header -->
         <div class="text-center mb-5">
             <h2 class="section-title h1">Promo & Event Terkini</h2>
-            <p class="text-muted lead mx-auto mt-3" style="max-width: 600px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p class="text-muted lead mx-auto mt-3" style="max-width: 600px;">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
         </div>
 
         <!-- Promo & Event Grid -->
@@ -267,12 +272,12 @@
             <!-- Promo 1 -->
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1498654200943-1088dd4438ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Promo Happy Hour" style="height: 220px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Promo Happy Hour" style="height: 220px; object-fit: cover;">
                     <div class="card-body p-4 position-relative bg-white pt-5">
                         <span class="badge bg-danger rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-clock me-1"></i> Promo Terbatas</span>
                         <h4 class="fw-bold text-dark mb-2">Pesta Happy Hour</h4>
-                        <p class="text-muted small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                        <a href="#" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Klaim Promo <i class="bi bi-ticket-perforated ms-1"></i></a>
+                        <p class="text-muted small mb-4">Dapatkan potongan harga spesial hingga 50% untuk semua varian kopi espresso-based setiap hari kerja pukul 14.00 - 17.00 WIB.</p>
+                        <a href="{{ url('/order') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Klaim Promo <i class="bi bi-ticket-perforated ms-1"></i></a>
                     </div>
                 </div>
             </div>
@@ -280,12 +285,12 @@
             <!-- Event 1 -->
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Live Music" style="height: 220px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Live Music" style="height: 220px; object-fit: cover;">
                     <div class="card-body p-4 position-relative bg-white pt-5">
                         <span class="badge bg-kopi rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-calendar-event me-1"></i> Sabtu Malam</span>
                         <h4 class="fw-bold text-dark mb-2">Akustik Senja Ria</h4>
-                        <p class="text-muted small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <a href="{{ url('/reservasi') }}" class="btn btn-kopi rounded-pill fw-bold w-100">Reservasi Meja <i class="bi bi-calendar-check ms-1"></i></a>
+                        <p class="text-muted small mb-4">Nikmati malam minggu yang syahdu dengan iringan live music akustik lokal terbaik sambil menyeruput secangkir kopi favorit Anda.</p>
+                        <a href="{{ url('/reservasi') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Reservasi Meja <i class="bi bi-calendar-check ms-1"></i></a>
                     </div>
                 </div>
             </div>
@@ -297,7 +302,7 @@
                     <div class="card-body p-4 position-relative bg-white pt-5">
                         <span class="badge bg-warning text-dark rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-star-fill me-1"></i> Khusus Member</span>
                         <h4 class="fw-bold text-dark mb-2">Beli 1 Dapat 2</h4>
-                        <p class="text-muted small mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p class="text-muted small mb-4">Eksklusif untuk Roastory Member! Beli varian kopi apa saja ukuran Large dan dapatkan gratis satu minuman pilihan untuk teman Anda.</p>
                         <a href="{{ url('/login') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Daftar Member <i class="bi bi-person-plus ms-1"></i></a>
                     </div>
                 </div>
@@ -308,7 +313,7 @@
         <div class="cta-section mx-auto" style="max-width: 900px;">
             <div class="cta-content">
                 <h2 class="fw-bold h1 mb-3">Siap Menikmati Seduhan Kami?</h2>
-                <p class="lead mb-4 opacity-75">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p class="lead mb-4 opacity-75">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
                 <a href="{{ url('/menu') }}" class="btn btn-light text-kopi btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">
                     Menuju Katalog Menu <i class="bi bi-book ms-2"></i>
                 </a>
