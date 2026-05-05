@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Reservasi Meja | Kopi Kenangan Kita')
+@section('title', 'Reservasi Meja | Roastory')
 
 @push('styles')
 <style>
 /* General Header */
 .page-header {
-    background: linear-gradient(to right, rgba(45, 36, 32, 0.9), rgba(92, 61, 46, 0.8)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80');
+    background: linear-gradient(to right, rgba(45, 36, 32, 0.9), rgba(92, 61, 46, 0.8)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3');
     background-size: cover;
     background-position: center;
     color: white;
@@ -104,7 +104,7 @@
 <div class="page-header mb-5" style="margin-top: 76px;">
     <div class="container">
         <h1 class="fw-bold display-5 mb-3">Reservasi Meja & Ruang</h1>
-        <p class="lead opacity-90 mx-auto" style="max-width: 600px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p class="lead opacity-90 mx-auto" style="max-width: 600px;">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
     </div>
 </div>
 
@@ -141,10 +141,10 @@
                     <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaSofa" value="Indoor Sofa Premium" data-min="100000" data-cap="4" autocomplete="off" checked>
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaSofa">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" class="w-100 object-fit-cover" style="height: 160px;" alt="Sofa">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Sofa">
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
                             <h5 class="fw-bold mb-1">Indoor Sofa Premium</h5>
-                            <p class="text-muted small mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <p class="text-muted small mb-3">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
                             <ul class="list-unstyled small text-secondary mb-0 mt-auto">
                                 <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 4 Org</li>
                                 <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 100.000</li>
@@ -158,10 +158,10 @@
                     <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaStandar" value="Indoor Meja Kaca" data-min="50000" data-cap="2" autocomplete="off">
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaStandar">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80" class="w-100 object-fit-cover" style="height: 160px;" alt="Kaca">
+                        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Kaca">
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
                             <h5 class="fw-bold mb-1">Indoor Dekat Kaca</h5>
-                            <p class="text-muted small mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <p class="text-muted small mb-3">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
                             <ul class="list-unstyled small text-secondary mb-0 mt-auto">
                                 <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 2 Org</li>
                                 <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 50.000</li>
@@ -175,10 +175,10 @@
                     <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaBalkon" value="Outdoor Balcony" data-min="100000" data-cap="4" autocomplete="off">
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaBalkon">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&q=80" class="w-100 object-fit-cover" style="height: 160px;" alt="Balkon">
+                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Balkon">
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
                             <h5 class="fw-bold mb-1">Outdoor Balcony</h5>
-                            <p class="text-muted small mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            <p class="text-muted small mb-3">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
                             <ul class="list-unstyled small text-secondary mb-0 mt-auto">
                                 <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 4 Org</li>
                                 <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 100.000</li>
@@ -192,10 +192,10 @@
                     <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaTaman" value="Garden Canopy Area" data-min="150000" data-cap="8" autocomplete="off">
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaTaman">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&q=80" class="w-100 object-fit-cover" style="height: 160px;" alt="Garden">
+                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Garden">
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
                             <h5 class="fw-bold mb-1">Garden Kanopi Besar</h5>
-                            <p class="text-muted small mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p class="text-muted small mb-3">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
                             <ul class="list-unstyled small text-secondary mb-0 mt-auto">
                                 <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 8 Org</li>
                                 <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 150.000</li>
@@ -215,10 +215,10 @@
             <h5 class="fw-bold fs-6 mb-3 mt-2 text-dark border-bottom pb-2">Paket Penawaran Hemat</h5>
             
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=600&q=80" alt="Kopi" class="product-img">
+                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fw-bold mb-1">Paket Kenangan Berdua</h6>
+                        <h6 class="fw-bold mb-1">Paket Roastory Berdua</h6>
                         <p class="text-muted small mb-1 d-none d-sm-block">2 Kopsus + 1 Porsi French Fries</p>
                         <span class="text-kopi fw-bold">Rp 65.000</span>
                     </div>
@@ -231,7 +231,7 @@
             </div>
 
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1621236378699-859efab60411?w=600&q=80" alt="Brownie" class="product-img">
+                <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Brownie" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="fw-bold mb-1">Piring Keluarga (Platter)</h6>
@@ -250,10 +250,10 @@
             <h5 class="fw-bold fs-6 mb-3 mt-4 text-dark border-bottom pb-2">Menu Satuan (A-La-Carte)</h5>
             
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" alt="Kopi Aren" class="product-img">
+                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi Aren" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fw-bold mb-1">Kopsus Kenangan (Aren)</h6>
+                        <h6 class="fw-bold mb-1">Kopsus Roastory (Aren)</h6>
                         <span class="text-kopi fw-bold text-nowrap">Rp 24.000</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
@@ -265,7 +265,7 @@
             </div>
 
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=600&q=80" alt="Croissant" class="product-img">
+                <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Croissant" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="fw-bold mb-1">Butter Croissant</h6>
@@ -280,7 +280,7 @@
             </div>
 
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80" alt="Kopi Hitam" class="product-img">
+                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi Hitam" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="fw-bold mb-1">Classic Espresso</h6>

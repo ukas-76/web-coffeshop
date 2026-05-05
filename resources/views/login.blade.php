@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Pelanggan | Kopi Kenangan Kita</title>
+    <title>Login Pelanggan | Roastory</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -104,8 +104,8 @@
                         <div class="badge bg-white text-dark mb-3 rounded-pill px-3 py-2 fw-bold shadow-sm">
                             <i class="bi bi-star-fill text-warning me-1"></i> Member Eksklusif
                         </div>
-                        <h2 class="fw-bold mb-2">Kopi Kenangan Kita</h2>
-                        <p class="opacity-75 mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <h2 class="fw-bold mb-2">Roastory</h2>
+                        <p class="opacity-75 mb-0">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@
                             </div>
                         </a>
                         <h3 class="fw-bold text-dark">Login Account</h3>
-                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <p class="text-muted">Silakan masuk ke akun Anda untuk melanjutkan dan menikmati kemudahan memesan kopi favorit Anda.</p>
                     </div>
 
                     <form action="{{ url('/') }}">

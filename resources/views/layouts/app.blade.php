@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Kopi Kenangan Kita')</title>
+    <title>@yield('title', 'Roastory')</title>
 
     <!-- Menggunakan Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -147,7 +147,7 @@
         <div class="container">
             <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="{{ url('/') }}">
                 <i class="bi bi-cup-hot-fill fs-3"></i>
-                Kenangan Kita
+                Roastory
             </a>
 
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -203,9 +203,9 @@
             <div class="row g-4 mb-4">
                 <div class="col-lg-4 col-md-6 text-center text-md-start">
                     <h4 class="fw-bold mb-3 text-white d-flex align-items-center justify-content-center justify-content-md-start gap-2">
-                        <i class="bi bi-cup-hot-fill"></i> Kopi Kenangan Kita
+                        <i class="bi bi-cup-hot-fill"></i> Roastory
                     </h4>
-                    <p class="text-white-50">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    <p class="text-white-50">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0 pl-md-5">
                     <h5 class="text-white mb-3 fw-bold">Kontak & Lokasi</h5>
@@ -229,7 +229,7 @@
             <hr class="border-secondary opacity-25">
             <div class="text-center mt-4 pb-0 mb-0">
                 <small class="text-white-50">
-                    &copy; 2026 Kopi Kenangan Kita. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
+                    &copy; 2026 Roastory. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
                 </small>
             </div>
         </div>
@@ -259,10 +259,12 @@
             if (!loginSection || !profileSection) return;
 
             if (isLoggedIn) {
+                loginSection.classList.remove('d-flex');
                 loginSection.style.display = 'none';
                 profileSection.style.display = 'block';
             } else {
                 loginSection.style.display = 'flex';
+                loginSection.classList.add('d-flex');
                 profileSection.style.display = 'none';
             }
         }

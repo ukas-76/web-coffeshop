@@ -35,10 +35,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=80&q=80" class="rounded" alt="Kopi Kenangan Mantan" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=80&q=80&ixlib=rb-4.0.3" class="rounded" alt="Roastory Mantan" style="width: 50px; height: 50px; object-fit: cover;">
                     </td>
                     <td>
-                        <div class="fw-bold text-white">Kopi Kenangan Mantan</div>
+                        <div class="fw-bold text-white">Roastory Mantan</div>
                         <div class="small text-muted text-truncate" style="max-width: 250px;">Espresso block, susu, gula aren asli.</div>
                     </td>
                     <td><span class="badge bg-dark text-light border border-secondary">Kopi</span></td>
@@ -56,7 +56,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=80&q=80" class="rounded" alt="Caramel Macchiato" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=80&q=80&ixlib=rb-4.0.3" class="rounded" alt="Caramel Macchiato" style="width: 50px; height: 50px; object-fit: cover;">
                     </td>
                     <td>
                         <div class="fw-bold text-white">Caramel Macchiato</div>
@@ -77,7 +77,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=80&q=80" class="rounded" alt="Matcha Latte" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=80&q=80&ixlib=rb-4.0.3" class="rounded" alt="Matcha Latte" style="width: 50px; height: 50px; object-fit: cover;">
                     </td>
                     <td>
                         <div class="fw-bold text-white">Premium Matcha Latte</div>
@@ -98,7 +98,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <img src="https://images.unsplash.com/photo-1550461716-1f016d9ba2dc?auto=format&fit=crop&w=80&q=80" class="rounded" alt="Croissant" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=80&q=80&ixlib=rb-4.0.3" class="rounded" alt="Croissant" style="width: 50px; height: 50px; object-fit: cover;">
                     </td>
                     <td>
                         <div class="fw-bold text-white">Butter Croissant</div>

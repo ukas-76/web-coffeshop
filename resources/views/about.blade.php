@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tentang Kami | Kopi Kenangan Kita')
+@section('title', 'Tentang Kami | Roastory')
 
 @push('styles')
 <style>
@@ -42,7 +42,7 @@
 <div class="page-header mb-5" style="margin-top: 76px;">
     <div class="container header-content">
         <h1 class="display-4 fw-bold mb-3">Tentang Kami</h1>
-        <p class="lead opacity-75 mx-auto" style="max-width: 600px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p class="lead opacity-75 mx-auto" style="max-width: 600px;">Menyajikan cerita dalam setiap tegukan, menghadirkan kehangatan, inspirasi, dan kebersamaan di setiap cangkir.</p>
     </div>
 </div>
 
@@ -52,13 +52,14 @@
     <div class="row align-items-center mb-5 g-5">
         <div class="col-md-6 mb-4 mb-md-0 position-relative">
             <div class="position-absolute w-100 h-100 bg-kopi rounded-4 shadow-sm" style="top: -15px; left: -15px; z-index: 0; opacity: 0.2;"></div>
-            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&w=800&q=80"
+            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&w=800&q=80&auto=format&fit=crop"
                 alt="Suasana Cafe" class="img-fluid rounded-4 shadow-lg position-relative" style="z-index: 1;">
         </div>
         <div class="col-md-6 ps-md-5">
-            <h3 class="fw-bold text-kopi mb-3">Berawal dari Mimpi Kecil</h3>
-            <p class="text-secondary" style="line-height: 1.8;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-            <p class="text-secondary" style="line-height: 1.8;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+            <h3 class="fw-bold text-kopi mb-3">Cerita di Balik Roastory</h3>
+            <p class="text-secondary" style="line-height: 1.8;">Selamat datang di Roastory, tempat di mana setiap cangkir kopi memiliki cerita. Kami percaya bahwa kopi bukan sekadar minuman, tetapi juga pengalaman yang menghadirkan kehangatan, inspirasi, dan kebersamaan.</p>
+            <p class="text-secondary" style="line-height: 1.8;">Roastory hadir dengan pilihan biji kopi berkualitas yang diproses dengan penuh perhatian untuk menghasilkan cita rasa terbaik. Dari aroma yang khas hingga rasa yang autentik, setiap seduhan kami dibuat untuk menemani setiap momen berharga Anda.</p>
+            <p class="text-secondary" style="line-height: 1.8;">Bagi kami, setiap biji kopi memiliki perjalanan, setiap proses roasting memiliki makna, dan setiap pelanggan menjadi bagian dari cerita itu. Karena di Roastory, kami tidak hanya menyajikan kopi &mdash; kami menyajikan cerita dalam setiap tegukan.</p>
         </div>
     </div>
 
@@ -75,7 +76,7 @@
                     <i class="bi bi-tree"></i>
                 </div>
                 <h4 class="fw-bold mb-3">Kualitas Terbaik</h4>
-                <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p class="text-muted mb-0">Biji kopi pilihan yang diproses dengan standar tinggi untuk menghasilkan aroma dan rasa yang sempurna di setiap cangkir.</p>
             </div>
         </div>
         <div class="col-lg-4 col-md-6">
@@ -84,7 +85,7 @@
                     <i class="bi bi-emoji-smile"></i>
                 </div>
                 <h4 class="fw-bold mb-3">Kenyamanan Ramah</h4>
-                <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                <p class="text-muted mb-0">Suasana tempat yang hangat dan pelayanan sepenuh hati, membuat Anda selalu merasa seperti di rumah sendiri.</p>
             </div>
         </div>
         <div class="col-lg-4 col-md-6">
@@ -93,7 +94,7 @@
                     <i class="bi bi-lightbulb"></i>
                 </div>
                 <h4 class="fw-bold mb-3">Inovasi Rasa</h4>
-                <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p class="text-muted mb-0">Terus berkreasi menciptakan varian menu baru yang unik tanpa meninggalkan cita rasa kopi autentik yang Anda cintai.</p>
             </div>
         </div>
     </div>

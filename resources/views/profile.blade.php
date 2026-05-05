@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kopi Kenangan Kita | Profil Saya')
+@section('title', 'Roastory | Profil Saya')
 
 @push('styles')
 <style>
@@ -40,8 +40,8 @@
 
 .avatar-edit-btn {
     position: absolute;
-    bottom: 10px;
-    right: calc(50% - 60px);
+    bottom: 5px;
+    right: 5px;
     background-color: var(--primary-coffee);
     color: white;
     border: 3px solid var(--bg-warm);
@@ -176,9 +176,11 @@
         <div class="col-12">
             <div class="profile-cover shadow-sm"></div>
             <div class="profile-avatar-container">
-                <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=150" alt="Profil Pengguna" class="profile-avatar">
-                <div class="avatar-edit-btn" title="Ubah Foto Profil">
-                    <i class="bi bi-camera-fill"></i>
+                <div style="position: relative; display: inline-block;">
+                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=150" alt="Profil Pengguna" class="profile-avatar">
+                    <div class="avatar-edit-btn" title="Ubah Foto Profil">
+                        <i class="bi bi-camera-fill"></i>
+                    </div>
                 </div>
                 <h2 class="fw-bold mt-3 mb-1">Budi Santoso</h2>
                 <p class="text-secondary mb-2">budi.santoso@example.com <span class="mx-2">•</span> +628123456789</p>
@@ -225,7 +227,7 @@
             <div id="tab-info" class="profile-tab-pane active">
                 <!-- Highlight Stats -->
                 <div class="row g-3 mb-4">
-                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">1,250</div><div class="stat-label">Poin Kenangan</div></div></div>
+                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">1,250</div><div class="stat-label">Poin Roastory</div></div></div>
                     <div class="col-md-4"><div class="stat-badge"><div class="stat-value">24</div><div class="stat-label">Total Pesanan</div></div></div>
                     <div class="col-md-4"><div class="stat-badge"><div class="stat-value">5</div><div class="stat-label">Reservasi Tuntas</div></div></div>
                 </div>
