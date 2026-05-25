@@ -2,6 +2,53 @@
 
 @section('title', 'Daftar Pengguna | Portal Admin')
 
+@push('admin_styles')
+<style>
+    :root {
+        --text-muted: rgba(255, 255, 255, 0.85) !important;
+        --border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    body {
+        color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    .table-dark {
+        color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    .icon-box.primary {
+        background-color: rgba(212, 181, 157, 0.2) !important;
+        color: #f5d5b8 !important;
+    }
+    
+    .icon-box.success {
+        background-color: rgba(25, 135, 84, 0.25) !important;
+        color: #51dd9f !important;
+    }
+    
+    .icon-box.warning {
+        background-color: rgba(255, 193, 7, 0.25) !important;
+        color: #ffd60a !important;
+    }
+    
+    .icon-box.info {
+        background-color: rgba(13, 202, 240, 0.25) !important;
+        color: #48d3ff !important;
+    }
+    
+    .badge-completed {
+        background-color: rgba(25, 135, 84, 0.35) !important;
+        color: #4cef9f !important;
+    }
+    
+    .badge-pending {
+        background-color: rgba(255, 193, 7, 0.35) !important;
+        color: #ffd60a !important;
+    }
+</style>
+@endpush
+
 @section('admin_content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
