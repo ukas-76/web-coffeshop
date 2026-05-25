@@ -121,38 +121,50 @@
                         <p class="text-muted">Silakan masuk ke akun Anda untuk melanjutkan dan menikmati kemudahan memesan kopi favorit Anda.</p>
                     </div>
 
-                    <form action="{{ url('/') }}">
-                        <!-- Input Email -->
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show rounded-4" role="alert">
+                            {{ $errors->first() }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <form action="/login" method="POST">
+                        @csrf 
+
                         <div class="mb-4">
                             <label for="email" class="form-label fw-bold text-dark">Alamat Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="contoh: nama@email.com" required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="contoh: nama@email.com" required>
                         </div>
 
-                        <!-- Input Password -->
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <label for="password" class="form-label fw-bold text-dark mb-0">Kata Sandi</label>
                                 <a href="#" class="text-kopi text-decoration-none small fw-semibold">Lupa Sandi?</a>
                             </div>
-                            <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi Anda" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi Anda" required>
                         </div>
 
-                        <!-- Ingat Saya -->
                         <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" id="ingatSaya">
+                            <input class="form-check-input" type="checkbox" id="ingatSaya" name="remember">
                             <label class="form-check-label text-muted" for="ingatSaya">
                                 Ingat masuk di perangkat ini
                             </label>
                         </div>
 
-                        <!-- Tombol Login -->
                         <button type="submit" class="btn btn-kopi w-100 py-3 mb-4 rounded-pill fw-bold fs-6 shadow-sm">
                             Masuk <i class="bi bi-box-arrow-in-right ms-2"></i>
                         </button>
                     </form>
 
                     <div class="text-center mt-auto">
-                        <p class="text-muted mb-2">Belum menjadi anggota? <a href="{{ url('/register') }}" class="text-kopi fw-bold text-decoration-none">Daftar sekarang</a></p>
+                        <p class="text-muted mb-2">Belum menjadi anggota? <a href="{{ route('register') }}" class="text-kopi fw-bold text-decoration-none">Daftar sekarang</a></p>
                         <a href="{{ url('/') }}" class="text-secondary text-decoration-none small"><i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda</a>
                     </div>
                 </div>
@@ -163,17 +175,7 @@
 
     <!-- Script Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const formObj = document.querySelector('form');
-            if (formObj) {
-                formObj.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    localStorage.setItem('isLoggedIn', 'true');
-                    window.location.href = "{{ url('/reservasi') }}";
-                });
-            }
-        });
-    </script>
+</body>
+</html>
 </body>
 </html>
