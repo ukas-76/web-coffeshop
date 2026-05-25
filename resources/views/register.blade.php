@@ -105,46 +105,45 @@
                         <p class="text-muted small">Gabung sekarang dan nikmati berbagai promo menarik.</p>
                     </div>
 
-                    <form action="{{ url('/') }}">
-                        <div class="row g-3 mb-3">
-                            <!-- Input Nama Depan -->
-                            <div class="col-sm-6">
-                                <label for="firstName" class="form-label fw-bold text-dark small">Nama Depan</label>
-                                <input type="text" class="form-control" id="firstName" placeholder="Sesuai KTP" required>
-                            </div>
-                            <!-- Input Nama Belakang -->
-                            <div class="col-sm-6">
-                                <label for="lastName" class="form-label fw-bold text-dark small">Nama Belakang</label>
-                                <input type="text" class="form-control" id="lastName" placeholder="Opsional">
-                            </div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger pb-0 rounded-4">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="/register" method="POST">
+                        @csrf 
+
+                        <div class="mb-3">
+                            <label for="nama" class="form-label fw-bold text-dark small">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Sesuai KTP" value="{{ old('nama') }}" required>
                         </div>
 
-                        <!-- Input Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label fw-bold text-dark small">Alamat Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="contoh: nama@email.com" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="contoh: nama@email.com" value="{{ old('email') }}" required>
                         </div>
 
-                        <!-- Input No HP -->
                         <div class="mb-3">
                             <label for="phone" class="form-label fw-bold text-dark small">Nomor Handphone (WhatsApp)</label>
-                            <input type="tel" class="form-control" id="phone" placeholder="0812xxxxxx" required>
+                            <input type="tel" class="form-control" id="phone" name="nomor_telepon" placeholder="0812xxxxxx" value="{{ old('nomor_telepon') }}" required>
                         </div>
 
                         <div class="row g-3 mb-4">
-                            <!-- Input Password -->
                             <div class="col-sm-6">
                                 <label for="password" class="form-label fw-bold text-dark small">Kata Sandi</label>
-                                <input type="password" class="form-control" id="password" placeholder="Minimal 8 Karakter" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Minimal 6 Karakter" required>
                             </div>
-                            <!-- Konfirmasi Password -->
                             <div class="col-sm-6">
                                 <label for="confirm" class="form-label fw-bold text-dark small">Konfirmasi Sandi</label>
-                                <input type="password" class="form-control" id="confirm" placeholder="Ulangi Sandi" required>
+                                <input type="password" class="form-control" id="confirm" name="password_confirmation" placeholder="Ulangi Sandi" required>
                             </div>
                         </div>
 
-                        <!-- Persetujuan -->
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="terms" required>
                             <label class="form-check-label text-muted small" for="terms">
@@ -152,14 +151,13 @@
                             </label>
                         </div>
 
-                        <!-- Tombol Daftar -->
                         <button type="submit" class="btn btn-kopi w-100 py-3 mb-4 rounded-pill fw-bold fs-6 shadow-sm">
-                            Daftar Sekkarang <i class="bi bi-person-plus ms-2"></i>
+                            Daftar Sekarang <i class="bi bi-person-plus ms-2"></i>
                         </button>
                     </form>
 
                     <div class="text-center mt-auto">
-                        <p class="text-muted mb-2">Sudah punya akun? <a href="{{ url('/login') }}" class="text-kopi fw-bold text-decoration-none">Masuk di sini</a></p>
+                        <p class="text-muted mb-2">Sudah punya akun? <a href="{{ route('login') }}" class="text-kopi fw-bold text-decoration-none">Masuk di sini</a></p>
                         <a href="{{ url('/') }}" class="text-secondary text-decoration-none small"><i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda</a>
                     </div>
                 </div>
@@ -186,23 +184,18 @@
             const formObj = document.querySelector('form');
             if (formObj) {
                 formObj.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    
                     const pass = document.getElementById('password').value;
                     const confirm = document.getElementById('confirm').value;
                     
                     if(pass !== confirm) {
+                        e.preventDefault(); // Cegah submit hanya jika password tidak sama
                         alert('Kata sandi dan konfirmasi sandi tidak cocok!');
-                        return;
                     }
-
-                    // Auto login after reg
-                    localStorage.setItem('isLoggedIn', 'true');
-                    alert('Registrasi berhasil! Selamat bergabung di Roastory.');
-                    window.location.href = "{{ url('/') }}";
+                    // Jika sama, biarkan form terkirim ke server Laravel (action="/register")
                 });
             }
         });
     </script>
 </body>
 </html>
+

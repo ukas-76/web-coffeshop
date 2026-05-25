@@ -242,23 +242,39 @@
                 <span class="fs-5 fw-bold text-white">Portal Admin</span>
             </a>
         </div>
-        <ul class="nav flex-column mt-3">
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}" href="{{ url('/admin/dashboard') }}"><i class="bi bi-grid-1x2-fill"></i> Ringkasan Utama</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/pesanan') ? 'active' : '' }}" href="{{ url('/admin/pesanan') }}"><i class="bi bi-bag-check"></i> Pesanan</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/reservasi') ? 'active' : '' }}" href="{{ url('/admin/reservasi') }}"><i class="bi bi-calendar2-check"></i> Reservasi</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/katalog-menu') ? 'active' : '' }}" href="{{ url('/admin/katalog-menu') }}"><i class="bi bi-journal-richtext"></i> Katalog Menu</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/pengguna') ? 'active' : '' }}" href="{{ url('/admin/pengguna') }}"><i class="bi bi-people"></i> Daftar Pengguna</a>
-            </li>
-        </ul>
+        <ul class="nav flex-column">
+    
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}" href="{{ url('/admin/dashboard') }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/users') ? 'active' : '' }}" href="{{ url('/admin/users') }}">
+            <i class="bi bi-people"></i> Pengguna
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/menus') ? 'active' : '' }}" href="{{ url('/admin/menus') }}">
+            <i class="bi bi-cup-hot"></i> Manajemen Menu
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}" href="{{ url('/admin/orders') }}">
+            <i class="bi bi-cart"></i> Pesanan
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/reservations') ? 'active' : '' }}" href="{{ url('/admin/reservations') }}">
+            <i class="bi bi-calendar-check"></i> Reservasi
+        </a>
+    </li>
+
+</ul>
 
         <div class="position-absolute bottom-0 w-100 p-3">
             <a class="btn btn-outline-admin w-100 d-flex justify-content-center align-items-center gap-2"
