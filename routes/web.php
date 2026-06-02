@@ -32,6 +32,7 @@ Route::get('/', [HalamanUtamaController::class, 'index']);
 // Jika user mengakses namacoffeeshop.com/menu
 Route::get('/menu', [HalamanUtamaController::class, 'menu']);
 
+
 // Jika user mengakses namacoffeeshop.com/reservasi
 Route::get('/reservasi', [ReservasiController::class, 'index']);
 
@@ -58,4 +59,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/users', [DashboardAdminController::class, 'users']);
 
     Route::delete('/users/{id}', [DashboardAdminController::class, 'hapusUser']);
+    Route::delete('/menus/{id}', [DashboardAdminController::class, 'hapusMenu']);
+
+    Route::post('/menus', [DashboardAdminController::class, 'storeMenu']); 
+    Route::put('/menus/{id}', [DashboardAdminController::class, 'updateMenu']);
 });
