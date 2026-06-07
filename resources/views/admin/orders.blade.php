@@ -56,12 +56,13 @@
         <p class="text-muted mb-0 small">Kelola seluruh transaksi pesanan (Delivery/Pick-up).</p>
     </div>
     <div class="d-flex gap-2">
-        <select class="form-select bg-dark text-white border-0 shadow-none" style="border: 1px solid var(--border-color) !important;">
+        <select id="filterStatus" class="form-select bg-dark text-white shadow-none" style="border: 1px solid var(--border-color) !important; width: auto;">
             <option value="all">Semua Status</option>
-            <option value="pending">Diproses</option>
-            <option value="completed">Selesai</option>
+            <option value="menunggu">Menunggu</option>
+            <option value="diproses">Diproses</option>
+            <option value="selesai">Selesai</option>
+            <option value="dibatalkan">Dibatalkan</option>
         </select>
-        <button class="btn btn-admin btn-sm px-3 rounded-pill text-nowrap"><i class="bi bi-funnel me-1"></i> Filter</button>
     </div>
 </div>
 
@@ -80,81 +81,61 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="fw-bold text-white">#ORD-9021</td>
-                    <td class="text-muted small">26 Apr 2026, 14:30</td>
+                @forelse($dataPesanan as $pesanan)
+                <tr class="baris-pesanan" data-status="{{ strtolower($pesanan->status ?? 'menunggu') }}">
+                    {{-- ID digenerate otomatis dengan padding nol agar terlihat seperti format nota --}}
+                    <td class="fw-bold text-white">#ORD-{{ str_pad($pesanan->id, 4, '0', STR_PAD_LEFT) }}</td>
+                    
+                    {{-- Format tanggal menggunakan Carbon bawaan Laravel --}}
+                    <td class="text-muted small">{{ $pesanan->created_at ? $pesanan->created_at->format('d M Y, H:i') : '-' }}</td>
+                    
+                    {{-- Mengambil data nama dan nomor telepon dari relasi tabel pengguna --}}
                     <td>
-                        <div class="fw-bold text-white">Bapak Budi Santoso</div>
-                        <div class="small text-muted">+62 812-3456-7890</div>
+                        <div class="fw-bold text-white">{{ $pesanan->pengguna->nama ?? 'Pelanggan Tamu' }}</div>
+                        <div class="small text-muted">{{ $pesanan->pengguna->nomor_telepon ?? '-' }}</div>
                     </td>
-                    <td><span class="badge bg-secondary">Pick-up</span></td>
-                    <td class="fw-bold">Rp 150.000</td>
-                    <td><span class="badge-status badge-completed">Selesai</span></td>
+                    
+                    {{-- Logika warna badge berdasarkan jenis pesanan --}}
+                    <td>
+                        @if($pesanan->jenis_pesanan == 'delivery')
+                            <span class="badge bg-info text-dark">Delivery</span>
+                        @else
+                            <span class="badge bg-secondary">Pick-up</span>
+                        @endif
+                    </td>
+                    
+                    {{-- Harga sementara menampilkan ongkir (nanti disambung ke tabel pembayaran) --}}
+                    <td class="fw-bold">Rp {{ number_format($pesanan->ongkir ?? 0, 0, ',', '.') }}</td>
+                    
+                    {{-- Logika warna badge berdasarkan status --}}
+                    <td>
+                        @if($pesanan->status == 'selesai')
+                            <span class="badge-status badge-completed">Selesai</span>
+                        @elseif($pesanan->status == 'dibatalkan')
+                            <span class="badge bg-danger text-white border-0">Dibatalkan</span>
+                        @else
+                            {{-- Status menunggu / dikonfirmasi --}}
+                            <span class="badge-status badge-pending">{{ ucfirst($pesanan->status ?? 'Diproses') }}</span>
+                        @endif
+                    </td>
+                    
                     <td class="text-end">
-                        <button class="btn btn-sm btn-outline-admin"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-primary ms-1"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#detailModal{{ $pesanan->id }}" title="Lihat Detail">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editStatusModal{{ $pesanan->id }}" title="Edit Status">
+                            <i class="bi bi-pencil"></i>
+                        </button>
                     </td>
                 </tr>
+                @empty
                 <tr>
-                    <td class="fw-bold text-white">#ORD-9022</td>
-                    <td class="text-muted small">26 Apr 2026, 15:05</td>
-                    <td>
-                        <div class="fw-bold text-white">Ibu Siti Aminah</div>
-                        <div class="small text-muted">+62 878-1234-5678</div>
-                    </td>
-                    <td><span class="badge bg-info text-dark">Delivery</span></td>
-                    <td class="fw-bold">Rp 85.000</td>
-                    <td><span class="badge-status badge-pending">Diproses</span></td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-admin"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-primary ms-1"><i class="bi bi-pencil"></i></button>
+                    <td colspan="7" class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        Belum ada pesanan Delivery atau Pick-up.
                     </td>
                 </tr>
-                <tr>
-                    <td class="fw-bold text-white">#ORD-9023</td>
-                    <td class="text-muted small">26 Apr 2026, 15:45</td>
-                    <td>
-                        <div class="fw-bold text-white">Andi Darmawan</div>
-                        <div class="small text-muted">+62 856-9876-5432</div>
-                    </td>
-                    <td><span class="badge bg-secondary">Pick-up</span></td>
-                    <td class="fw-bold">Rp 210.000</td>
-                    <td><span class="badge-status badge-completed">Selesai</span></td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-admin"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-primary ms-1"><i class="bi bi-pencil"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-white">#ORD-9024</td>
-                    <td class="text-muted small">26 Apr 2026, 16:10</td>
-                    <td>
-                        <div class="fw-bold text-white">Maya Sari</div>
-                        <div class="small text-muted">+62 811-2233-4455</div>
-                    </td>
-                    <td><span class="badge bg-info text-dark">Delivery</span></td>
-                    <td class="fw-bold">Rp 45.000</td>
-                    <td><span class="badge-status badge-pending">Diproses</span></td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-admin"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-primary ms-1"><i class="bi bi-pencil"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-white">#ORD-9025</td>
-                    <td class="text-muted small">26 Apr 2026, 16:30</td>
-                    <td>
-                        <div class="fw-bold text-white">Rizky Aditya</div>
-                        <div class="small text-muted">+62 813-5566-7788</div>
-                    </td>
-                    <td><span class="badge bg-secondary">Pick-up</span></td>
-                    <td class="fw-bold">Rp 120.000</td>
-                    <td><span class="badge-status badge-pending">Diproses</span></td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-admin"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-primary ms-1"><i class="bi bi-pencil"></i></button>
-                    </td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -172,4 +153,99 @@
         </nav>
     </div>
 </div>
+
+{{-- MODAL EDIT STATUS PESANAN --}}
+@foreach($dataPesanan as $pesanan)
+<div class="modal fade" id="editStatusModal{{ $pesanan->id }}" tabindex="-1" data-bs-theme="dark">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="background-color: var(--admin-card); border: 1px solid var(--border-color);">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold text-white">Update Status</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/pesanan/{{ $pesanan->id }}/status" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body py-1">
+                    <p class="small text-muted mb-2">Pesanan: #ORD-{{ str_pad($pesanan->id, 4, '0', STR_PAD_LEFT) }}</p>
+                    <select name="status" class="form-select bg-dark text-white border-secondary">
+                        <option value="menunggu" {{ $pesanan->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="diproses" {{ $pesanan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                        <option value="selesai" {{ $pesanan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="dibatalkan" {{ $pesanan->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                    </select>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- MODAL DETAIL PESANAN (Tombol Mata) --}}
+<div class="modal fade" id="detailModal{{ $pesanan->id }}" tabindex="-1" data-bs-theme="dark">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--admin-card); border: 1px solid var(--border-color);">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title fw-bold text-white">Detail Pesanan #ORD-{{ str_pad($pesanan->id, 4, '0', STR_PAD_LEFT) }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body py-0">
+                <div class="p-3 rounded mb-3" style="background-color: rgba(0,0,0,0.2);">
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted d-block">Pelanggan</small>
+                            <span class="text-white fw-bold">{{ $pesanan->pengguna->nama ?? 'Tamu' }}</span>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Telepon</small>
+                            <span class="text-white">{{ $pesanan->pengguna->nomor_telepon ?? '-' }}</span>
+                        </div>
+                    </div>
+                    <hr class="border-secondary">
+                    <div class="row">
+                        <div class="col-12">
+                            <small class="text-muted d-block">Alamat Pengiriman</small>
+                            <span class="text-white">{{ $pesanan->alamat_pengiriman ?? 'Ambil di Toko (Pick-up)' }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6 class="text-white mb-2">Daftar Menu:</h6>
+                <div class="text-center py-4 text-muted border border-secondary rounded mb-3" style="border-style: dashed !important;">
+                    <i class="bi bi-cart4 fs-3 d-block mb-2"></i>
+                    <small>Daftar pesanan menu akan segera disambungkan ke tabel detail_reservasi.</small>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endforeach
+
+{{-- SCRIPT JAVASCRIPT UNTUK FILTER DROPDOWN --}}
+@push('admin_scripts')
+<script>
+    document.getElementById('filterStatus').addEventListener('change', function() {
+        let selectedStatus = this.value;
+        let rows = document.querySelectorAll('.baris-pesanan');
+        
+        rows.forEach(row => {
+            let rowStatus = row.getAttribute('data-status');
+            // Jika pilih 'all' atau statusnya cocok, tampilkan. Jika tidak, sembunyikan.
+            if (selectedStatus === 'all' || selectedStatus === rowStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+@endpush
+
 @endsection

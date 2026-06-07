@@ -63,4 +63,11 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/menus', [DashboardAdminController::class, 'storeMenu']); 
     Route::put('/menus/{id}', [DashboardAdminController::class, 'updateMenu']);
+
+    Route::get('/reservasi', [DashboardAdminController::class, 'indexReservasi']);
+    Route::get('/orders', [DashboardAdminController::class, 'indexPesanan']);
+    Route::put('/pesanan/{id}/status', [DashboardAdminController::class, 'updateStatusPesanan']);
+    Route::get('/reservations', [DashboardAdminController::class, 'indexReservasi']);
+    Route::post('/reservations', [DashboardAdminController::class, 'storeReservasi']);
+    Route::put('/reservations/{id}/status', [DashboardAdminController::class, 'updateStatusReservasi']);
 });
