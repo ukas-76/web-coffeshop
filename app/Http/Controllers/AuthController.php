@@ -80,4 +80,19 @@ class AuthController extends Controller
         // 3. Arahkan ke halaman login dengan pesan sukses
         return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
+
+    public function prosesLogout(Request $request)
+{
+    // Mengeluarkan pengguna dari sesi autentikasi Laravel
+    Auth::logout();
+
+    // Menghapus seluruh data sesi agar aman
+    $request->session()->invalidate();
+
+    // Membuat ulang token CSRF baru untuk mencegah serangan CSRF
+    $request->session()->regenerateToken();
+
+    // Mengalihkan pengguna kembali ke halaman utama
+    return redirect('/')->with('success', 'Kamu telah berhasil keluar.');
+}
 }

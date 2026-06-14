@@ -268,46 +268,51 @@
         </div>
 
         <!-- Promo & Event Grid -->
-        <div class="row g-4 justify-content-center">
-            <!-- Promo 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Promo Happy Hour" style="height: 220px; object-fit: cover;">
-                    <div class="card-body p-4 position-relative bg-white pt-5">
-                        <span class="badge bg-danger rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-clock me-1"></i> Promo Terbatas</span>
-                        <h4 class="fw-bold text-dark mb-2">Pesta Happy Hour</h4>
-                        <p class="text-muted small mb-4">Dapatkan potongan harga spesial hingga 50% untuk semua varian kopi espresso-based setiap hari kerja pukul 14.00 - 17.00 WIB.</p>
-                        <a href="{{ url('/order') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Klaim Promo <i class="bi bi-ticket-perforated ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Event 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Live Music" style="height: 220px; object-fit: cover;">
-                    <div class="card-body p-4 position-relative bg-white pt-5">
-                        <span class="badge bg-kopi rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-calendar-event me-1"></i> Sabtu Malam</span>
-                        <h4 class="fw-bold text-dark mb-2">Akustik Senja Ria</h4>
-                        <p class="text-muted small mb-4">Nikmati malam minggu yang syahdu dengan iringan live music akustik lokal terbaik sambil menyeruput secangkir kopi favorit Anda.</p>
-                        <a href="{{ url('/reservasi') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Reservasi Meja <i class="bi bi-calendar-check ms-1"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Promo 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Buy 1 Get 1" style="height: 220px; object-fit: cover;">
-                    <div class="card-body p-4 position-relative bg-white pt-5">
-                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;"><i class="bi bi-star-fill me-1"></i> Khusus Member</span>
-                        <h4 class="fw-bold text-dark mb-2">Beli 1 Dapat 2</h4>
-                        <p class="text-muted small mb-4">Eksklusif untuk Roastory Member! Beli varian kopi apa saja ukuran Large dan dapatkan gratis satu minuman pilihan untuk teman Anda.</p>
-                        <a href="{{ url('/login') }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Daftar Member <i class="bi bi-person-plus ms-1"></i></a>
-                    </div>
-                </div>
+        <!-- Promo & Event Grid Dinamis -->
+<div class="row g-4 justify-content-center">
+    
+    <!-- LOOPING DATA PROMO -->
+    @foreach($promos as $promo)
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+            <img src="{{ $promo->gambar ?? 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $promo->judul }}" style="height: 220px; object-fit: cover;">
+            <div class="card-body p-4 position-relative bg-white pt-5">
+                <span class="badge bg-danger rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;">
+                    <i class="bi bi-clock me-1"></i> {{ $promo->badge_teks }}
+                </span>
+                <h4 class="fw-bold text-dark mb-2">{{ $promo->judul }}</h4>
+                <p class="text-muted small mb-4">{{ $promo->deskripsi }}</p>
+                <a href="{{ url($promo->link_aksi) }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Klaim Promo <i class="bi bi-ticket-perforated ms-1"></i></a>
             </div>
         </div>
+    </div>
+    @endforeach
+
+    <!-- LOOPING DATA EVENT -->
+    @foreach($events as $event)
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
+            <img src="{{ $event->gambar ?? 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $event->judul }}" style="height: 220px; object-fit: cover;">
+            <div class="card-body p-4 position-relative bg-white pt-5">
+                <span class="badge bg-kopi rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;">
+                    <i class="bi bi-calendar-event me-1"></i> {{ $event->badge_teks }}
+                </span>
+                <h4 class="fw-bold text-dark mb-2">{{ $event->judul }}</h4>
+                <p class="text-muted small mb-4">{{ $event->deskripsi }}</p>
+                <a href="{{ url($event->link_aksi) }}" class="btn btn-outline-kopi rounded-pill fw-bold w-100">Reservasi Meja <i class="bi bi-calendar-check ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+    <!-- TAMPILAN JIKA DATABASE KOSONG -->
+    @if($promos->isEmpty() && $events->isEmpty())
+        <div class="col-12 text-center py-5">
+            <p class="text-muted lead">Belum ada promo atau event aktif saat ini. Pantau terus ya!</p>
+        </div>
+    @endif
+
+</div>
 
         <!-- CTA Section -->
         <div class="cta-section mx-auto" style="max-width: 900px;">
