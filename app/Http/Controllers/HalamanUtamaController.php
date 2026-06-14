@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Promo;
+use App\Models\Event;
 
 class HalamanUtamaController extends Controller
 {
     public function index()
     {
-        // Mengarahkan ke file resources/views/index.blade.php
-        return view('index'); 
+        // Mengambil semua data promo dan event dari database
+        $promos = Promo::all();
+        $events = Event::all();
+
+        // Mengirimkan data ke view index.blade.php
+        return view('index', compact('promos', 'events')); 
     }
 
     public function menu()

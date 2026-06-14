@@ -19,6 +19,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 // Route POST untuk memproses form (BARU)
 Route::post('/register', [AuthController::class, 'prosesRegister']);
 Route::post('/login', [AuthController::class, 'prosesLogin']);
+Route::post('/logout', [AuthController::class, 'prosesLogout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------

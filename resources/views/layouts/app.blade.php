@@ -6,16 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Roastory')</title>
 
-    <!-- Menggunakan Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- Font yang lebih modern -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tambahan styles spesifik per halaman -->
     @stack('styles')
 
     <style>
@@ -142,8 +138,7 @@
 
 <body>
 
-    <!-- Navbar Modern -->
-    <nav class="navbar navbar-expand-lg navbar-custom py-3 fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-custom py-3 fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand text-kopi d-flex align-items-center gap-2" href="{{ url('/') }}">
                 <i class="bi bi-cup-hot-fill fs-3"></i>
@@ -172,32 +167,41 @@
                         <a class="nav-link {{ request()->is('order') ? 'active' : '' }}" href="{{ url('/order') }}">Pesan Online</a>
                     </li>
                 </ul>
+                
                 <div class="d-flex mt-3 mt-lg-0 align-items-center gap-3">
-                    <div id="loginSection" class="d-flex gap-3 align-items-center">
+                    @guest
                         <a class="btn btn-outline-kopi px-4 py-2 rounded-pill" href="{{ url('/login') }}">Masuk</a>
                         <a class="btn btn-kopi px-4 py-2 rounded-pill" href="{{ url('/login-admin') }}">Admin</a>
-                    </div>
-                    <div id="profileSection" class="dropdown" style="display: none;">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=40" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-white shadow-sm">
-                            <span class="ms-2 fw-bold text-dark d-none d-lg-inline">Budi Santoso</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 p-2" aria-labelledby="dropdownUser">
-                            <li><a class="dropdown-item rounded-3 mb-1 bg-kopi-light text-kopi fw-bold" href="{{ url('/profile') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a></li>
-                            <li><a class="dropdown-item rounded-3 mb-1" href="{{ url('/order') }}"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item rounded-3 text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a></li>
-                        </ul>
-                    </div>
+                    @endguest
+
+                    @auth
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama) }}&background=5c3d2e&color=fff&size=40" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-white shadow-sm">
+                                <span class="ms-2 fw-bold text-dark d-none d-lg-inline">{{ Auth::user()->nama }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 p-2" aria-labelledby="dropdownUser">
+                                <li><a class="dropdown-item rounded-3 mb-1 bg-kopi-light text-kopi fw-bold" href="{{ url('/profile') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a></li>
+                                <li><a class="dropdown-item rounded-3 mb-1" href="{{ url('/order') }}"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST" id="logoutForm" class="d-none">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item rounded-3 text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Keluar
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Konten Utama -->
     @yield('content')
 
-    <!-- Footer -->
     <footer class="py-5 mt-5">
         <div class="container">
             <div class="row g-4 mb-4">
@@ -207,25 +211,43 @@
                     </h4>
                     <p class="text-white-50">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
                 </div>
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0 pl-md-5">
-                    <h5 class="text-white mb-3 fw-bold">Kontak & Lokasi</h5>
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0 d-flex flex-column align-items-md-center justify-content-start text-start text-md-center mx-auto">
+                    <h5 class="text-white mb-3 fw-bold">Lokasi & Jam Operasional</h5>
                     <ul class="list-unstyled text-white-50">
                         <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> Jl. Sudirman No 123, Kota Kopi</li>
                         <li class="mb-2"><i class="bi bi-clock me-2"></i> Buka Setiap Hari: 08.00 - 23.00 WIB</li>
-                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> +62 812-3456-7890</li>
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-12 text-center text-lg-end">
-                    <h5 class="text-white mb-3 fw-bold">Ikuti Kami</h5>
+                    <h5 class="fw-bold text-white mb-3">Ikuti & Kontak Kami</h5>
                     <div class="social-links d-flex justify-content-center justify-content-lg-end">
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-whatsapp"></i></a>
-                        <a href="#"><i class="bi bi-tiktok"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a href="https://instagram.com/roastory.co" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 40px; height: 40px; transition: all 0.3s;" title="Instagram Roastory">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                        <a href="https://wa.me/6281234567890?text=Halo%20Roastory,%20saya%20ingin%20bertanya" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 40px; height: 40px; transition: all 0.3s;" title="WhatsApp Roastory">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+
+                        <a href="https://tiktok.com/@roastory.coffee.pwt" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 40px; height: 40px; transition: all 0.3s;" title="TikTok Roastory">
+                            <i class="bi bi-tiktok"></i>
+                        </a>
+
+                        <a href="https://youtube.com/@roastory" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 40px; height: 40px; transition: all 0.3s;" title="YouTube Roastory">
+                            <i class="bi bi-youtube"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-            
+
             <hr class="border-secondary opacity-25">
             <div class="text-center mt-4 pb-0 mb-0">
                 <small class="text-white-50">
@@ -235,7 +257,6 @@
         </div>
     </footer>
 
-    <!-- Script Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Efek untuk membuat navbar memiliki shadow saat di-scroll
@@ -249,41 +270,8 @@
                 navbar.style.backgroundColor = 'rgba(253, 251, 247, 0.95)';
             }
         });
-
-        // Login status management
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const loginSection = document.getElementById('loginSection');
-            const profileSection = document.getElementById('profileSection');
-            
-            if (!loginSection || !profileSection) return;
-
-            if (isLoggedIn) {
-                loginSection.classList.remove('d-flex');
-                loginSection.style.display = 'none';
-                profileSection.style.display = 'block';
-            } else {
-                loginSection.style.display = 'flex';
-                loginSection.classList.add('d-flex');
-                profileSection.style.display = 'none';
-            }
-        }
-
-        // Logout function
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.setItem('isLoggedIn', 'false');
-                window.location.href = "{{ url('/') }}";
-            });
-        }
-
-        // Check login status on page load
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
     </script>
-    
-    <!-- Tambahan scripts spesifik per halaman -->
+
     @stack('scripts')
 </body>
 
