@@ -34,6 +34,21 @@
             display: flex;
         }
 
+        /* Override Bootstrap Global untuk Teks Redup di Dark Mode */
+        .text-muted {
+            color: rgba(255, 255, 255, 0.65) !important;
+        }
+        
+        .text-secondary {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        /* Memastikan placeholder pada input pencarian juga terbaca jelas */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+            opacity: 1; 
+        }
+
         /* Sidebar Styling */
         #sidebar {
             width: 250px;
@@ -288,35 +303,20 @@
     <main id="main-content">
         <!-- Topbar -->
         <header class="top-navbar">
-            <div class="d-flex align-items-center gap-3">
-                <button id="sidebar-toggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <div class="d-none d-md-flex align-items-center bg-dark rounded-pill px-3 py-2"
-                    style="border: 1px solid var(--border-color);">
+            <form action="{{ url('/admin/search') }}" method="GET" class="d-none d-md-flex align-items-center bg-dark rounded-pill px-3 py-2" style="border: 1px solid var(--border-color); margin-bottom: 0; min-width: 250px;">
                     <i class="bi bi-search text-muted me-2"></i>
-                    <input type="text" placeholder="Cari data..." class="bg-transparent border-0 text-white shadow-none"
-                        style="outline: none;">
-                </div>
-            </div>
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari pesanan, menu, user..." class="bg-transparent border-0 text-white shadow-none w-100" style="outline: none;">
+            </form>
 
-            <div class="d-flex align-items-center gap-4">
-                <a href="#" class="text-muted position-relative hover-white transition-colors">
-                    <i class="bi bi-bell fs-5"></i>
-                    <span
-                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-dark rounded-circle">
-                        <span class="visually-hidden">New alerts</span>
-                    </span>
-                </a>
-                <div class="user-profile d-flex align-items-center gap-2 cursor-pointer">
-                    <img src="https://ui-avatars.com/api/?name=Admin+Kopi&background=d4b59d&color=1e1b1a"
-                        alt="Admin Profile">
+            <div class="user-profile d-flex align-items-center gap-2 cursor-pointer">
+                    <!-- Avatar dinamis berdasarkan nama yang login -->
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama ?? 'Admin') }}&background=d4b59d&color=1e1b1a" alt="Admin Profile">
                     <div class="d-none d-md-block">
-                        <p class="mb-0 fw-bold fs-6 lh-sm">Admin Utama</p>
-                        <small class="text-muted" style="font-size: 0.7rem;">Superadmin</small>
+                        <!-- Menampilkan nama admin dari database -->
+                        <p class="mb-0 fw-bold fs-6 lh-sm">{{ Auth::user()->nama ?? 'Administrator' }}</p>
+                        <small class="text-muted" style="font-size: 0.7rem;">{{ ucfirst(Auth::user()->role ?? 'Admin') }}</small>
                     </div>
                 </div>
-            </div>
         </header>
 
         <!-- Dashboard Content -->
