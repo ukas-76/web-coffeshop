@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller; 
 use Illuminate\Http\Request;
-use App\Models\user as Pengguna; // Pastikan model User sudah dibuat dan sesuai dengan nama tabel 'pengguna'
+use App\Models\User as Pengguna; // Menggunakan kapital 'User' sesuai standar penamaan Laravel
 use App\Models\Menu;
 use App\Models\Reservasi;
 use App\Models\Meja;
@@ -13,39 +13,106 @@ use Carbon\Carbon;
 
 class DashboardAdminController extends Controller
 {
+    // ==========================================
+    // 1. HALAMAN RINGKASAN UTAMA (DASHBOARD)
+    // ==========================================
     public function index()
     {
-        // Mengarahkan ke file resources/views/admin/dashboard.blade.php
-        return view('admin.dashboard');
+        $today = Carbon::today();
+
+        // Hitung Pendapatan Hari Ini (dari kolom ongkir/DP sementara)
+        $pendapatanHariIni = Reservasi::whereDate('created_at', $today)
+                                ->where('status', 'selesai')
+                                ->sum('ongkir');
+
+        // Hitung Pesanan Baru (Delivery & Pickup hari ini)
+        $pesananBaru = Reservasi::whereDate('created_at', $today)
+                            ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
+                            ->count();
+
+        // Hitung Reservasi Menunggu (Dine-in yang statusnya masih menunggu)
+        $reservasiMenunggu = Reservasi::where('jenis_pesanan', 'dine_in')
+                                ->where('status', 'menunggu')
+                                ->count();
+
+        // Total Pelanggan terdaftar
+        $totalPelanggan = Pengguna::where('role', 'pelanggan')->count();
+
+        // Daftar Pesanan Terbaru (Ambil 5 transaksi terakhir)
+        $recentOrders = Reservasi::with('pengguna')
+                            ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
+                            ->orderBy('created_at', 'desc')
+                            ->limit(5)
+                            ->get();
+
+        // Jadwal Reservasi Terdekat (Ambil 3 booking mendatang)
+        $upcomingReservations = Reservasi::with(['pengguna', 'meja'])
+                                    ->where('jenis_pesanan', 'dine_in')
+                                    ->where('tanggal_reservasi', '>=', $today)
+                                    ->where('status', 'menunggu')
+                                    ->orderBy('tanggal_reservasi', 'asc')
+                                    ->orderBy('jam_mulai', 'asc')
+                                    ->limit(3)
+                                    ->get();
+
+        return view('admin.dashboard', compact(
+            'pendapatanHariIni', 
+            'pesananBaru', 
+            'reservasiMenunggu', 
+            'totalPelanggan', 
+            'recentOrders', 
+            'upcomingReservations'
+        ));
     }
 
+    // ==========================================
+    // 2. FITUR UNDUH LAPORAN (EXPORT CSV)
+    // ==========================================
+    public function exportLaporan()
+    {
+        $fileName = 'laporan_roastory_' . date('Y-m-d') . '.csv';
+        $tasks = Reservasi::with('pengguna')->orderBy('created_at', 'desc')->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('ID Pesanan', 'Pelanggan', 'Jenis Pesanan', 'Total Transaksi', 'Status', 'Tanggal');
+
+        $callback = function() use($tasks, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($tasks as $task) {
+                fputcsv($file, array(
+                    '#ORD-' . str_pad($task->id, 4, '0', STR_PAD_LEFT),
+                    $task->pengguna->nama ?? 'Tamu Walk-in',
+                    ucfirst($task->jenis_pesanan),
+                    'Rp ' . number_format($task->ongkir ?? 0, 0, ',', '.'),
+                    ucfirst($task->status),
+                    $task->created_at ? $task->created_at->format('d M Y, H:i') : '-'
+                ));
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    // ==========================================
+    // 3. MANAJEMEN KATALOG MENU
+    // ==========================================
     public function menus()
     {
-        // 1. Ambil semua data menu
         $dataMenu = Menu::all(); 
-        
-        // 2. Ambil semua data dari tabel kategori_menu
         $dataKategori = DB::table('kategori_menu')->get(); 
-        
-        // 3. Kirim kedua variabel ke halaman view
         return view('admin.menus', compact('dataMenu', 'dataKategori'));
     }
-    
-    public function hapusMenu($id)
-    {
-        $menu = Menu::findOrFail($id);
-        
-        // Hapus file gambar dari penyimpanan jika ada
-        if ($menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar))) {
-            unlink(public_path('uploads/menus/' . $menu->gambar));
-        }
 
-        $menu->delete();
-
-        return redirect()->back()->with('success', 'Menu berhasil dihapus dari katalog!');
-    }
-
-    // Fungsi CREATE: Menyimpan menu baru
     public function storeMenu(Request $request)
     {
         $request->validate([
@@ -54,14 +121,13 @@ class DashboardAdminController extends Controller
             'harga' => 'required|numeric',
             'deskripsi' => 'nullable|string',
             'tersedia' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Wajib gambar, max 2MB
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $namaGambar = null;
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $namaGambar = time() . '_' . $file->getClientOriginalName();
-            // Simpan gambar ke folder public/uploads/menus
             $file->move(public_path('uploads/menus'), $namaGambar);
         }
 
@@ -77,7 +143,6 @@ class DashboardAdminController extends Controller
         return redirect()->back()->with('success', 'Menu baru berhasil ditambahkan!');
     }
 
-    // Fungsi UPDATE: Menyimpan editan menu
     public function updateMenu(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
@@ -91,16 +156,13 @@ class DashboardAdminController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $namaGambar = $menu->gambar; // Gunakan gambar lama secara default
+        $namaGambar = $menu->gambar;
         
-        // Jika admin mengunggah gambar baru
         if ($request->hasFile('gambar')) {
-            // 1. Hapus gambar lama
             if ($menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar))) {
                 unlink(public_path('uploads/menus/' . $menu->gambar));
             }
             
-            // 2. Simpan gambar baru
             $file = $request->file('gambar');
             $namaGambar = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/menus'), $namaGambar);
@@ -118,29 +180,30 @@ class DashboardAdminController extends Controller
         return redirect()->back()->with('success', 'Data menu berhasil diperbarui!');
     }
 
-    public function orders()
+    public function hapusMenu($id)
     {
-        return view('admin.orders');
+        $menu = Menu::findOrFail($id);
+        
+        if ($menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar))) {
+            unlink(public_path('uploads/menus/' . $menu->gambar));
+        }
+
+        $menu->delete();
+        return redirect()->back()->with('success', 'Menu berhasil dihapus dari katalog!');
     }
 
-    public function reservations()
-    {
-        return view('admin.reservations');
-    }
-
-    // 1. Halaman Manajemen Reservasi (Khusus Dine-in)
+    // ==========================================
+    // 4. MANAJEMEN RESERVASI (DINE-IN)
+    // ==========================================
     public function indexReservasi(Request $request)
     {
-        // 1. Tangkap tanggal dari filter kalender, jika kosong gunakan hari ini
         $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
 
-        // 2. Ambil data dari database berdasarkan tanggal yang difilter
         $dataReservasi = Reservasi::with(['pengguna', 'meja'])
             ->where('jenis_pesanan', 'dine_in')
             ->whereDate('tanggal_reservasi', $tanggal)
             ->orderBy('jam_mulai', 'asc')
             ->get();
-
         
         $dataMeja = Meja::all(); 
 
@@ -148,21 +211,11 @@ class DashboardAdminController extends Controller
         $menunggu = $dataReservasi->whereIn('status', ['menunggu', 'diproses', 'dikonfirmasi'])->count();
         $hadir = $dataReservasi->whereIn('status', ['selesai', 'hadir'])->count();
 
-    // 2. Jangan lupa tambahkan 'dataMeja' ke dalam compact
-    return view('admin.reservations', compact('dataReservasi', 'tanggal', 'totalHariIni', 'menunggu', 'hadir', 'dataMeja'));
-
-        // 3. Hitung statistik untuk Kartu Ringkasan di atas tabel
-        $totalHariIni = $dataReservasi->count();
-        $menunggu = $dataReservasi->whereIn('status', ['menunggu', 'diproses', 'dikonfirmasi'])->count();
-        $hadir = $dataReservasi->whereIn('status', ['selesai', 'hadir'])->count();
-
-        // 4. Kirim semua data tersebut ke file view
-        return view('admin.reservations', compact('dataReservasi', 'tanggal', 'totalHariIni', 'menunggu', 'hadir'));
+        return view('admin.reservations', compact('dataReservasi', 'tanggal', 'totalHariIni', 'menunggu', 'hadir', 'dataMeja'));
     }
 
     public function storeReservasi(Request $request)
     {
-        // 1. Validasi input dari form modal
         $request->validate([
             'nama_pelanggan'    => 'required|string|max:255',
             'nomor_telepon'     => 'required|string|max:20',
@@ -172,19 +225,16 @@ class DashboardAdminController extends Controller
             'total_tamu'        => 'required|integer|min:1',
         ]);
 
-        // 2. Cari atau Buat Akun Pelanggan (berdasarkan Nomor Telepon)
         $pelanggan = Pengguna::firstOrCreate(
             ['nomor_telepon' => $request->nomor_telepon],
             [
                 'nama' => $request->nama_pelanggan,
                 'role' => 'pelanggan',
-                // Data dummy wajib jika tabel pengguna mengharuskan email/password
                 'email' => $request->nomor_telepon . '@tamu.com', 
                 'password' => bcrypt('tamu1234')
             ]
         );
 
-        // 3. Simpan data ke tabel Reservasi
         Reservasi::create([
             'pengguna_id'       => $pelanggan->id,
             'jenis_pesanan'     => 'dine_in',
@@ -193,22 +243,19 @@ class DashboardAdminController extends Controller
             'jam_mulai'         => $request->jam_mulai,
             'jam_selesai'       => $request->jam_selesai,
             'total_tamu'        => $request->total_tamu,
-            'ongkir'            => $request->dp_dibayar ?? 0, // DP masuk ke ongkir sementara
-            'status'            => 'dikonfirmasi' // Otomatis dikonfirmasi karena dibuat oleh Admin
+            'ongkir'            => $request->dp_dibayar ?? 0,
+            'status'            => 'dikonfirmasi'
         ]);
 
-        // 4. Kembalikan ke halaman semula
         return redirect()->back()->with('success', 'Reservasi manual berhasil ditambahkan!');
     }
 
     public function updateStatusReservasi(Request $request, $id)
     {
-        // Validasi input status
         $request->validate([
             'status' => 'required|in:menunggu,diproses,dikonfirmasi,selesai,dibatalkan'
         ]);
 
-        // Cari data reservasinya dan perbarui
         $reservasi = Reservasi::findOrFail($id);
         $reservasi->update([
             'status' => $request->status
@@ -217,7 +264,9 @@ class DashboardAdminController extends Controller
         return redirect()->back()->with('success', 'Status reservasi berhasil diperbarui!');
     }
 
-// 2. Halaman Daftar Pesanan (Khusus Delivery dan Pick-up)
+    // ==========================================
+    // 5. MANAJEMEN PESANAN (DELIVERY / PICKUP)
+    // ==========================================
     public function indexPesanan()
     {
         $dataPesanan = Reservasi::with(['pengguna'])
@@ -228,39 +277,72 @@ class DashboardAdminController extends Controller
         return view('admin.orders', compact('dataPesanan'));
     }
 
-    // Fungsi untuk memperbarui status pesanan dari Modal Edit
     public function updateStatusPesanan(Request $request, $id)
     {
-        // Validasi input status
         $request->validate([
             'status' => 'required|in:menunggu,diproses,selesai,dibatalkan'
         ]);
 
-        // Cari pesanannya, lalu ubah statusnya
         $pesanan = Reservasi::findOrFail($id);
         $pesanan->update([
             'status' => $request->status
         ]);
 
-        // Kembalikan ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()->with('success', 'Status pesanan berhasil diperbarui!');
     }
     
+    // ==========================================
+    // 6. MANAJEMEN PENGGUNA (PELANGGAN)
+    // ==========================================
     public function users()
     {
-        // Mengambil semua data pengguna dengan role 'pelanggan'
         $dataPengguna = Pengguna::where('role', 'pelanggan')->get();
-        
-        // Mengirim data ke view admin/users.blade.php
         return view('admin.users', compact('dataPengguna'));
     }
 
     public function hapusUser($id)
     {
-        $user = Pengguna::findOrFail($id); // Cari user berdasarkan ID
-        $user->delete(); // Hapus dari database
+        $user = Pengguna::findOrFail($id);
+        $user->delete();
 
-        // Kembali ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()->with('success', 'Pengguna berhasil dihapus!');
+    }
+
+    // ==========================================
+    // FITUR PENCARIAN GLOBAL
+    // ==========================================
+    public function globalSearch(Request $request)
+    {
+        // 1. Ambil kata kunci dari form
+        $keyword = $request->input('q');
+
+        // Jika kotak pencarian kosong, kembalikan ke halaman sebelumnya
+        if (empty($keyword)) {
+            return redirect()->back();
+        }
+
+        // 2. Cari di Tabel Menu (Berdasarkan Nama atau Deskripsi)
+        $hasilMenu = Menu::where('nama', 'LIKE', "%{$keyword}%")
+                        ->orWhere('deskripsi', 'LIKE', "%{$keyword}%")
+                        ->get();
+
+        // 3. Cari di Tabel Pengguna (Berdasarkan Nama atau Nomor Telepon)
+        $hasilPengguna = Pengguna::where('role', 'pelanggan')
+                        ->where(function($query) use ($keyword) {
+                            $query->where('nama', 'LIKE', "%{$keyword}%")
+                                  ->orWhere('nomor_telepon', 'LIKE', "%{$keyword}%");
+                        })->get();
+
+        // 4. Cari di Tabel Reservasi / Pesanan 
+        // (Berdasarkan ID Pesanan ATAU Nama Pelanggan yang memesan)
+        $hasilReservasi = Reservasi::with('pengguna')
+                        ->where('id', 'LIKE', "%{$keyword}%")
+                        ->orWhereHas('pengguna', function($query) use ($keyword) {
+                            $query->where('nama', 'LIKE', "%{$keyword}%")
+                                  ->orWhere('nomor_telepon', 'LIKE', "%{$keyword}%");
+                        })->get();
+
+        // 5. Kirim semua hasil ke halaman view khusus pencarian
+        return view('admin.search_results', compact('keyword', 'hasilMenu', 'hasilPengguna', 'hasilReservasi'));
     }
 }
