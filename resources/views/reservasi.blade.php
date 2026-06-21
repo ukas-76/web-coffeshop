@@ -112,17 +112,19 @@
 <main class="container mb-5 position-relative">
     
     <!-- LAYER PROTEKSI LOGIN (Full main cover) -->
-    <div class="login-overlay text-center p-4" id="loginProtectOverlay">
-        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
-            <i class="bi bi-lock-fill fs-1 text-kopi"></i>
+        @guest
+        <div class="login-overlay text-center p-4" id="loginProtectOverlay">
+            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
+                <i class="bi bi-lock-fill fs-1 text-kopi"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
+            <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
+            <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
+            <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
+                [Mode Pratinjau: Sembunyikan Dialog]
+            </button>
         </div>
-        <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
-        <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
-        <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
-        <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
-            [Mode Pratinjau: Sembunyikan Dialog]
-        </button>
-    </div>
+        @endguest
 
     <div class="row g-4">
         <!-- KIRI: Pemilihan Meja & DP Menu -->
@@ -361,11 +363,22 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Simulasi Login Auto
-        if (localStorage.getItem('isLoggedIn') === 'true') {
-            document.getElementById('loginProtectOverlay').style.display = 'none';
+        // 1. Ambil elemen overlay lock login
+        const overlay = document.getElementById('loginProtectOverlay');
+    
+        // 2. Ambil status login asli langsung dari server Laravel Auth
+        const isUserLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+    
+        // 3. Logika Kunci otomatis
+        if (isUserLoggedIn) {
+            // Jika user sudah login, buka/sembunyikan lock otomatis
+            if (overlay) overlay.style.display = 'none';
+        } else {
+                // Jika user belum login, pastikan halaman tetap terkunci (lock)
+            if (overlay) overlay.style.display = 'flex';
         }
 
+        // 2. Inisialisasi Elemen UI (Duplikasi 'radios' sudah dihapus di sini)
         const radios = document.querySelectorAll('.table-radio');
         const sumMeja = document.getElementById('sumMeja');
         const sumMinDp = document.getElementById('sumMinDp');
@@ -414,6 +427,7 @@
             validateCheckout();
         }
 
+        // Validasi tombol pembayaran berdasarkan minimal DP
         function validateCheckout() {
             if(currentTotalDP >= currentMinDP) {
                 dpAlert.className = 'alert alert-success py-2 small fw-bold d-flex align-items-center mb-4';
@@ -426,10 +440,10 @@
             }
         }
 
-        // Event Listeners for Radios
+        // Event Listeners untuk Radio Meja
         radios.forEach(r => r.addEventListener('change', updateTableSelection));
 
-        // Event Listeners for Minus / Plus Menu
+        // Event Listeners untuk Tombol Plus Menu
         document.querySelectorAll('.dp-plus').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const valEl = e.currentTarget.parentElement.querySelector('.dp-val');
@@ -439,6 +453,7 @@
             });
         });
 
+        // Event Listeners untuk Tombol Minus Menu
         document.querySelectorAll('.dp-minus').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const valEl = e.currentTarget.parentElement.querySelector('.dp-val');
@@ -450,14 +465,13 @@
             });
         });
 
-        // Handle Submission
+        // Handle form submission ke halaman payment
         document.getElementById('reservationForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Redirect ke halaman pembayaran dengan nominal tagihan
             window.location.href = "{{ url('/payment') }}?amount=" + currentTotalDP;
         });
 
-        // Initialize
+        // Jalankan fungsi inisialisasi di awal load halaman
         updateTableSelection();
         calculateDPTotal();
     });

@@ -38,7 +38,7 @@
     background-color: white;
 }
 
-.avatar-edit-btn {
+.avatar-edit-label {
     position: absolute;
     bottom: 5px;
     right: 5px;
@@ -53,6 +53,11 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.avatar-edit-label:hover {
+    background-color: var(--secondary-coffee);
+    transform: scale(1.05);
 }
 
 .card-custom {
@@ -171,19 +176,41 @@
 @section('content')
 <main class="container my-5 flex-grow-1">
     
+    <!-- Flash Message Notification -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Profile Header -->
     <div class="row mb-5">
         <div class="col-12">
             <div class="profile-cover shadow-sm"></div>
             <div class="profile-avatar-container">
                 <div style="position: relative; display: inline-block;">
-                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=5c3d2e&color=fff&size=150" alt="Profil Pengguna" class="profile-avatar">
-                    <div class="avatar-edit-btn" title="Ubah Foto Profil">
-                        <i class="bi bi-camera-fill"></i>
-                    </div>
+                    
+                    <!-- Avatar Preview Image -->
+                    <img id="avatarPreview" 
+                         src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?nama=' . urlencode(auth()->user()->name) . '&background=5c3d2e&color=fff&size=150' }}" 
+                         alt="Profil Pengguna" 
+                         class="profile-avatar">
+                    
+                    <!-- Form Hidden File Upload khusus Avatar -->
+                    <form id="avatarForm" action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+                        <label for="avatarInput" class="avatar-edit-label" title="Ubah Foto Profil">
+                            <i class="bi bi-camera-fill"></i>
+                        </label>
+                        <input type="file" id="avatarInput" name="avatar" accept="image/*" class="d-none">
+                    </form>
+
                 </div>
-                <h2 class="fw-bold mt-3 mb-1">Budi Santoso</h2>
-                <p class="text-secondary mb-2">budi.santoso@example.com <span class="mx-2">•</span> +628123456789</p>
+                <!-- SINKRONISASI DATA NAMA DAN EMAIL USER -->
+                <h2 class="fw-bold mt-3 mb-1">{{ auth()->user()->nama }}</h2>
+                <p class="text-secondary mb-2">{{ auth()->user()->email }} <span class="mx-2">•</span> {{ auth()->user()->nomor_telepon ?? '-' }}</p>
                 <div class="tier-badge">
                     <i class="bi bi-star-fill"></i> Gold Member
                 </div>
@@ -212,9 +239,14 @@
                         </a>
                     </li>
                     <li class="mt-4 border-top pt-3">
-                        <a href="{{ url('/') }}" class="profile-menu-link text-danger" id="logoutBtnProfile">
+                        <!-- Menggunakan form log out standar Laravel agar aman secara server-side -->
+                        <a href="#" class="profile-menu-link text-danger" 
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="bi bi-box-arrow-right text-danger"></i> Keluar
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -232,41 +264,40 @@
                     <div class="col-md-4"><div class="stat-badge"><div class="stat-value">5</div><div class="stat-label">Reservasi Tuntas</div></div></div>
                 </div>
 
-                <!-- Form Profile -->
+                <!-- Form Profile Info -->
                 <div class="card-custom p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
                         <h4 class="fw-bold mb-0 text-kopi">Informasi Pribadi</h4>
-                        <button class="btn btn-outline-kopi rounded-pill px-4 py-2 btn-sm"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                     </div>
-                    <form>
+                    <form action="{{ route('profile.update') }}" method="POST">
+                        @csrf
+                        @method('PATCH')
                         <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nama Depan</label>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nama Lengkap</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" class="form-control" value="Budi" readonly>
-                                </div>
+                                    <input type="text" name="name" class="form-control" value="{{ auth()->user()->nama }}" placeholder="Masukkan Nama Lengkap">
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nama Belakang</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" class="form-control" value="Santoso" readonly>
-                                </div>
-                            </div>
+                        </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Email Registrasi</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" class="form-control" value="budi.santoso@example.com" readonly>
+                                    <input type="email" class="form-control" value="{{ auth()->user()->email }}" disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nomor Telepon</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" class="form-control" value="+628123456789" readonly>
+                                    <input type="text" name="phone" class="form-control" value="{{ auth()->user()->nomor_telepon }}" placeholder="Masukkan Nomor Telepon">
                                 </div>
+                            </div>
+                            <div class="col-12 text-end mt-4">
+                                <button type="submit" class="btn btn-kopi rounded-pill px-4 py-2">
+                                    <i class="bi bi-save me-2"></i>Simpan Perubahan
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -366,32 +397,46 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        // Tab Switcher Logic
+        // 1. Tab Switcher Logic
         const menuLinks = document.querySelectorAll('.profile-menu-link[data-target]');
         const tabPanes = document.querySelectorAll('.profile-tab-pane');
 
         menuLinks.forEach(link => {
             link.addEventListener('click', function() {
-                // Remove active classes
                 menuLinks.forEach(l => l.classList.remove('active'));
                 tabPanes.forEach(t => t.classList.remove('active'));
 
-                // Add active to clicked link
                 this.classList.add('active');
-                
-                // Show targeted tab
                 const targetId = this.getAttribute('data-target');
                 document.getElementById(targetId).classList.add('active');
             });
         });
 
-        // Logout Logic
-        const logoutBtnProfile = document.getElementById('logoutBtnProfile');
-        if (logoutBtnProfile) {
-            logoutBtnProfile.addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.setItem('isLoggedIn', 'false');
-                window.location.href = "{{ url('/') }}";
+        // 2. Avatar Instant Preview & Auto Submit
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarForm = document.getElementById('avatarForm');
+
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    // Validasi tipe file gambar di client-side
+                    if (!file.type.startsWith('image/')) {
+                        alert('Silakan pilih file gambar yang valid.');
+                        return;
+                    }
+                    
+                    // Instant preview menggunakan FileReader
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+
+                    // Submit otomatis form upload avatar ke server tanpa tombol tambahan
+                    avatarForm.submit();
+                }
             });
         }
     });
