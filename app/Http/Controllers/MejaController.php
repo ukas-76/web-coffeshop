@@ -19,6 +19,7 @@ class MejaController extends Controller
         $request->validate([
             'nomor_meja' => 'required|string|max:20|unique:meja,nomor_meja', // unique ke tabel meja
             'kapasitas' => 'required|integer|min:1',
+            'min_dp' => 'required|integer|min:0',
             'status' => 'required|in:tersedia,dipesan,rusak',
             'gambar_lokasi' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
@@ -44,6 +45,7 @@ class MejaController extends Controller
         $request->validate([
             'nomor_meja' => 'required|string|max:20|unique:meja,nomor_meja,' . $id,
             'kapasitas' => 'required|integer|min:1',
+            'min_dp' => 'required|integer|min:0',
             'status' => 'required|in:tersedia,dipesan,rusak',
             'gambar_lokasi' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);

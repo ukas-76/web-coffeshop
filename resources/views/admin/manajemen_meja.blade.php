@@ -28,8 +28,9 @@
                     <th width="5%">No</th>
                     <th width="15%">Nomor Meja</th>
                     <th width="15%">Kapasitas</th>
-                    <th width="20%">Status</th>
-                    <th width="30%">Foto / Denah Lokasi</th>
+                    <th width="15%">Minimal DP</th>
+                    <th width="15%">Status</th>
+                    <th width="20%">Foto / Denah Lokasi</th>
                     <th width="15%">Aksi</th>
                 </tr>
             </thead>
@@ -39,6 +40,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td class="fw-bold">{{ $meja->nomor_meja }}</td>
                     <td>{{ $meja->kapasitas }} Kursi</td>
+                    <td class="text-warning fw-bold">Rp {{ number_format($meja->min_dp ?? 0, 0, ',', '.') }}</td>
                     <td>
                         @if($meja->status == 'tersedia')
                             <span class="badge bg-success text-white px-3 py-2 rounded-pill">Tersedia</span>
@@ -68,7 +70,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center text-muted py-4">Belum ada data meja terdaftar.</td>
+                    <td colspan="7" class="text-center text-muted py-4">Belum ada data meja terdaftar.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -96,6 +98,10 @@
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Kapasitas (Kursi)</label>
                         <input type="number" name="kapasitas" class="form-control bg-secondary text-white border-0" required min="1" placeholder="Contoh: 4">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Minimal DP Pembelian (Rupiah)</label>
+                        <input type="number" name="min_dp" class="form-control bg-secondary text-white border-0" required min="0" placeholder="Contoh: 100000">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Status</label>
@@ -141,6 +147,10 @@
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Kapasitas (Kursi)</label>
                         <input type="number" name="kapasitas" class="form-control bg-secondary text-white border-0" value="{{ $meja->kapasitas }}" required min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Minimal DP Pembelian (Rupiah)</label>
+                        <input type="number" name="min_dp" class="form-control bg-secondary text-white border-0" value="{{ $meja->min_dp ?? 0 }}" required min="0">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Status Meja</label>

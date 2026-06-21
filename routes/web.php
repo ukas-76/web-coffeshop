@@ -60,6 +60,10 @@ Route::middleware(['auth'])->group(function () {
     
     // Pastikan namanya 'profile.avatar.update' jika di blade Anda menggunakan nama ini
     Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
+
+
+    Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
+    Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
 });
 
 /*
