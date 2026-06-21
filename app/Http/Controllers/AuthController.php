@@ -24,6 +24,32 @@ class AuthController extends Controller
         return view('login-admin');
     }
 
+    public function prosesLoginAdmin(Request $request)
+    {
+        // 1. Validasi input yang masuk
+        $credentials = $request->validate([
+            'email'    => 'required', // Jika tabel database-mu menggunakan kolom 'username', ganti kata 'email' ini menjadi 'username'
+            'password' => 'required'
+        ]);
+
+        // 2. Coba cocokkan dengan database
+        if (Auth::attempt($credentials)) {
+            
+            // 3. Pastikan yang login memiliki role admin atau superadmin
+            if (Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin') {
+                $request->session()->regenerate();
+                return redirect()->intended('/admin/dashboard');
+            }
+
+            // Jika pelanggan biasa nyasar mencoba login lewat gerbang admin
+            Auth::logout();
+            return back()->with('error', 'Akses ditolak! Anda tidak memiliki otorisasi Admin.');
+        }
+
+        // Jika email atau password salah
+        return back()->with('error', 'Kredensial tidak valid. Silakan periksa kembali ID dan Kata Sandi Anda.');
+    }
+
     // Menampilkan halaman pendaftaran member/pelanggan baru
     public function register()
     {
