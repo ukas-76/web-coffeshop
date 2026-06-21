@@ -55,207 +55,42 @@
 <!-- Konten Utama: Tabs & Cards -->
 <main class="container mb-5">
 
-    <!-- Tab Kategori -->
+    @php
+        $categories = $menus->map(function($m){ return $m->kategori?->nama ?? 'Lainnya'; })->unique()->values();
+    @endphp
+
+    <!-- Tab Kategori (dibuat dari database) -->
     <ul class="nav nav-pills justify-content-center mb-5 gap-2" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-kopi-tab" data-bs-toggle="pill" data-bs-target="#pills-kopi" type="button" role="tab">
-                <i class="bi bi-cup-hot me-2"></i> Base Kopi
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-nonkopi-tab" data-bs-toggle="pill" data-bs-target="#pills-nonkopi" type="button" role="tab">
-                <i class="bi bi-cup-straw me-2"></i> Non-Kopi
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-makanan-tab" data-bs-toggle="pill" data-bs-target="#pills-makanan" type="button" role="tab">
-                <i class="bi bi-cake2 me-2"></i> Makanan
-            </button>
-        </li>
+        @foreach($categories as $i => $cat)
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{ $i===0 ? 'active' : '' }}" id="pills-{{ \Illuminate\Support\Str::slug($cat) }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ \Illuminate\Support\Str::slug($cat) }}" type="button" role="tab">
+                    {{ $cat }}
+                </button>
+            </li>
+        @endforeach
     </ul>
 
-    <!-- Isi Konten Berdasarkan Tab -->
     <div class="tab-content" id="pills-tabContent">
-
-        <!-- Tab Kategori Kopi -->
-        <div class="tab-pane fade show active" id="pills-kopi" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Espresso" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Classic Espresso</h4>
-                            <p class="text-muted mb-4 small">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 18.000</span>
+        @foreach($categories as $i => $cat)
+            <div class="tab-pane fade {{ $i===0 ? 'show active' : '' }}" id="pills-{{ \Illuminate\Support\Str::slug($cat) }}" role="tabpanel">
+                <div class="row g-4">
+                    @foreach($menus->filter(function($m) use($cat){ return ($m->kategori?->nama ?? 'Lainnya') === $cat; }) as $menu)
+                        <div class="col-lg-4 col-md-6">
+                            <div class="menu-card">
+                                <img src="{{ $menu->gambar ?? 'https://via.placeholder.com/600x400?text=No+Image' }}" alt="{{ $menu->nama }}" class="menu-img">
+                                <div class="menu-content">
+                                    <h4 class="fw-bold mb-2">{{ $menu->nama }}</h4>
+                                    <p class="text-muted mb-4 small">{{ $menu->deskripsi ?? 'Tidak ada deskripsi.' }}</p>
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <span class="menu-price">Rp {{ number_format($menu->harga,0,',','.') }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Cappuccino" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Cappuccino Hangat</h4>
-                            <p class="text-muted mb-4 small">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 26.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card border border-warning" style="box-shadow: 0 0 0 1px #ffc107;">
-                        <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Kopi Susu Gula Aren" class="menu-img">
-                        <div class="menu-content">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h4 class="fw-bold mb-0">Kopsus Roastory</h4>
-                                <span class="badge bg-warning text-dark rounded-pill py-2 px-3 fw-bold"><i class="bi bi-star-fill me-1"></i> Terlaris</span>
-                            </div>
-                            <p class="text-muted mb-4 small">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 24.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1551030173-122aabc4489c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Americano" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Americano Chill</h4>
-                            <p class="text-muted mb-4 small">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 20.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Caramel Macchiato" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Caramel Macchiato</h4>
-                            <p class="text-muted mb-4 small">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 28.000</span>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-        </div>
-
-        <!-- Tab Kategori Non Kopi -->
-        <div class="tab-pane fade" id="pills-nonkopi" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Matcha" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Matcha Sakura Latte</h4>
-                            <p class="text-muted mb-4 small">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 28.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Choco Latte" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Belgian Chocolate</h4>
-                            <p class="text-muted mb-4 small">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 25.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Red Velvet" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Red Velvet Latte</h4>
-                            <p class="text-muted mb-4 small">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 26.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1556881286-fc6915169721?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Taro Frappe" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Taro Frappe</h4>
-                            <p class="text-muted mb-4 small">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 28.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab Kategori Makanan -->
-        <div class="tab-pane fade" id="pills-makanan" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Croissant" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Butter Croissant</h4>
-                            <p class="text-muted mb-4 small">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 20.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?ixlib=rb-4.0.3&w=600&q=80&auto=format&fit=crop" alt="Brownies" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Fudgy Brownies</h4>
-                            <p class="text-muted mb-4 small">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 18.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cheese Cake" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Classic Cheese Cake</h4>
-                            <p class="text-muted mb-4 small">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 30.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="menu-card">
-                        <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="French Fries" class="menu-img">
-                        <div class="menu-content">
-                            <h4 class="fw-bold mb-2">Crispy French Fries</h4>
-                            <p class="text-muted mb-4 small">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="menu-price">Rp 20.000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-</div>
-        </div>
+        @endforeach
     </div>
 
     <div class="text-center mt-5 mb-3 p-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, rgba(253, 251, 247, 1) 0%, rgba(212, 181, 157, 0.2) 100%); border: 1px solid rgba(92, 61, 46, 0.1);">
@@ -269,5 +104,5 @@
         </a>
     </div>
 
-</main>
+    </main>
 @endsection

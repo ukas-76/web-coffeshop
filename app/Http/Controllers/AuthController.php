@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\user as Pengguna; // Pastikan model User sudah dibuat dan sesuai dengan nama tabel 'pengguna'
+use App\Models\User as Pengguna; // Pastikan model User sudah dibuat dan sesuai dengan nama tabel 'pengguna'
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
