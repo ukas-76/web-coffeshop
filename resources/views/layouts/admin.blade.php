@@ -288,7 +288,16 @@
             <i class="bi bi-calendar-check"></i> Reservasi
         </a>
     </li>
-
+    <li>
+        <a href="{{ url('/admin/promo-event') }}" class="nav-link {{ Request::is('admin/promo-event*') ? 'active' : '' }}">
+            <i class="bi bi-megaphone-fill"></i> Promo & Event
+        </a>
+    </li>
+    <li>
+        <a href="{{ url('/admin/meja') }}" class="nav-link {{ Request::is('admin/meja*') ? 'active' : '' }}">
+            <i class="bi bi-table"></i> Manajemen Meja
+        </a>
+    </li>
 </ul>
 
         <div class="position-absolute bottom-0 w-100 p-3">
