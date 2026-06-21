@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User as Pengguna; // Pastikan model User sudah dibuat dan sesuai dengan nama tabel 'pengguna'
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Reservasi;
 
 class AuthController extends Controller
 {
@@ -124,11 +125,26 @@ class AuthController extends Controller
 
 public function profile()
     {
-        // Mengembalikan tampilan halaman profile.blade.php
-        return view('profile');
+        // 1. Ambil data pengguna yang sedang login
+        $user = auth()->user();
+
+        // 2. Ambil riwayat Pesanan Online (Delivery & Pickup)
+        $riwayatPesanan = Reservasi::where('pengguna_id', $user->id)
+            ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // 3. Ambil riwayat Reservasi Meja (Dine-in)
+        $riwayatReservasi = Reservasi::where('pengguna_id', $user->id)
+            ->where('jenis_pesanan', 'dine_in')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // 4. Kirim variabel ke view profile.blade.php
+        return view('profile', compact('user', 'riwayatPesanan', 'riwayatReservasi'));
     }
 
-/**
+    /**
      * Memperbarui Informasi Teks Profil (Nama Lengkap & Nomor Telepon)
      */
     public function updateProfile(Request $request)

@@ -5,6 +5,7 @@ use App\Http\Controllers\HalamanUtamaController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PromoEventController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\EventController;
@@ -43,8 +44,8 @@ Route::get('/menu', [HalamanUtamaController::class, 'menu']);
 Route::get('/reservasi', [ReservasiController::class, 'index']);
 
 Route::get('/about', [HalamanUtamaController::class, 'about']);
-Route::get('/order', [HalamanUtamaController::class, 'order']);
-Route::get('/payment', [HalamanUtamaController::class, 'payment']);
+Route::get('/order', [PesananController::class, 'order'])->name('order.index');
+Route::get('/payment', [PesananController::class, 'payment'])->name('payment.index');
 
 
 /*
@@ -60,6 +61,8 @@ Route::middleware(['auth'])->group(function () {
     
     // Pastikan namanya 'profile.avatar.update' jika di blade Anda menggunakan nama ini
     Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
+    //agar hanya bisa diakses oleh user yang sudah login
+    Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
 
 
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
