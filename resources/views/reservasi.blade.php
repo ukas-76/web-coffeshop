@@ -100,7 +100,6 @@
 @endpush
 
 @section('content')
-<!-- Header Halaman -->
 <div class="page-header mb-5" style="margin-top: 76px;">
     <div class="container">
         <h1 class="fw-bold display-5 mb-3">Reservasi Meja & Ruang</h1>
@@ -108,26 +107,23 @@
     </div>
 </div>
 
-<!-- Konten Utama: Split Layout -->
 <main class="container mb-5 position-relative">
     
-    <!-- LAYER PROTEKSI LOGIN (Full main cover) -->
-        @guest
-        <div class="login-overlay text-center p-4" id="loginProtectOverlay">
-            <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
-                <i class="bi bi-lock-fill fs-1 text-kopi"></i>
-            </div>
-            <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
-            <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
-            <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
-            <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
-                [Mode Pratinjau: Sembunyikan Dialog]
-            </button>
+    @guest
+    <div class="login-overlay text-center p-4" id="loginProtectOverlay">
+        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
+            <i class="bi bi-lock-fill fs-1 text-kopi"></i>
         </div>
-        @endguest
+        <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
+        <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
+        <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
+        <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
+            [Mode Pratinjau: Sembunyikan Dialog]
+        </button>
+    </div>
+    @endguest
 
     <div class="row g-4">
-        <!-- KIRI: Pemilihan Meja & DP Menu -->
         <div class="col-lg-7 col-xl-8">
             
             <h3 class="fw-bold text-kopi d-flex align-items-center gap-2 mb-2 pb-2">
@@ -135,77 +131,36 @@
             </h3>
             <p class="text-muted small mb-4">Silakan pilih lokasi tempat duduk Anda. Setiap meja memiliki ketentuan minimum DP pembelian yang berbeda.</p>
 
-            <!-- Grid Template Meja -->
             <div class="row g-3 mb-5" id="tableGrid">
-                
-                <!-- Meja 1 -->
+                @forelse($daftarMeja as $key => $meja)
                 <div class="col-md-6">
-                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaSofa" value="Indoor Sofa Premium" data-min="100000" data-cap="4" autocomplete="off" checked>
-                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaSofa">
+                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="meja_{{ $meja->id }}" 
+                           value="{{ $meja->nomor_meja }}" 
+                           data-min="{{ $meja->min_dp ?? 0 }}" 
+                           data-cap="{{ (int) filter_var($meja->kapasitas, FILTER_SANITIZE_NUMBER_INT) ?: 4 }}" 
+                           autocomplete="off" {{ $key == 0 ? 'checked' : '' }}>
+                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="meja_{{ $meja->id }}">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Sofa">
+                        
+                        {{-- Menggunakan gambar default apabila kolom foto kosong --}}
+                        <img src="{{ $meja->foto ? asset('storage/' . $meja->foto) : 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80' }}" 
+                             class="w-100 object-fit-cover" style="height: 160px;" alt="{{ $meja->nomor_meja }}">
+                        
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
-                            <h5 class="fw-bold mb-1">Indoor Sofa Premium</h5>
-                            <p class="text-muted small mb-3">Dibuat dari biji kopi pilihan terbaik yang dipanggang dengan sempurna, menghadirkan keseimbangan rasa dan kelembutan di setiap tegukan.</p>
+                            <h5 class="fw-bold mb-1">Meja {{ $meja->nomor_meja }}</h5>
+                            <p class="text-muted small mb-3">Nikmati fasilitas area terbaik kami yang bersih, nyaman, dan ramah untuk menemani aktivitas produktif maupun waktu bersantai Anda.</p>
                             <ul class="list-unstyled small text-secondary mb-0 mt-auto">
-                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 4 Org</li>
-                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 100.000</li>
+                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas: {{ $meja->kapasitas }}</li>
+                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp {{ number_format($meja->min_dp, 0, ',', '.') }}</li>
                             </ul>
                         </div>
                     </label>
                 </div>
-
-                <!-- Meja 2 -->
-                <div class="col-md-6">
-                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaStandar" value="Indoor Meja Kaca" data-min="50000" data-cap="2" autocomplete="off">
-                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaStandar">
-                        <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Kaca">
-                        <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
-                            <h5 class="fw-bold mb-1">Indoor Dekat Kaca</h5>
-                            <p class="text-muted small mb-3">Menawarkan sensasi rasa autentik dengan sentuhan resep rahasia kami, menciptakan harmoni sempurna antara rasa dan kehangatan.</p>
-                            <ul class="list-unstyled small text-secondary mb-0 mt-auto">
-                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 2 Org</li>
-                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 50.000</li>
-                            </ul>
-                        </div>
-                    </label>
+                @empty
+                <div class="col-12 text-center py-4">
+                    <p class="text-muted">Maaf, saat ini tidak ada meja yang berstatus tersedia.</p>
                 </div>
-
-                <!-- Meja 3 -->
-                <div class="col-md-6">
-                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaBalkon" value="Outdoor Balcony" data-min="100000" data-cap="4" autocomplete="off">
-                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaBalkon">
-                        <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Balkon">
-                        <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
-                            <h5 class="fw-bold mb-1">Outdoor Balcony</h5>
-                            <p class="text-muted small mb-3">Sajian spesial yang diracik oleh barista berpengalaman kami, cocok untuk Anda yang mencari inspirasi atau sekadar bersantai sejenak.</p>
-                            <ul class="list-unstyled small text-secondary mb-0 mt-auto">
-                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 4 Org</li>
-                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 100.000</li>
-                            </ul>
-                        </div>
-                    </label>
-                </div>
-
-                <!-- Meja 4 -->
-                <div class="col-md-6">
-                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="mejaTaman" value="Garden Canopy Area" data-min="150000" data-cap="8" autocomplete="off">
-                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="mejaTaman">
-                        <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
-                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" class="w-100 object-fit-cover" style="height: 160px;" alt="Garden">
-                        <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
-                            <h5 class="fw-bold mb-1">Garden Kanopi Besar</h5>
-                            <p class="text-muted small mb-3">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
-                            <ul class="list-unstyled small text-secondary mb-0 mt-auto">
-                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas Maks. 8 Org</li>
-                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp 150.000</li>
-                            </ul>
-                        </div>
-                    </label>
-                </div>
-
+                @endforelse
             </div>
 
             <h3 class="fw-bold text-kopi d-flex align-items-center gap-2 mb-2 pb-2 mt-5 border-top pt-4">
@@ -213,105 +168,45 @@
             </h3>
             <p class="text-muted small mb-4">Tambahkan item untuk mencapai batas minimum DP meja Anda.</p>
 
-            <!-- Paket Hemat -->
-            <h5 class="fw-bold fs-6 mb-3 mt-2 text-dark border-bottom pb-2">Paket Penawaran Hemat</h5>
+            <h5 class="fw-bold fs-6 mb-3 mt-2 text-dark border-bottom pb-2">Daftar Menu Kafe</h5>
             
+            @forelse($daftarMenu as $menu)
             <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi" class="product-img">
+                <img src="{{ $menu->foto ? asset('storage/' . $menu->foto) : 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80' }}" 
+                     alt="{{ $menu->nama_menu }}" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fw-bold mb-1">Paket Roastory Berdua</h6>
-                        <p class="text-muted small mb-1 d-none d-sm-block">2 Kopsus + 1 Porsi French Fries</p>
-                        <span class="text-kopi fw-bold">Rp 65.000</span>
+                        <h6 class="fw-bold mb-1">{{ $menu->nama_menu }}</h6>
+                        <p class="text-muted small mb-1 d-none d-sm-block">{{ $menu->deskripsi ?? 'Pilihan hidangan spesial dari Roastory.' }}</p>
+                        <span class="text-kopi fw-bold">Rp {{ number_format($menu->harga, 0, ',', '.') }}</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn qty-btn dp-minus" type="button"><i class="bi bi-dash"></i></button>
-                        <span class="qty-val dp-val" data-price="65000">0</span>
+                        <span class="qty-val dp-val" data-price="{{ $menu->harga }}">0</span>
                         <button class="btn qty-btn dp-plus" type="button"><i class="bi bi-plus"></i></button>
                     </div>
                 </div>
             </div>
-
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Brownie" class="product-img">
-                <div class="flex-grow-1 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="fw-bold mb-1">Piring Keluarga (Platter)</h6>
-                        <p class="text-muted small mb-1 d-none d-sm-block">Camilan Gorengan Besar + 2 Sweet Tea</p>
-                        <span class="text-kopi fw-bold">Rp 85.000</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn qty-btn dp-minus" type="button"><i class="bi bi-dash"></i></button>
-                        <span class="qty-val dp-val" data-price="85000">0</span>
-                        <button class="btn qty-btn dp-plus" type="button"><i class="bi bi-plus"></i></button>
-                    </div>
-                </div>
+            @empty
+            <div class="col-12 text-center py-3">
+                <p class="text-muted">Menu belum tersedia.</p>
             </div>
-
-            <!-- Menu A-La-Carte (Satuan) -->
-            <h5 class="fw-bold fs-6 mb-3 mt-4 text-dark border-bottom pb-2">Menu Satuan (A-La-Carte)</h5>
-            
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi Aren" class="product-img">
-                <div class="flex-grow-1 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="fw-bold mb-1">Kopsus Roastory (Aren)</h6>
-                        <span class="text-kopi fw-bold text-nowrap">Rp 24.000</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn qty-btn dp-minus" type="button"><i class="bi bi-dash"></i></button>
-                        <span class="qty-val dp-val" data-price="24000">0</span>
-                        <button class="btn qty-btn dp-plus" type="button"><i class="bi bi-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Croissant" class="product-img">
-                <div class="flex-grow-1 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="fw-bold mb-1">Butter Croissant</h6>
-                        <span class="text-kopi fw-bold text-nowrap">Rp 20.000</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn qty-btn dp-minus" type="button"><i class="bi bi-dash"></i></button>
-                        <span class="qty-val dp-val" data-price="20000">0</span>
-                        <button class="btn qty-btn dp-plus" type="button"><i class="bi bi-plus"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80&ixlib=rb-4.0.3&auto=format&fit=crop" alt="Kopi Hitam" class="product-img">
-                <div class="flex-grow-1 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="fw-bold mb-1">Classic Espresso</h6>
-                        <span class="text-kopi fw-bold text-nowrap">Rp 18.000</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn qty-btn dp-minus" type="button"><i class="bi bi-dash"></i></button>
-                        <span class="qty-val dp-val" data-price="18000">0</span>
-                        <button class="btn qty-btn dp-plus" type="button"><i class="bi bi-plus"></i></button>
-                    </div>
-                </div>
-            </div>
+            @endforelse
 
         </div>
 
-        <!-- KANAN: Formulir & Checkout -->
         <div class="col-lg-5 col-xl-4">
             <div class="cart-sidebar">
                 <h4 class="fw-bold border-bottom pb-3 mb-4">Status Reservasi</h4>
                 
-                <!-- Rincian Pilihan -->
                 <div class="bg-light p-3 rounded-3 mb-4 border">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="text-muted small">Spot:</span>
-                        <span class="fw-bold text-end" id="sumMeja">Indoor Sofa Premium</span>
+                        <span class="fw-bold text-end" id="sumMeja">-</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="text-muted small">Target DP:</span>
-                        <span class="fw-bold text-danger text-end" id="sumMinDp">Rp 100.000</span>
+                        <span class="fw-bold text-danger text-end" id="sumMinDp">Rp 0</span>
                     </div>
                     <hr class="my-2 border-secondary">
                     <div class="d-flex justify-content-between align-items-center mt-2">
@@ -328,15 +223,21 @@
                     <p class="fw-bold mb-3 d-block"><i class="bi bi-person-lines-fill me-2"></i> 3. Data Diri & Waktu</p>
                     
                     <div class="mb-3">
-                        <input type="text" class="form-control form-control-sm py-2 px-3 fs-6" placeholder="Nama Pemesan" required>
+                        <input type="text" class="form-control form-control-sm py-2 px-3 fs-6" 
+                               placeholder="Nama Pemesan" 
+                               value="{{ auth()->check() ? auth()->user()->nama : '' }}" 
+                               required>
                     </div>
                     <div class="mb-3">
-                        <input type="tel" class="form-control form-control-sm py-2 px-3 fs-6" placeholder="Nomor WhatsApp Aktif" required>
+                        <input type="tel" class="form-control form-control-sm py-2 px-3 fs-6" 
+                               placeholder="Nomor WhatsApp Aktif" 
+                               value="{{ auth()->check() ? auth()->user()->nomor_telepon : '' }}" 
+                               required>
                     </div>
                     <div class="row g-2 mb-3">
                         <div class="col-6">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Tanggal</label>
-                            <input type="date" class="form-control form-control-sm py-2 px-3" required>
+                            <input type="date" class="form-control form-control-sm py-2 px-3" min="{{ date('Y-m-d') }}" required>
                         </div>
                         <div class="col-6">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Waktu Kedatangan</label>
@@ -344,8 +245,8 @@
                         </div>
                         <div class="col-12 mt-2">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Berapa Orang?</label>
-                            <input type="number" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" max="4" required>
-                            <div class="form-text mt-1" style="font-size: 0.75rem;" id="kapasitasText">Meja ini berkapasitas maksimal 4 orang.</div>
+                            <input type="number" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" required>
+                            <div class="form-text mt-1" style="font-size: 0.75rem;" id="kapasitasText">Silakan pilih meja terlebih dahulu.</div>
                         </div>
                     </div>
 
@@ -363,22 +264,15 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Ambil elemen overlay lock login
         const overlay = document.getElementById('loginProtectOverlay');
+        const isUserLoggedIn = '{{ Auth::check() ? "true" : "false" }}' === 'true';
     
-        // 2. Ambil status login asli langsung dari server Laravel Auth
-        const isUserLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
-    
-        // 3. Logika Kunci otomatis
         if (isUserLoggedIn) {
-            // Jika user sudah login, buka/sembunyikan lock otomatis
             if (overlay) overlay.style.display = 'none';
         } else {
-                // Jika user belum login, pastikan halaman tetap terkunci (lock)
             if (overlay) overlay.style.display = 'flex';
         }
 
-        // 2. Inisialisasi Elemen UI (Duplikasi 'radios' sudah dihapus di sini)
         const radios = document.querySelectorAll('.table-radio');
         const sumMeja = document.getElementById('sumMeja');
         const sumMinDp = document.getElementById('sumMinDp');
@@ -388,20 +282,19 @@
         const jumlahOrangInput = document.getElementById('jumlahOrang');
         const kapasitasText = document.getElementById('kapasitasText');
 
-        let currentMinDP = 100000;
+        let currentMinDP = 0;
         let currentTotalDP = 0;
-        let currentCap = 4;
+        let currentCap = 1;
 
-        // Update UI Sidebar ketika meja dipilih
         function updateTableSelection() {
             const selected = document.querySelector('.table-radio:checked');
             if(!selected) return;
 
             const name = selected.value;
-            currentMinDP = parseInt(selected.getAttribute('data-min'));
-            currentCap = parseInt(selected.getAttribute('data-cap'));
+            currentMinDP = parseInt(selected.getAttribute('data-min')) || 0;
+            currentCap = parseInt(selected.getAttribute('data-cap')) || 4;
 
-            sumMeja.textContent = name;
+            sumMeja.textContent = "Meja " + name;
             sumMinDp.textContent = 'Rp ' + currentMinDP.toLocaleString('id-ID');
             
             jumlahOrangInput.max = currentCap;
@@ -413,12 +306,11 @@
             validateCheckout();
         }
 
-        // Hitung total pra-pesan
         function calculateDPTotal() {
             let total = 0;
             document.querySelectorAll('.dp-val').forEach(el => {
-                const price = parseInt(el.getAttribute('data-price'));
-                const qty = parseInt(el.textContent);
+                const price = parseInt(el.getAttribute('data-price')) || 0;
+                const qty = parseInt(el.textContent) || 0;
                 total += (price * qty);
             });
             currentTotalDP = total;
@@ -427,7 +319,6 @@
             validateCheckout();
         }
 
-        // Validasi tombol pembayaran berdasarkan minimal DP
         function validateCheckout() {
             if(currentTotalDP >= currentMinDP) {
                 dpAlert.className = 'alert alert-success py-2 small fw-bold d-flex align-items-center mb-4';
@@ -440,24 +331,21 @@
             }
         }
 
-        // Event Listeners untuk Radio Meja
         radios.forEach(r => r.addEventListener('change', updateTableSelection));
 
-        // Event Listeners untuk Tombol Plus Menu
         document.querySelectorAll('.dp-plus').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const valEl = e.currentTarget.parentElement.querySelector('.dp-val');
-                let qty = parseInt(valEl.textContent);
+                let qty = parseInt(valEl.textContent) || 0;
                 valEl.textContent = qty + 1;
                 calculateDPTotal();
             });
         });
 
-        // Event Listeners untuk Tombol Minus Menu
         document.querySelectorAll('.dp-minus').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const valEl = e.currentTarget.parentElement.querySelector('.dp-val');
-                let qty = parseInt(valEl.textContent);
+                let qty = parseInt(valEl.textContent) || 0;
                 if(qty > 0) {
                     valEl.textContent = qty - 1;
                     calculateDPTotal();
@@ -465,13 +353,12 @@
             });
         });
 
-        // Handle form submission ke halaman payment
         document.getElementById('reservationForm').addEventListener('submit', (e) => {
             e.preventDefault();
             window.location.href = "{{ url('/payment') }}?amount=" + currentTotalDP;
         });
 
-        // Jalankan fungsi inisialisasi di awal load halaman
+        // Inisialisasi awal
         updateTableSelection();
         calculateDPTotal();
     });

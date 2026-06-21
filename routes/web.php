@@ -5,7 +5,13 @@ use App\Http\Controllers\HalamanUtamaController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\PromoEventController;
+use App\Http\Controllers\PromoController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\MejaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +20,11 @@ use App\Http\Controllers\PesananController;
 */
 // Tambahkan ->name('login') agar Laravel tahu ini adalah halaman login utama
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/login-admin', [AuthController::class, 'loginAdmin'])->name('login-admin');
+// Route tampilan login admin (sudah ada)
+Route::get('/login-admin', [AuthController::class, 'loginAdmin']);
 Route::get('/register', [AuthController::class, 'register'])->name('register'); 
 // Route POST untuk memproses form (BARU)
+Route::post('/login-admin', [AuthController::class, 'prosesLoginAdmin']);
 Route::post('/register', [AuthController::class, 'prosesRegister']);
 Route::post('/login', [AuthController::class, 'prosesLogin']);
 Route::post('/logout', [AuthController::class, 'prosesLogout'])->name('logout');
@@ -56,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
     //agar hanya bisa diakses oleh user yang sudah login
     Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
+
+
+    Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
+    Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
 });
 
 /*
@@ -92,4 +104,29 @@ Route::prefix('admin')->group(function () {
 
     // Rute Pencarian Global
     Route::get('/search', [DashboardAdminController::class, 'globalSearch']);
+
+    // Route tampilan login admin (sudah ada)
+    Route::get('/login-admin', [AuthController::class, 'loginAdmin']);
+
+    // TAMBAHKAN ROUTE INI: Untuk memproses data login admin
+    Route::post('/login-admin', [AuthController::class, 'prosesLoginAdmin']);
+
+    // 1. Route Promo & Event (Dipisah controllernya agar kode tetap rapi dan bersih)
+    Route::get('/promo-event', [PromoEventController::class, 'index']);
+    Route::post('/promo/store', [PromoController::class, 'store'])->name('promo.store');
+    Route::post('/event/store', [EventController::class, 'store'])->name('event.store');
+
+    // Route untuk Promo
+    Route::put('/promo/update/{id}', [PromoController::class, 'update'])->name('promo.update');
+    Route::delete('/promo/destroy/{id}', [PromoController::class, 'destroy'])->name('promo.destroy');
+
+    // Route untuk Event
+    Route::put('/event/update/{id}', [EventController::class, 'update'])->name('event.update');
+    Route::delete('/event/destroy/{id}', [EventController::class, 'destroy'])->name('event.destroy');
+
+    // 2. Route Manajemen Meja
+    Route::get('/meja', [MejaController::class, 'index'])->name('meja.index');
+    Route::post('/meja/store', [MejaController::class, 'store'])->name('meja.store');
+    Route::put('/meja/update/{id}', [MejaController::class, 'update'])->name('meja.update');
+    Route::delete('/meja/destroy/{id}', [MejaController::class, 'destroy'])->name('meja.destroy');
 });

@@ -107,36 +107,30 @@
                 <p class="text-white-50 small">Silakan masuk ke akun Anda untuk melanjutkan dan menikmati kemudahan memesan kopi favorit Anda.</p>
             </div>
 
-            <form action="{{ url('/admin/dashboard') }}" class="position-relative z-1">
-                <!-- Input Username / ID Pegawai -->
+            <form action="{{ url('/login-admin') }}" method="POST" class="position-relative z-1">
+                @csrf @if(session('error'))
+                    <div class="alert p-2 mb-4 rounded text-center small" style="background-color: rgba(220, 53, 69, 0.15); border: 1px solid rgba(220, 53, 69, 0.5); color: #ff8787;">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ session('error') }}
+                    </div>
+                @endif
+
                 <div class="mb-4">
-                    <label for="adminId" class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">ID
-                        Pegawai / Username</label>
+                    <label for="adminId" class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">Email / Username</label>
                     <div class="input-group">
-                        <span class="input-group-text border-0"
-                            style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i
-                                class="bi bi-person-badge"></i></span>
-                        <input type="text" class="form-control border-start-0 ps-0" id="adminId"
-                            placeholder="Contoh: ADM-001" required>
+                        <span class="input-group-text border-0" style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i class="bi bi-person-badge"></i></span>
+                        <input type="text" name="email" class="form-control border-start-0 ps-0" id="adminId" placeholder="Masukkan email atau ID admin" value="{{ old('email') }}" required>
                     </div>
                 </div>
 
-                <!-- Input Password -->
                 <div class="mb-5">
-                    <label for="password"
-                        class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">Kata Sandi</label>
+                    <label for="password" class="form-label fw-bold text-white-50 small text-uppercase letter-spacing">Kata Sandi</label>
                     <div class="input-group">
-                        <span class="input-group-text border-0"
-                            style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i
-                                class="bi bi-key"></i></span>
-                        <input type="password" class="form-control border-start-0 ps-0" id="password"
-                            placeholder="Masukkan kata sandi otorisasi" required>
+                        <span class="input-group-text border-0" style="background-color: rgba(0,0,0,0.2); color: var(--admin-accent);"><i class="bi bi-key"></i></span>
+                        <input type="password" name="password" class="form-control border-start-0 ps-0" id="password" placeholder="Masukkan kata sandi otorisasi" required>
                     </div>
                 </div>
 
-                <!-- Tombol Login -->
-                <button type="submit"
-                    class="btn btn-admin w-100 py-3 mb-4 rounded-pill fw-bold text-uppercase shadow-sm">
+                <button type="submit" class="btn btn-admin w-100 py-3 mb-4 rounded-pill fw-bold text-uppercase shadow-sm">
                     <i class="bi bi-unlock me-2"></i> Otorisasi Masuk
                 </button>
             </form>
