@@ -121,4 +121,62 @@ class AuthController extends Controller
     // Mengalihkan pengguna kembali ke halaman utama
     return redirect('/')->with('success', 'Kamu telah berhasil keluar.');
 }
+
+public function profile()
+    {
+        // Mengembalikan tampilan halaman profile.blade.php
+        return view('profile');
+    }
+
+/**
+     * Memperbarui Informasi Teks Profil (Nama Lengkap & Nomor Telepon)
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        // Mengupdate data user ke tabel pengguna menggunakan model Pengguna
+        Pengguna::where('id', $user->id)->update([
+            'nama' => $request->name,
+            'nomor_telepon' => $request->phone,
+        ]);
+
+        return redirect()->back()->with('success', 'Informasi pribadi berhasil diperbarui!');
+    }
+
+    /**
+     * Memperbarui Foto Profil / Avatar User (Mengatasi Error Saat Upload)
+     */
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Maksimal 2MB
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('avatar')) {
+            // Hapus avatar lama dari storage jika ada untuk menghemat ruang
+            if ($user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+            }
+
+            // Simpan file baru ke folder storage/app/public/avatars
+            $path = $request->file('avatar')->store('avatars', 'public');
+
+            // Simpan path file baru tersebut ke database
+            Pengguna::where('id', $user->id)->update([
+                'avatar' => $path
+            ]);
+
+            return redirect()->back()->with('success', 'Foto profil berhasil diperbarui!');
+        }
+
+        return redirect()->back()->with('error', 'Gagal mengunggah foto profil.');
+    }
 }

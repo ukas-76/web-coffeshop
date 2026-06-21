@@ -39,15 +39,28 @@ Route::get('/', [HalamanUtamaController::class, 'index']);
 // Jika user mengakses namacoffeeshop.com/menu
 Route::get('/menu', [HalamanUtamaController::class, 'menu']);
 
-
 // Jika user mengakses namacoffeeshop.com/reservasi
 Route::get('/reservasi', [ReservasiController::class, 'index']);
 
 Route::get('/about', [HalamanUtamaController::class, 'about']);
 Route::get('/order', [HalamanUtamaController::class, 'order']);
 Route::get('/payment', [HalamanUtamaController::class, 'payment']);
-Route::get('/profile', [HalamanUtamaController::class, 'profile']);
 
+
+/*
+|--------------------------------------------------------------------------
+| Jalur Khusus User Terautentikasi (Fitur Profil)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+    // Memanggil method profile() yang baru saja kita buat di atas
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile'); 
+    
+    Route::patch('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
+    
+    // Pastikan namanya 'profile.avatar.update' jika di blade Anda menggunakan nama ini
+    Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
+});
 
 /*
 |--------------------------------------------------------------------------

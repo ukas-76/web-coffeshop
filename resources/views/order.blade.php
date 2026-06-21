@@ -334,10 +334,22 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        if (localStorage.getItem('isLoggedIn') === 'true') {
-            document.getElementById('loginProtectOverlay').style.display = 'none';
+        // 1. Ambil elemen overlay lock login
+        const overlay = document.getElementById('loginProtectOverlay');
+        
+        // 2. Ambil status login asli langsung dari server Laravel Auth
+        const isUserLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+        
+        // 3. Logika Kunci Otomatis Real-Time
+        if (isUserLoggedIn) {
+            // Jika user sudah login, buka/sembunyikan lock otomatis
+            if (overlay) overlay.style.display = 'none';
+        } else {
+            // Jika user belum login, pastikan halaman tetap terkunci (lock) dengan flex layout
+            if (overlay) overlay.style.display = 'flex';
         }
 
+        // --- Sisa Logika Fitur Keranjang Belanja ---
         const products = document.querySelectorAll('.product-card');
         const cartItemsContainer = document.getElementById('cart-items');
         const emptyCartMsg = document.getElementById('empty-cart-msg');
