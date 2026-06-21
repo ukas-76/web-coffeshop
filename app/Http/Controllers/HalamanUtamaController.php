@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Promo;
 use App\Models\Event;
+use App\Models\Menu;
 
 class HalamanUtamaController extends Controller
 {
@@ -20,8 +21,11 @@ class HalamanUtamaController extends Controller
 
     public function menu()
     {
-        // Mengarahkan ke file resources/views/menu.blade.php
-        return view('menu');
+        // Ambil menu yang tersedia dari database beserta kategori
+        $menus = Menu::with('kategori')->where('tersedia', true)->get();
+
+        // Kirimkan data menus ke view
+        return view('menu', compact('menus'));
     }
 
     public function about()
