@@ -134,15 +134,16 @@
             <div class="row g-3 mb-5" id="tableGrid">
                 @forelse($daftarMeja as $key => $meja)
                 <div class="col-md-6">
+                    <!-- PERBAIKAN DI SINI: value diisi $meja->id dan ada data-name -->
                     <input type="radio" class="btn-check table-radio" name="mejaSelect" id="meja_{{ $meja->id }}" 
-                           value="{{ $meja->nomor_meja }}" 
+                           value="{{ $meja->id }}" 
+                           data-name="{{ $meja->nomor_meja }}"
                            data-min="{{ $meja->min_dp ?? 0 }}" 
                            data-cap="{{ (int) filter_var($meja->kapasitas, FILTER_SANITIZE_NUMBER_INT) ?: 4 }}" 
                            autocomplete="off" {{ $key == 0 ? 'checked' : '' }}>
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="meja_{{ $meja->id }}">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
                         
-                        {{-- Menggunakan gambar default apabila kolom foto kosong --}}
                         <img src="{{ $meja->foto ? asset('storage/' . $meja->foto) : 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80' }}" 
                              class="w-100 object-fit-cover" style="height: 160px;" alt="{{ $meja->nomor_meja }}">
                         
@@ -219,17 +220,28 @@
                     <i class="bi bi-exclamation-triangle me-2 fs-5"></i> Nilai pesanan DP Anda belum memenuhi batas minimum meja!
                 </div>
 
-                <form id="reservationForm">
+                <!-- PERBAIKAN DI SINI: Tampilkan Error kalau ada -->
+                @if(session('error'))
+                    <div class="alert alert-danger py-2 small fw-bold d-flex align-items-center mb-3">
+                        <i class="bi bi-x-circle-fill me-2 fs-5"></i> {{ session('error') }}
+                    </div>
+                @endif
+
+                <form id="reservationForm" action="{{ route('checkout.proses') }}" method="POST">
+                    @csrf
+                    
+                    <input type="hidden" name="total_bayar" id="inputTotalBayar" value="0">
+                    
                     <p class="fw-bold mb-3 d-block"><i class="bi bi-person-lines-fill me-2"></i> 3. Data Diri & Waktu</p>
                     
                     <div class="mb-3">
-                        <input type="text" class="form-control form-control-sm py-2 px-3 fs-6" 
+                        <input type="text" name="nama" class="form-control form-control-sm py-2 px-3 fs-6" 
                                placeholder="Nama Pemesan" 
                                value="{{ auth()->check() ? auth()->user()->nama : '' }}" 
                                required>
                     </div>
                     <div class="mb-3">
-                        <input type="tel" class="form-control form-control-sm py-2 px-3 fs-6" 
+                        <input type="tel" name="no_whatsapp" class="form-control form-control-sm py-2 px-3 fs-6" 
                                placeholder="Nomor WhatsApp Aktif" 
                                value="{{ auth()->check() ? auth()->user()->nomor_telepon : '' }}" 
                                required>
@@ -237,15 +249,15 @@
                     <div class="row g-2 mb-3">
                         <div class="col-6">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Tanggal</label>
-                            <input type="date" class="form-control form-control-sm py-2 px-3" min="{{ date('Y-m-d') }}" required>
+                            <input type="date" name="tanggal" class="form-control form-control-sm py-2 px-3" min="{{ date('Y-m-d') }}" required>
                         </div>
                         <div class="col-6">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Waktu Kedatangan</label>
-                            <input type="time" class="form-control form-control-sm py-2 px-3" required>
+                            <input type="time" name="jam" class="form-control form-control-sm py-2 px-3" required>
                         </div>
                         <div class="col-12 mt-2">
                             <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Berapa Orang?</label>
-                            <input type="number" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" required>
+                            <input type="number" name="jumlah_orang" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" required>
                             <div class="form-text mt-1" style="font-size: 0.75rem;" id="kapasitasText">Silakan pilih meja terlebih dahulu.</div>
                         </div>
                     </div>
@@ -290,7 +302,8 @@
             const selected = document.querySelector('.table-radio:checked');
             if(!selected) return;
 
-            const name = selected.value;
+            // PERBAIKAN DI SINI: Ambil nama dari data-name
+            const name = selected.getAttribute('data-name');
             currentMinDP = parseInt(selected.getAttribute('data-min')) || 0;
             currentCap = parseInt(selected.getAttribute('data-cap')) || 4;
 
@@ -315,7 +328,9 @@
             });
             currentTotalDP = total;
             sumDpTotal.textContent = 'Rp ' + currentTotalDP.toLocaleString('id-ID');
-            
+
+            document.getElementById('inputTotalBayar').value = currentTotalDP;
+
             validateCheckout();
         }
 
@@ -353,9 +368,9 @@
             });
         });
 
+        // Hapus e.preventDefault() biarkan jalan standar form submit
         document.getElementById('reservationForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            window.location.href = "{{ url('/payment') }}?amount=" + currentTotalDP;
+            // Form akan submit normal dan pindah ke PembayaranController
         });
 
         // Inisialisasi awal

@@ -40,7 +40,7 @@ class PesananController extends Controller
 public function prosesCheckout(Request $request)
     {
         try {
-            $userId = auth()->id(); 
+            $userId = auth()->guard('web')->id(); 
             $jenisPesanan = $request->jenis_pesanan; // 'delivery' atau 'pickup'
 
             // Simpan data utama ke tabel 'reservasi'
@@ -107,7 +107,7 @@ public function prosesCheckout(Request $request)
         $poinBaru = floor($reservasi->total_tamu / 10000);
 
         // Tambah poin ke user via relasi auth atau manual (sesuaikan nama kolom 'poin' di tabel pengguna)
-        $user = auth()->user();
+        $user = auth()->guard('web')->user();
         if ($user && $reservasi->pengguna_id == $user->id) {
             $user->increment('poin', $poinBaru);
         }

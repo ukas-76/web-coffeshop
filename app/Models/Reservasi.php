@@ -9,16 +9,13 @@ class Reservasi extends Model
     protected $table = 'reservasi';
 
     protected $fillable = [
-        'pengguna_id',
-        'jenis_pesanan', // 'dine_in', 'delivery', 'pickup'
-        'meja_id',
-        'tanggal_reservasi',
-        'jam_mulai',
-        'jam_selesai',
-        'total_tamu',
-        'alamat_pengiriman',
-        'ongkir',
-        'status' // 'menunggu', 'dikonfirmasi', 'selesai', 'dibatalkan'
+        'pengguna_id', 
+        'meja_id', 
+        'jenis_pesanan', 
+        'tanggal_reservasi', 
+        'jam_mulai', 
+        'total_tamu', 
+        'status'
     ];
 
     // Relasi ke tabel Pengguna/Pelanggan
