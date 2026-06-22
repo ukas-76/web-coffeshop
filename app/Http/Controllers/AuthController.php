@@ -98,6 +98,66 @@ class AuthController extends Controller
 
     // Memproses logout pengguna
     public function prosesLogout(Request $request)
+{
+    // Mengeluarkan pengguna dari sesi autentikasi Laravel
+    Auth::logout();
+
+    // Menghapus seluruh data sesi agar aman
+    $request->session()->invalidate();
+
+    // Membuat ulang token CSRF baru untuk mencegah serangan CSRF
+    $request->session()->regenerateToken();
+
+    // Mengalihkan pengguna kembali ke halaman utama
+    return redirect('/')->with('success', 'Kamu telah berhasil keluar.');
+}
+
+public function profile()
+    {
+        // 1. Ambil data pengguna yang sedang login
+        $user = auth()->guard('web')->user();
+
+        // 2. Ambil riwayat Pesanan Online (Delivery & Pickup)
+        $riwayatPesanan = Reservasi::where('pengguna_id', $user->id)
+            ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // 3. Ambil riwayat Reservasi Meja (Dine-in)
+        $riwayatReservasi = Reservasi::where('pengguna_id', $user->id)
+            ->where('jenis_pesanan', 'dine_in')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // 4. Kirim variabel ke view profile.blade.php
+        return view('profile', compact('user', 'riwayatPesanan', 'riwayatReservasi'));
+    }
+
+    /**
+     * Memperbarui Informasi Teks Profil (Nama Lengkap & Nomor Telepon)
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        // Mengupdate data user ke tabel pengguna menggunakan model Pengguna
+        Pengguna::where('id', $user->id)->update([
+            'nama' => $request->name,
+            'nomor_telepon' => $request->phone,
+        ]);
+
+        return redirect()->back()->with('success', 'Informasi pribadi berhasil diperbarui!');
+    }
+
+    /**
+     * Memperbarui Foto Profil / Avatar User (Mengatasi Error Saat Upload)
+     */
+    public function updateAvatar(Request $request)
     {
         Auth::logout();
 

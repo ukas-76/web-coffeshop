@@ -60,6 +60,8 @@ class PesananController extends Controller
 
             $userId = Auth::id(); 
             $jenisPesanan = $request->jenis_pesanan; 
+            $userId = auth()->guard('web')->id(); 
+            $jenisPesanan = $request->jenis_pesanan; // 'delivery' atau 'pickup'
 
             // 1. Simpan data utama ke tabel 'reservasi'
             $reservasi = Reservasi::create([
@@ -124,6 +126,8 @@ class PesananController extends Controller
 
         // Tambah poin ke pengguna yang bersangkutan jika akun terverifikasi cocok
         $user = Auth::user();
+        // Tambah poin ke user via relasi auth atau manual (sesuaikan nama kolom 'poin' di tabel pengguna)
+        $user = auth()->guard('web')->user();
         if ($user && $reservasi->pengguna_id == $user->id) {
             $user->increment('poin', $poinBaru);
         }

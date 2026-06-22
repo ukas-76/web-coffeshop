@@ -113,6 +113,47 @@
         <div class="login-overlay text-center p-4" id="loginProtectOverlay">
             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
                 <i class="bi bi-lock-fill fs-1 text-kopi"></i>
+    @endguest
+
+    <div class="row g-4">
+        <div class="col-lg-7 col-xl-8">
+            
+            <h3 class="fw-bold text-kopi d-flex align-items-center gap-2 mb-2 pb-2">
+                <i class="bi bi-geo-alt"></i> 1. Pilih Lokasi Meja
+            </h3>
+            <p class="text-muted small mb-4">Silakan pilih lokasi tempat duduk Anda. Setiap meja memiliki ketentuan minimum DP pembelian yang berbeda.</p>
+
+            <div class="row g-3 mb-5" id="tableGrid">
+                @forelse($daftarMeja as $key => $meja)
+                <div class="col-md-6">
+                    <!-- PERBAIKAN DI SINI: value diisi $meja->id dan ada data-name -->
+                    <input type="radio" class="btn-check table-radio" name="mejaSelect" id="meja_{{ $meja->id }}" 
+                           value="{{ $meja->id }}" 
+                           data-name="{{ $meja->nomor_meja }}"
+                           data-min="{{ $meja->min_dp ?? 0 }}" 
+                           data-cap="{{ (int) filter_var($meja->kapasitas, FILTER_SANITIZE_NUMBER_INT) ?: 4 }}" 
+                           autocomplete="off" {{ $key == 0 ? 'checked' : '' }}>
+                    <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="meja_{{ $meja->id }}">
+                        <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
+                        
+                        <img src="{{ $meja->foto ? asset('storage/' . $meja->foto) : 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80' }}" 
+                             class="w-100 object-fit-cover" style="height: 160px;" alt="{{ $meja->nomor_meja }}">
+                        
+                        <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
+                            <h5 class="fw-bold mb-1">Meja {{ $meja->nomor_meja }}</h5>
+                            <p class="text-muted small mb-3">Nikmati fasilitas area terbaik kami yang bersih, nyaman, dan ramah untuk menemani aktivitas produktif maupun waktu bersantai Anda.</p>
+                            <ul class="list-unstyled small text-secondary mb-0 mt-auto">
+                                <li class="mb-1"><i class="bi bi-people d-inline-block text-kopi me-2" style="width:16px"></i>Kapasitas: {{ $meja->kapasitas }}</li>
+                                <li class="mb-1 fw-bold text-dark"><i class="bi bi-tag d-inline-block text-kopi me-2" style="width:16px"></i>Min. DP: Rp {{ number_format($meja->min_dp, 0, ',', '.') }}</li>
+                            </ul>
+                        </div>
+                    </label>
+                </div>
+                @empty
+                <div class="col-12 text-center py-4">
+                    <p class="text-muted">Maaf, saat ini tidak ada meja yang berstatus tersedia.</p>
+                </div>
+                @endforelse
             </div>
             <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
             <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
@@ -248,6 +289,45 @@
                                 <input type="number" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" required>
                                 <div class="form-text mt-1" style="font-size: 0.75rem;" id="kapasitasText">Silakan pilih meja terlebih dahulu.</div>
                             </div>
+                <!-- PERBAIKAN DI SINI: Tampilkan Error kalau ada -->
+                @if(session('error'))
+                    <div class="alert alert-danger py-2 small fw-bold d-flex align-items-center mb-3">
+                        <i class="bi bi-x-circle-fill me-2 fs-5"></i> {{ session('error') }}
+                    </div>
+                @endif
+
+                <form id="reservationForm" action="{{ route('checkout.proses') }}" method="POST">
+                    @csrf
+                    
+                    <input type="hidden" name="total_bayar" id="inputTotalBayar" value="0">
+                    
+                    <p class="fw-bold mb-3 d-block"><i class="bi bi-person-lines-fill me-2"></i> 3. Data Diri & Waktu</p>
+                    
+                    <div class="mb-3">
+                        <input type="text" name="nama" class="form-control form-control-sm py-2 px-3 fs-6" 
+                               placeholder="Nama Pemesan" 
+                               value="{{ auth()->check() ? auth()->user()->nama : '' }}" 
+                               required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" name="no_whatsapp" class="form-control form-control-sm py-2 px-3 fs-6" 
+                               placeholder="Nomor WhatsApp Aktif" 
+                               value="{{ auth()->check() ? auth()->user()->nomor_telepon : '' }}" 
+                               required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Tanggal</label>
+                            <input type="date" name="tanggal" class="form-control form-control-sm py-2 px-3" min="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Waktu Kedatangan</label>
+                            <input type="time" name="jam" class="form-control form-control-sm py-2 px-3" required>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label class="small fw-semibold text-muted text-uppercase" style="font-size: 0.75rem;">Berapa Orang?</label>
+                            <input type="number" name="jumlah_orang" class="form-control form-control-sm py-2 px-3" id="jumlahOrang" placeholder="Jumlah Orang" min="1" required>
+                            <div class="form-text mt-1" style="font-size: 0.75rem;" id="kapasitasText">Silakan pilih meja terlebih dahulu.</div>
                         </div>
 
                         <button type="submit" class="btn btn-kopi w-100 py-3 mt-2 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center" id="btnSubmit" disabled>
@@ -304,6 +384,50 @@
                 kapasitasText.textContent = `Meja ini berkapasitas maksimal ${currentCap} orang.`;
 
                 validateCheckout();
+    </div>
+</main>
+@endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('loginProtectOverlay');
+        const isUserLoggedIn = '{{ Auth::check() ? "true" : "false" }}' === 'true';
+    
+        if (isUserLoggedIn) {
+            if (overlay) overlay.style.display = 'none';
+        } else {
+            if (overlay) overlay.style.display = 'flex';
+        }
+
+        const radios = document.querySelectorAll('.table-radio');
+        const sumMeja = document.getElementById('sumMeja');
+        const sumMinDp = document.getElementById('sumMinDp');
+        const sumDpTotal = document.getElementById('sumDpTotal');
+        const dpAlert = document.getElementById('dpAlert');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const jumlahOrangInput = document.getElementById('jumlahOrang');
+        const kapasitasText = document.getElementById('kapasitasText');
+
+        let currentMinDP = 0;
+        let currentTotalDP = 0;
+        let currentCap = 1;
+
+        function updateTableSelection() {
+            const selected = document.querySelector('.table-radio:checked');
+            if(!selected) return;
+
+            // PERBAIKAN DI SINI: Ambil nama dari data-name
+            const name = selected.getAttribute('data-name');
+            currentMinDP = parseInt(selected.getAttribute('data-min')) || 0;
+            currentCap = parseInt(selected.getAttribute('data-cap')) || 4;
+
+            sumMeja.textContent = "Meja " + name;
+            sumMinDp.textContent = 'Rp ' + currentMinDP.toLocaleString('id-ID');
+            
+            jumlahOrangInput.max = currentCap;
+            if(parseInt(jumlahOrangInput.value) > currentCap) {
+                jumlahOrangInput.value = currentCap;
             }
 
             function calculateDPTotal() {
@@ -329,6 +453,30 @@
                     dpAlert.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> Uang muka Anda belum memenuhi batas minimum meja (Kurang Rp ' + (currentMinDP - currentTotalDP).toLocaleString('id-ID') + ').';
                     btnSubmit.disabled = true;
                 }
+        function calculateDPTotal() {
+            let total = 0;
+            document.querySelectorAll('.dp-val').forEach(el => {
+                const price = parseInt(el.getAttribute('data-price')) || 0;
+                const qty = parseInt(el.textContent) || 0;
+                total += (price * qty);
+            });
+            currentTotalDP = total;
+            sumDpTotal.textContent = 'Rp ' + currentTotalDP.toLocaleString('id-ID');
+
+            document.getElementById('inputTotalBayar').value = currentTotalDP;
+
+            validateCheckout();
+        }
+
+        function validateCheckout() {
+            if(currentTotalDP >= currentMinDP) {
+                dpAlert.className = 'alert alert-success py-2 small fw-bold d-flex align-items-center mb-4';
+                dpAlert.innerHTML = '<i class="bi bi-check-circle-fill me-2 fs-5"></i> Syarat minimum uang muka terpenuhi!';
+                btnSubmit.disabled = false;
+            } else {
+                dpAlert.className = 'alert alert-warning py-2 small fw-bold d-flex align-items-center mb-4';
+                dpAlert.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> Uang muka Anda belum memenuhi batas minimum meja (Kurang Rp ' + (currentMinDP - currentTotalDP).toLocaleString('id-ID') + ').';
+                btnSubmit.disabled = true;
             }
 
             radios.forEach(r => r.addEventListener('change', updateTableSelection));
@@ -357,6 +505,10 @@
                 e.preventDefault();
                 window.location.href = "{{ url('/payment') }}?amount=" + currentTotalDP;
             });
+        // Hapus e.preventDefault() biarkan jalan standar form submit
+        document.getElementById('reservationForm').addEventListener('submit', (e) => {
+            // Form akan submit normal dan pindah ke PembayaranController
+        });
 
             // Inisialisasi awal
             updateTableSelection();

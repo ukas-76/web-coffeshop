@@ -13,6 +13,7 @@ use App\Http\Controllers\PromoEventController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MejaController;
+use App\Http\Controllers\PembayaranController;
 
 
 /*
@@ -65,6 +66,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
     Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
+
+    // Route untuk halaman checkout pelanggan
+    Route::post('/checkout/proses', [PembayaranController::class, 'prosesCheckout'])->name('checkout.proses');
+   
+    
+    Route::get('/checkout/finish', [PembayaranController::class, 'finishCheckout'])->name('checkout.finish');
 });
 
 
