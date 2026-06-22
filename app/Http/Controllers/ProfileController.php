@@ -36,7 +36,7 @@ class ProfileController extends Controller
          */
         $totalBelanjaSelesai = Reservasi::where('pengguna_id', $user->id)
             ->where('status', 'selesai')
-            ->sum('total_tamu'); 
+            ->sum('total_harga'); 
 
         // Hitung poin (pembulatan ke bawah dengan floor)
         $poinRoastory = floor($totalBelanjaSelesai / 10000); 
