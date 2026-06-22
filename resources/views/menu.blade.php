@@ -77,7 +77,9 @@
                     @foreach($menus->filter(function($m) use($cat){ return ($m->kategori?->nama ?? 'Lainnya') === $cat; }) as $menu)
                         <div class="col-lg-4 col-md-6">
                             <div class="menu-card">
-                                <img src="{{ $menu->gambar ?? 'https://via.placeholder.com/600x400?text=No+Image' }}" alt="{{ $menu->nama }}" class="menu-img">
+                                <img src="{{ $menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar)) ? asset('uploads/menus/' . $menu->gambar) : 'https://via.placeholder.com/600x400?text=No+Image' }}" 
+     alt="{{ $menu->nama }}" 
+     class="menu-img">
                                 <div class="menu-content">
                                     <h4 class="fw-bold mb-2">{{ $menu->nama }}</h4>
                                     <p class="text-muted mb-4 small">{{ $menu->deskripsi ?? 'Tidak ada deskripsi.' }}</p>

@@ -7,9 +7,7 @@
     <title>@yield('title', 'Roastory')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @stack('styles')
@@ -133,6 +131,11 @@
             background-color: var(--primary-coffee);
             transform: translateY(-3px);
         }
+
+        /* Ruang spasi agar konten tidak tertutup fixed-top navbar */
+        .main-content {
+            padding-top: 90px;
+        }
     </style>
 </head>
 
@@ -153,19 +156,19 @@
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Beranda</a>
-                    </li>
+                    </td>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="{{ url('/about') }}">Tentang Kami</a>
-                    </li>
+                    </td>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('menu') ? 'active' : '' }}" href="{{ url('/menu') }}">Katalog Menu</a>
-                    </li>
+                    </td>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('reservasi') ? 'active' : '' }}" href="{{ url('/reservasi') }}">Reservasi</a>
-                    </li>
+                    </td>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('order') ? 'active' : '' }}" href="{{ url('/order') }}">Pesan Online</a>
-                    </li>
+                    </td>
                 </ul>
                 
                 <div class="d-flex mt-3 mt-lg-0 align-items-center gap-3">
@@ -177,9 +180,14 @@
                     @auth
                         <div class="dropdown">
                             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama) }}&background=5c3d2e&color=fff&size=40" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-white shadow-sm">
+                                @if(Auth::user()->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists(Auth::user()->avatar))
+                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar" width="40" height="40" class="rounded-circle  border-2 border-white shadow-sm" style="object-fit: cover;">
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama) }}&background=5c3d2e&color=fff&size=40" alt="Avatar" width="40" height="40" class="rounded-circle border border-2 border-white shadow-sm">
+                                @endif
                                 <span class="ms-2 fw-bold text-dark d-none d-lg-inline">{{ Auth::user()->nama }}</span>
                             </a>
+                            
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 p-2" aria-labelledby="dropdownUser">
                                 <li><a class="dropdown-item rounded-3 mb-1 bg-kopi-light text-kopi fw-bold" href="{{ url('/profile') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a></li>
                                 <li><a class="dropdown-item rounded-3 mb-1" href="{{ url('/order') }}"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
@@ -195,12 +203,10 @@
                             </ul>
                         </div>
                     @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    @yield('content')
+                </div> </div> </div> </nav>
+    <main class="main-content flex-grow-1">
+        @yield('content')
+    </main>
 
     <footer class="py-5 mt-5">
         <div class="container">
@@ -250,16 +256,15 @@
 
             <hr class="border-secondary opacity-25">
             <div class="text-center mt-4 pb-0 mb-0">
+                <br>
                 <small class="text-white-50">
                     &copy; 2026 Roastory. Dibuat dengan <i class="bi bi-suit-heart-fill text-danger"></i> untuk Anda.
                 </small>
             </div>
         </div>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Efek untuk membuat navbar memiliki shadow saat di-scroll
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar-custom');
             if (window.scrollY > 50) {

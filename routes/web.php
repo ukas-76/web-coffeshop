@@ -5,6 +5,9 @@ use App\Http\Controllers\HalamanUtamaController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
+
+
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PromoEventController;
 use App\Http\Controllers\PromoController;
@@ -54,18 +57,13 @@ Route::get('/payment', [PesananController::class, 'payment'])->name('payment.ind
 | Jalur Khusus User Terautentikasi (Fitur Profil)
 |--------------------------------------------------------------------------
 */
+// Ubah route profile kamu di web.php menjadi seperti ini:
 Route::middleware(['auth'])->group(function () {
-    // Memanggil method profile() yang baru saja kita buat di atas
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile'); 
-    
-    Route::patch('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
-    
-    // Pastikan namanya 'profile.avatar.update' jika di blade Anda menggunakan nama ini
-    Route::patch('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('profile.avatar.update');
-    //agar hanya bisa diakses oleh user yang sudah login
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
+    Route::post('/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/avatar', [\App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar');   
+
     Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
-
-
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
     Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
 
@@ -75,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/checkout/finish', [PembayaranController::class, 'finishCheckout'])->name('checkout.finish');
 });
+
 
 /*
 |--------------------------------------------------------------------------

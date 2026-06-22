@@ -140,16 +140,28 @@
     font-weight: 600;
 }
 
+/* TIER BADGE DYNAMIC STYLE */
 .tier-badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 5px 15px;
-    background: linear-gradient(135deg, #ffd700, #ffb300);
-    color: #4a3500;
+    padding: 6px 18px;
     border-radius: 50px;
     font-weight: 700;
     font-size: 0.85rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.tier-gold {
+    background: linear-gradient(135deg, #ffd700, #ffb300);
+    color: #4a3500;
+}
+.tier-silver {
+    background: linear-gradient(135deg, #e3e4e5, #cbd5e1);
+    color: #334155;
+}
+.tier-bronze {
+    background: linear-gradient(135deg, #cd7f32, #b45309);
+    color: #ffffff;
 }
 
 /* Dynamic Tabs */
@@ -167,9 +179,10 @@
 }
 
 /* Badge Status in Tables */
-.b-status { font-size: 0.8rem; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+.b-status { font-size: 0.8rem; padding: 4px 8px; border-radius: 6px; font-weight: bold; text-transform: capitalize; }
 .b-success { background-color: #d4edda; color: #155724; }
 .b-warning { background-color: #fff3cd; color: #856404; }
+.b-danger { background-color: #f8d7da; color: #721c24; }
 </style>
 @endpush
 
@@ -183,6 +196,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <!-- Profile Header -->
     <div class="row mb-5">
@@ -193,14 +212,13 @@
                     
                     <!-- Avatar Preview Image -->
                     <img id="avatarPreview" 
-                         src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?nama=' . urlencode(auth()->user()->name) . '&background=5c3d2e&color=fff&size=150' }}" 
+                         src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->nama) . '&background=5c3d2e&color=fff&size=150' }}" 
                          alt="Profil Pengguna" 
                          class="profile-avatar">
                     
                     <!-- Form Hidden File Upload khusus Avatar -->
-                    <form id="avatarForm" action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data">
+                    <form id="avatarForm" action="{{ route('profile.avatar') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('PATCH')
                         <label for="avatarInput" class="avatar-edit-label" title="Ubah Foto Profil">
                             <i class="bi bi-camera-fill"></i>
                         </label>
@@ -208,11 +226,12 @@
                     </form>
 
                 </div>
-                <!-- SINKRONISASI DATA NAMA DAN EMAIL USER -->
-                <h2 class="fw-bold mt-3 mb-1">{{ auth()->user()->nama }}</h2>
-                <p class="text-secondary mb-2">{{ auth()->user()->email }} <span class="mx-2">•</span> {{ auth()->user()->nomor_telepon ?? '-' }}</p>
-                <div class="tier-badge">
-                    <i class="bi bi-star-fill"></i> Gold Member
+                <h2 class="fw-bold mt-3 mb-1">{{ $user->nama }}</h2>
+                <p class="text-secondary mb-2">{{ $user->email }} <span class="mx-2">•</span> {{ $user->nomor_telepon ?? '-' }}</p>
+                
+                <!-- BADGE TIER MEMBER DINAMIS BERUBAH WARNA -->
+                <div class="tier-badge {{ $tierBadgeClass }}">
+                    <i class="bi bi-star-fill"></i> {{ $tierMember }}
                 </div>
             </div>
         </div>
@@ -239,7 +258,6 @@
                         </a>
                     </li>
                     <li class="mt-4 border-top pt-3">
-                        <!-- Menggunakan form log out standar Laravel agar aman secara server-side -->
                         <a href="#" class="profile-menu-link text-danger" 
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="bi bi-box-arrow-right text-danger"></i> Keluar
@@ -257,45 +275,44 @@
             
             <!-- TAB: INFO -->
             <div id="tab-info" class="profile-tab-pane active">
-                <!-- Highlight Stats -->
+                <!-- Highlight Stats Dinamis -->
                 <div class="row g-3 mb-4">
-                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">1,250</div><div class="stat-label">Poin Roastory</div></div></div>
-                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">24</div><div class="stat-label">Total Pesanan</div></div></div>
-                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">5</div><div class="stat-label">Reservasi Tuntas</div></div></div>
+                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">{{ number_format($poinRoastory) }}</div><div class="stat-label">Poin Roastory</div></div></div>
+                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">{{ $totalPesanan }}</div><div class="stat-label">Total Pesanan</div></div></div>
+                    <div class="col-md-4"><div class="stat-badge"><div class="stat-value">{{ $reservasiTuntas }}</div><div class="stat-label">Reservasi Tuntas</div></div></div>
                 </div>
 
                 <!-- Form Profile Info -->
                 <div class="card-custom p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                        <h4 class="fw-bold mb-0 text-kopi">Informasi Pribadi</h4>
+                        <h4 class="fw-bold mb-0" style="color: var(--primary-coffee);">Informasi Pribadi</h4>
                     </div>
                     <form action="{{ route('profile.update') }}" method="POST">
                         @csrf
-                        @method('PATCH')
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nama Lengkap</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" name="name" class="form-control" value="{{ auth()->user()->nama }}" placeholder="Masukkan Nama Lengkap">
+                                    <input type="text" name="name" class="form-control" value="{{ $user->nama }}" placeholder="Masukkan Nama Lengkap" required>
+                                </div>
                             </div>
-                        </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Email Registrasi</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" class="form-control" value="{{ auth()->user()->email }}" disabled>
+                                    <input type="email" class="form-control" value="{{ $user->email }}" disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-secondary text-uppercase" style="font-size: 0.8rem;">Nomor Telepon</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="text" name="phone" class="form-control" value="{{ auth()->user()->nomor_telepon }}" placeholder="Masukkan Nomor Telepon">
+                                    <input type="text" name="phone" class="form-control" value="{{ $user->nomor_telepon }}" placeholder="Masukkan Nomor Telepon">
                                 </div>
                             </div>
                             <div class="col-12 text-end mt-4">
-                                <button type="submit" class="btn btn-kopi rounded-pill px-4 py-2">
+                                <button type="submit" class="btn btn-dark rounded-pill px-4 py-2" style="background-color: var(--primary-coffee); border: none;">
                                     <i class="bi bi-save me-2"></i>Simpan Perubahan
                                 </button>
                             </div>
@@ -304,87 +321,84 @@
                 </div>
             </div>
 
-            <!-- TAB: ORDERS -->
+            <!-- TAB: ORDERS (Riwayat Pesanan) -->
             <div id="tab-orders" class="profile-tab-pane">
                 <div class="card-custom p-4 p-md-5">
-                    <h4 class="fw-bold mb-4 pb-3 border-bottom text-kopi">Riwayat Pesanan (Delivery/Pick-up)</h4>
+                    <h4 class="fw-bold mb-4 pb-3 border-bottom" style="color: var(--primary-coffee);">Riwayat Pesanan (Delivery/Pick-up)</h4>
                     <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>ID Pesanan</th>
-                                    <th>Tanggal</th>
-                                    <th>Items</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-bold">#ORD-9088</td>
-                                    <td class="text-muted small">24 Apr 2026</td>
-                                    <td>2x Kopsus Aren, 1x Croissant</td>
-                                    <td class="fw-bold">Rp 68.000</td>
-                                    <td><span class="b-status b-success">Selesai</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">#ORD-8942</td>
-                                    <td class="text-muted small">12 Mar 2026</td>
-                                    <td>1x Matcha Sakura Latte</td>
-                                    <td class="fw-bold">Rp 28.000</td>
-                                    <td><span class="b-status b-success">Selesai</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">#ORD-8110</td>
-                                    <td class="text-muted small">20 Feb 2026</td>
-                                    <td>3x Cappuccino Hangat</td>
-                                    <td class="fw-bold">Rp 78.000</td>
-                                    <td><span class="b-status b-success">Selesai</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @if($riwayatPesanan->isEmpty())
+                            <p class="text-muted text-center my-4">Belum ada riwayat pesanan online.</p>
+                        @else
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID Pesanan</th>
+                                        <th>Jenis</th>
+                                        <th>Tanggal</th>
+                                        <th>Total Belanja</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($riwayatPesanan as $pesanan)
+                                    <tr>
+                                        <td class="fw-bold">#ORD-{{ str_pad($pesanan->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                        <td><span class="badge bg-secondary text-capitalize">{{ $pesanan->jenis_pesanan }}</span></td>
+                                        <td class="text-muted small">{{ $pesanan->created_at->format('d M Y, H:i') }}</td>
+                                        <!-- Menggunakan total_tamu sesuai penamaan kolom databasemu -->
+                                        <td class="fw-bold">Rp {{ number_format($pesanan->total_tamu, 0, ',', '.') }}</td>
+                                        <td>
+                                            <span class="b-status 
+                                                {{ $pesanan->status == 'selesai' ? 'b-success' : ($pesanan->status == 'dibatalkan' ? 'b-danger' : 'b-warning') }}">
+                                                {{ $pesanan->status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- TAB: RESERVATIONS -->
+            <!-- TAB: RESERVATIONS (Riwayat Reservasi) -->
             <div id="tab-reservations" class="profile-tab-pane">
                 <div class="card-custom p-4 p-md-5">
-                    <h4 class="fw-bold mb-4 pb-3 border-bottom text-kopi">Riwayat Reservasi Meja</h4>
+                    <h4 class="fw-bold mb-4 pb-3 border-bottom" style="color: var(--primary-coffee);">Riwayat Reservasi Meja (Dine In)</h4>
                     <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Kode Booking</th>
-                                    <th>Waktu Temu</th>
-                                    <th>Lokasi Meja</th>
-                                    <th>DP Dibayar</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-bold">#RES-2933</td>
-                                    <td>
-                                        <div class="fw-bold">Besok, 18:00</div>
-                                        <div class="small text-muted">27 Apr 2026</div>
-                                    </td>
-                                    <td>Indoor Sofa Premium (4 Org)</td>
-                                    <td class="fw-bold text-success">Rp 100.000</td>
-                                    <td><span class="b-status b-warning text-dark">Akan Datang</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">#RES-1402</td>
-                                    <td>
-                                        <div class="fw-bold">14:00</div>
-                                        <div class="small text-muted">05 Jan 2026</div>
-                                    </td>
-                                    <td>Outdoor Balcony (2 Org)</td>
-                                    <td class="fw-bold text-success">Rp 100.000</td>
-                                    <td><span class="b-status b-success">Selesai</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @if($riwayatReservasi->isEmpty())
+                            <p class="text-muted text-center my-4">Belum ada riwayat reservasi meja.</p>
+                        @else
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Kode Booking</th>
+                                        <th>Tanggal Reservasi</th>
+                                        <th>Jam Mulai</th>
+                                        <th>Total DP / Biaya</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($riwayatReservasi as $res)
+                                    <tr>
+                                        <td class="fw-bold">#RES-{{ str_pad($res->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                        <td class="text-muted small">{{ \Carbon\Carbon::parse($res->tanggal_reservasi)->format('d M Y') }}</td>
+                                        <td class="fw-bold">{{ $res->jam_mulai }} WIB</td>
+                                        <!-- Menggunakan total_tamu sesuai penamaan kolom databasemu -->
+                                        <td class="fw-bold">Rp {{ number_format($res->total_tamu, 0, ',', '.') }}</td>
+                                        <td>
+                                            <span class="b-status 
+                                                {{ $res->status == 'selesai' ? 'b-success' : ($res->status == 'dibatalkan' ? 'b-danger' : 'b-warning') }}">
+                                                {{ $res->status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -421,20 +435,17 @@
             avatarInput.addEventListener('change', function() {
                 const file = this.files[0];
                 if (file) {
-                    // Validasi tipe file gambar di client-side
                     if (!file.type.startsWith('image/')) {
                         alert('Silakan pilih file gambar yang valid.');
                         return;
                     }
                     
-                    // Instant preview menggunakan FileReader
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         avatarPreview.src = e.target.result;
                     };
                     reader.readAsDataURL(file);
 
-                    // Submit otomatis form upload avatar ke server tanpa tombol tambahan
                     avatarForm.submit();
                 }
             });
