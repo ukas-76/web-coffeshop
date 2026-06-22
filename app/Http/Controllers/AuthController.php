@@ -126,7 +126,7 @@ class AuthController extends Controller
 public function profile()
     {
         // 1. Ambil data pengguna yang sedang login
-        $user = auth()->user();
+        $user = auth()->guard('web')->user();
 
         // 2. Ambil riwayat Pesanan Online (Delivery & Pickup)
         $riwayatPesanan = Reservasi::where('pengguna_id', $user->id)
@@ -149,7 +149,7 @@ public function profile()
      */
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = Auth::guard('web')->user();
         
         $request->validate([
             'name' => 'required|string|max:255',
