@@ -346,7 +346,7 @@
                                         <td><span class="badge bg-secondary text-capitalize">{{ $pesanan->jenis_pesanan }}</span></td>
                                         <td class="text-muted small">{{ $pesanan->created_at->format('d M Y, H:i') }}</td>
                                         <!-- Menggunakan total_tamu sesuai penamaan kolom databasemu -->
-                                        <td class="fw-bold">Rp {{ number_format($pesanan->total_tamu, 0, ',', '.') }}</td>
+                                        <td class="fw-bold">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
                                         <td>
                                             <span class="b-status 
                                                 {{ $pesanan->status == 'selesai' ? 'b-success' : ($pesanan->status == 'dibatalkan' ? 'b-danger' : 'b-warning') }}">
@@ -387,7 +387,7 @@
                                         <td class="text-muted small">{{ \Carbon\Carbon::parse($res->tanggal_reservasi)->format('d M Y') }}</td>
                                         <td class="fw-bold">{{ $res->jam_mulai }} WIB</td>
                                         <!-- Menggunakan total_tamu sesuai penamaan kolom databasemu -->
-                                        <td class="fw-bold">Rp {{ number_format($res->total_tamu, 0, ',', '.') }}</td>
+                                        <td class="fw-bold">Rp {{ number_format($res->total_harga, 0, ',', '.') }}</td>
                                         <td>
                                             <span class="b-status 
                                                 {{ $res->status == 'selesai' ? 'b-success' : ($res->status == 'dibatalkan' ? 'b-danger' : 'b-warning') }}">

@@ -327,7 +327,8 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "{{ url('/payment') }}?amount=" + rawTotal + "&reservasi_id=" + data.reservasi_id;
+                    // Alihkan langsung ke halaman payment yang sudah disiapkan oleh Controller
+                    window.location.href = data.redirect_url;
                 } else {
                     alert('Gagal menyimpan pesanan: ' + (data.message || 'Silakan coba lagi.'));
                     checkoutBtn.disabled = false;

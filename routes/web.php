@@ -67,10 +67,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
     Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
 
+    Route::post('/order/checkout', [PembayaranController::class, 'prosesCheckoutOnline'])->name('order.checkout');
+
     // Route untuk halaman checkout pelanggan
-    Route::post('/checkout/proses', [PembayaranController::class, 'prosesCheckout'])->name('checkout.proses');
+    Route::post('/checkout/proses', [PembayaranController::class, 'prosesCheckout'])->name('reservasi.checkout.proses');
    
-    
+    Route::get('/payment', [PembayaranController::class, 'halamanPayment'])->name('payment.show');
     Route::get('/checkout/finish', [PembayaranController::class, 'finishCheckout'])->name('checkout.finish');
 });
 

@@ -227,7 +227,7 @@
                     </div>
                 @endif
 
-                <form id="reservationForm" action="{{ route('checkout.proses') }}" method="POST">
+                <form id="reservationForm" action="{{ route('reservasi.checkout.proses') }}" method="POST">
                     @csrf
                     
                     <input type="hidden" name="total_bayar" id="inputTotalBayar" value="0">
