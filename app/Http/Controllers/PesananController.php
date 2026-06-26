@@ -67,7 +67,8 @@ class PesananController extends Controller
             $reservasi = Reservasi::create([
                 'pengguna_id'       => $userId,
                 'jenis_pesanan'     => $jenisPesanan,
-                'total_tamu'        => $request->total_tamu, // Total harga belanja disimpan di sini
+                'total_tamu'        => null, 
+                'total_harga'       => $request->total_tamu, // Total harga belanja dikirim via param total_tamu dari JS
                 'status'            => 'menunggu', 
                 
                 // Field dine-in diset NULL karena ini transaksi online (delivery/pickup)
@@ -92,7 +93,6 @@ class PesananController extends Controller
                     'reservasi_id'          => $reservasi->id,
                     'menu_id'               => $item['menu_id'],
                     'jumlah'                => $item['jumlah'],
-                    'subtotal'              => $item['subtotal'],
                     'harga_saat_reservasi'  => $hargaMenu 
                 ]);
             }
@@ -101,7 +101,8 @@ class PesananController extends Controller
 
             return response()->json([
                 'success' => true,
-                'reservasi_id' => $reservasi->id
+                'reservasi_id' => $reservasi->id,
+                'redirect_url' => url('/payment') . '?amount=' . $request->total_tamu . '&reservasi_id=' . $reservasi->id
             ]);
 
         } catch (\Exception $e) {
@@ -121,8 +122,8 @@ class PesananController extends Controller
         $reservasi = Reservasi::findOrFail($id);
         $reservasi->update(['status' => 'selesai']);
 
-        // Hitung poin: Setiap Kelipatan Rp 10.000 dapat 1 poin
-        $poinBaru = floor($reservasi->total_tamu / 10000);
+        // Hitung poin: Setiap Kelipatan Rp 10.000 dapat 1 poin (menggunakan total_harga)
+        $poinBaru = floor($reservasi->total_harga / 10000);
 
         // Tambah poin ke pengguna yang bersangkutan jika akun terverifikasi cocok
         $user = Auth::user();
@@ -133,5 +134,19 @@ class PesananController extends Controller
         }
 
         return redirect()->back()->with('success', 'Pesanan selesai! Anda berhasil mendapatkan ' . $poinBaru . ' poin Roastory.');
+    }
+
+    /**
+     * Menampilkan daftar pesanan (historis/aktif) milik pengguna yang sedang login
+     */
+    public function pesananSaya()
+    {
+        $pesanan = Reservasi::where('pengguna_id', Auth::id())
+            ->whereNotIn('status', ['selesai', 'dibatalkan'])
+            ->with('detailReservasi.menu')
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        return view('pesanan-saya', compact('pesanan'));
     }
 }

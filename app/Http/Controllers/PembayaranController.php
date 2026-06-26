@@ -102,6 +102,24 @@ class PembayaranController extends Controller
 
         try {
            
+            // Cek bentrok jadwal (Double Booking Protection)
+            $jamSelesaiReq = date('H:i', strtotime($jam) + 7200);
+            $cekBentrok = \App\Models\Reservasi::where('meja_id', $mejaId)
+                ->where('tanggal_reservasi', $tanggal)
+                ->where(function($query) use ($jam, $jamSelesaiReq) {
+                    $query->whereBetween('jam_mulai', [$jam, $jamSelesaiReq])
+                          ->orWhereBetween('jam_selesai', [$jam, $jamSelesaiReq])
+                          ->orWhere(function($q) use ($jam, $jamSelesaiReq) {
+                              $q->where('jam_mulai', '<=', $jam)
+                                ->where('jam_selesai', '>=', $jamSelesaiReq);
+                          });
+                })
+                ->whereNotIn('status', ['dibatalkan'])
+                ->exists();
+                
+            if ($cekBentrok) {
+                return back()->with('error', 'Maaf, meja tersebut sudah dipesan pada waktu yang Anda pilih. Silakan pilih meja atau waktu kedatangan yang lain.');
+            }
             
             // 2. Simpan ke database
             $reservasi = \App\Models\Reservasi::create([
@@ -244,10 +262,10 @@ class PembayaranController extends Controller
                     'metode_pembayaran' => $method ?: 'qris'
                 ]);
 
-                // 3. Update status reservasi yang terhubung menjadi diterima
+                // 3. Update status reservasi yang terhubung menjadi diproses
                 if ($pembayaran->reservasi) {
                     $pembayaran->reservasi->update([
-                        'status' => 'selesai'
+                        'status' => 'diproses'
                     ]);
                 }
             }
@@ -257,5 +275,45 @@ class PembayaranController extends Controller
 
         // 4. Alihkan user ke halaman riwayat atau dashboard utama dengan notifikasi sukses
         return redirect('/')->with('success', 'Pembayaran sukses, reservasi kamu berhasil dicatat!');
+    }
+
+    /**
+     * Langkah 3: Webhook Midtrans (Notifikasi Latar Belakang)
+     * Ini dipanggil oleh Midtrans secara otomatis untuk mengabarkan status pembayaran (berhasil, pending, atau gagal).
+     */
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        // Midtrans menggunakan sha512 untuk signature key
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        
+        // Verifikasi keaslian notifikasi
+        if ($hashed == $request->signature_key) {
+            $pembayaran = Pembayaran::where('id_transaksi', $request->order_id)->first();
+            
+            if ($pembayaran) {
+                // Tangkap status dari Midtrans
+                if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                    $pembayaran->update([
+                        'status' => 'lunas',
+                        'metode_pembayaran' => $request->payment_type
+                    ]);
+                    
+                    if ($pembayaran->reservasi) {
+                        $pembayaran->reservasi->update(['status' => 'diproses']);
+                    }
+                } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
+                    $pembayaran->update(['status' => 'gagal']);
+                    
+                    if ($pembayaran->reservasi) {
+                        $pembayaran->reservasi->update(['status' => 'dibatalkan']);
+                    }
+                } elseif ($request->transaction_status == 'pending') {
+                    $pembayaran->update(['status' => 'pending']);
+                }
+            }
+        }
+        
+        return response()->json(['message' => 'Callback received']);
     }
 }   

@@ -273,7 +273,7 @@ class DashboardAdminController extends Controller
     // ==========================================
     public function indexPesanan()
     {
-        $dataPesanan = Reservasi::with(['pengguna'])
+        $dataPesanan = Reservasi::with(['pengguna', 'detailReservasi.menu'])
             ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -284,7 +284,7 @@ class DashboardAdminController extends Controller
     public function updateStatusPesanan(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:menunggu,diproses,selesai,dibatalkan'
+            'status' => 'required|in:menunggu,diproses,ready_diambil,sedang_diantar,selesai,dibatalkan'
         ]);
 
         $pesanan = Reservasi::findOrFail($id);

@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         'api/midtrans-callback',
         'midtrans-callback' // daftarkan kedua variasi ini agar aman
     ]);
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\IsAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

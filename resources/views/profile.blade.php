@@ -354,6 +354,20 @@
                                             </span>
                                         </td>
                                     </tr>
+                                    @if($pesanan->detailReservasi->isNotEmpty())
+                                    <tr class="bg-light">
+                                        <td colspan="5" class="border-0 pb-3">
+                                            <div class="px-3">
+                                                <div class="fw-bold small mb-1">Item Pesanan:</div>
+                                                <ul class="list-unstyled small text-muted mb-0 ms-1">
+                                                    @foreach($pesanan->detailReservasi as $detail)
+                                                    <li>&bull; {{ $detail->jumlah }}x {{ $detail->menu->nama ?? 'Menu Terhapus' }} <span class="ms-2">(Rp {{ number_format($detail->subtotal ?? ($detail->jumlah * $detail->harga_saat_reservasi), 0, ',', '.') }})</span></li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -395,6 +409,20 @@
                                             </span>
                                         </td>
                                     </tr>
+                                    @if($res->detailReservasi->isNotEmpty())
+                                    <tr class="bg-light">
+                                        <td colspan="5" class="border-0 pb-3">
+                                            <div class="px-3">
+                                                <div class="fw-bold small mb-1">Menu yang Dipesan:</div>
+                                                <ul class="list-unstyled small text-muted mb-0 ms-1">
+                                                    @foreach($res->detailReservasi as $detail)
+                                                    <li>&bull; {{ $detail->jumlah }}x {{ $detail->menu->nama ?? 'Menu Terhapus' }} <span class="ms-2">(Rp {{ number_format($detail->subtotal ?? ($detail->jumlah * $detail->harga_saat_reservasi), 0, ',', '.') }})</span></li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>

@@ -50,6 +50,8 @@ Route::get('/about', [HalamanUtamaController::class, 'about']);
 
 Route::get('/payment', [PesananController::class, 'payment'])->name('payment.index');
 
+// Route untuk Webhook Midtrans (Notifikasi Status Pembayaran)
+Route::post('/midtrans-callback', [PembayaranController::class, 'callback']);
 
 /*
 |--------------------------------------------------------------------------
@@ -64,12 +66,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute pemesanan dan reservasi yang membutuhkan login
     Route::get('/order', [PesananController::class, 'order'])->name('order.index');
+    Route::get('/pesanan-saya', [PesananController::class, 'pesananSaya'])->name('pesanan.saya');
+    Route::post('/pesanan-saya/{id}/selesai', [PesananController::class, 'selesaikanPesanan'])->name('pesanan.saya.selesai');
 
     Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
     Route::post('/reservasi/store', [ReservasiController::class, 'userStore'])->name('reservasi.store');
 
-    Route::post('/order/checkout', [PembayaranController::class, 'prosesCheckoutOnline'])->name('order.checkout');
 
     // Route untuk halaman checkout pelanggan
     Route::post('/checkout/proses', [PembayaranController::class, 'prosesCheckout'])->name('reservasi.checkout.proses');
@@ -87,7 +90,7 @@ Route::middleware(['auth'])->group(function () {
 | dengan '/admin'. Contoh: namacoffeeshop.com/admin/dashboard
 */
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // 1. Dashboard Utama & Unduh Laporan
     Route::get('/dashboard', [DashboardAdminController::class, 'index']); 
     Route::get('/export-laporan', [DashboardAdminController::class, 'exportLaporan']);

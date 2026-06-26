@@ -162,10 +162,10 @@
             @forelse($daftarMenu as $menu)
             <div class="product-card">
                 <img src="{{ $menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar)) ? asset('uploads/menus/' . $menu->gambar) : 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80' }}" 
-                     alt="{{ $menu->nama_menu }}" class="product-img">
+                     alt="{{ $menu->nama }}" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fw-bold mb-1">{{ $menu->nama_menu }}</h6>
+                        <h6 class="fw-bold mb-1">{{ $menu->nama }}</h6>
                         <p class="text-muted small mb-1 d-none d-sm-block">{{ $menu->deskripsi ?? 'Pilihan hidangan spesial dari Roastory.' }}</p>
                         <span class="text-kopi fw-bold">Rp {{ number_format($menu->harga, 0, ',', '.') }}</span>
                     </div>
@@ -352,8 +352,73 @@
 
         // Hapus e.preventDefault() biarkan jalan standar form submit
         document.getElementById('reservationForm').addEventListener('submit', (e) => {
-            // Form akan submit normal dan pindah ke PembayaranController
+            // Cek jika tidak ada meja yang dipilih
+            const selectedMeja = document.querySelector('input[name="mejaSelect"]:checked');
+            if(!selectedMeja || selectedMeja.disabled) {
+                e.preventDefault();
+                alert('Silakan pilih meja yang tersedia terlebih dahulu.');
+            }
         });
+
+        // AJAX Cek Ketersediaan Meja
+        const tanggalInput = document.querySelector('input[name="tanggal"]');
+        const jamInput = document.querySelector('input[name="jam"]');
+        
+        function cekMejaAvailable() {
+            const tanggal = tanggalInput.value;
+            const jam = jamInput.value;
+            
+            if (tanggal && jam) {
+                fetch(`/api/cek-ketersediaan-meja?tanggal=${tanggal}&jam=${jam}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const mejaTerpakai = data.meja_terpakai || [];
+                        let selectedRadioCanceled = false;
+                        
+                        document.querySelectorAll('.table-radio').forEach(radio => {
+                            const mejaId = parseInt(radio.value);
+                            const label = document.querySelector(`label[for="${radio.id}"]`);
+                            let badge = label.querySelector('.booked-badge');
+                            
+                            if (mejaTerpakai.includes(mejaId)) {
+                                radio.disabled = true;
+                                label.style.opacity = '0.5';
+                                label.style.cursor = 'not-allowed';
+                                
+                                if (!badge) {
+                                    badge = document.createElement('div');
+                                    badge.className = 'booked-badge position-absolute top-50 start-50 translate-middle bg-danger text-white px-3 py-1 rounded-pill fw-bold shadow';
+                                    badge.innerHTML = '<i class="bi bi-x-circle me-1"></i>Sudah Dipesan';
+                                    badge.style.zIndex = '10';
+                                    label.appendChild(badge);
+                                }
+                                
+                                // Jika sedang dipilih, batalkan pilihan
+                                if (radio.checked) {
+                                    radio.checked = false;
+                                    selectedRadioCanceled = true;
+                                }
+                            } else {
+                                radio.disabled = false;
+                                label.style.opacity = '1';
+                                label.style.cursor = 'pointer';
+                                if (badge) {
+                                    badge.remove();
+                                }
+                            }
+                        });
+                        
+                        if (selectedRadioCanceled) {
+                            updateTableSelection();
+                            alert('Meja yang Anda pilih sudah dipesan pada waktu tersebut. Silakan pilih meja lain.');
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+        }
+
+        tanggalInput.addEventListener('change', cekMejaAvailable);
+        jamInput.addEventListener('change', cekMejaAvailable);
 
         // Inisialisasi awal
         updateTableSelection();

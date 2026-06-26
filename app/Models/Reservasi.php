@@ -31,4 +31,16 @@ class Reservasi extends Model
     {
         return $this->belongsTo(Meja::class, 'meja_id');
     }
+
+    // Relasi ke Detail Reservasi
+    public function detailReservasi()
+    {
+        return $this->hasMany(DetailReservasi::class, 'reservasi_id');
+    }
+
+    // Relasi ke Pembayaran
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'reservasi_id');
+    }
 }
