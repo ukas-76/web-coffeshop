@@ -14,6 +14,7 @@ class Reservasi extends Model
         'jenis_pesanan', 
         'tanggal_reservasi', 
         'jam_mulai', 
+        'jam_selesai',
         'total_tamu',
         'total_harga', 
         'status'

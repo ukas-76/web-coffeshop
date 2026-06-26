@@ -10,6 +10,7 @@ use App\Models\Reservasi;
 use App\Models\Meja;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Pengaturan;
 
 class DashboardAdminController extends Controller
 {
@@ -199,6 +200,7 @@ class DashboardAdminController extends Controller
     {
         $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
 
+        // Mengurutkan berdasarkan jam_mulai paling awal untuk tanggal terpilih
         $dataReservasi = Reservasi::with(['pengguna', 'meja'])
             ->where('jenis_pesanan', 'dine_in')
             ->whereDate('tanggal_reservasi', $tanggal)
@@ -216,6 +218,7 @@ class DashboardAdminController extends Controller
 
     public function storeReservasi(Request $request)
     {
+        // total_harga dibuat nullable agar tidak error jika DP dikosongkan (Walk-in)
         $request->validate([
             'nama_pelanggan'    => 'required|string|max:255',
             'nomor_telepon'     => 'required|string|max:20',
@@ -223,6 +226,7 @@ class DashboardAdminController extends Controller
             'jam_mulai'         => 'required',
             'meja_id'           => 'required',
             'total_tamu'        => 'required|integer|min:1',
+            'total_harga'       => 'nullable|numeric', 
         ]);
 
         $pelanggan = Pengguna::firstOrCreate(
@@ -243,8 +247,8 @@ class DashboardAdminController extends Controller
             'jam_mulai'         => $request->jam_mulai,
             'jam_selesai'       => $request->jam_selesai,
             'total_tamu'        => $request->total_tamu,
-            'ongkir'            => $request->dp_dibayar ?? 0,
-            'status'            => 'dikonfirmasi'
+            'total_harga'       => $request->total_harga ?? 0, // Jika kosong otomatis bernilai 0
+            'status'            => 'dikonfirmasi' // Langsung konfirmasi karena diinput manual oleh admin
         ]);
 
         return redirect()->back()->with('success', 'Reservasi manual berhasil ditambahkan!');
@@ -344,5 +348,28 @@ class DashboardAdminController extends Controller
 
         // 5. Kirim semua hasil ke halaman view khusus pencarian
         return view('admin.search_results', compact('keyword', 'hasilMenu', 'hasilPengguna', 'hasilReservasi'));
+    }
+
+    // ==========================================
+    // 6. MANAJEMEN PENGATURAN
+    // ==========================================
+    public function settings()
+    {
+        $googleMapsUrl = Pengaturan::where('kunci', 'google_maps_embed_url')->value('nilai');
+        return view('admin.settings', compact('googleMapsUrl'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $request->validate([
+            'google_maps_embed_url' => 'required|url',
+        ]);
+
+        Pengaturan::updateOrCreate(
+            ['kunci' => 'google_maps_embed_url'],
+            ['nilai' => $request->google_maps_embed_url]
+        );
+
+        return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui!');
     }
 }
