@@ -173,8 +173,7 @@
                 
                 <div class="d-flex mt-3 mt-lg-0 align-items-center gap-3">
                     @guest
-                        <a class="btn btn-outline-kopi px-4 py-2 rounded-pill" href="{{ url('/login') }}">Masuk</a>
-                        <a class="btn btn-kopi px-4 py-2 rounded-pill" href="{{ url('/login-admin') }}">Admin</a>
+                        <a class="btn btn-kopi px-4 py-2 rounded-pill shadow-sm" href="{{ url('/login') }}">Masuk</a>
                     @endguest
 
                     @auth

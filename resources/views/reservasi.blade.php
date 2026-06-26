@@ -100,7 +100,7 @@
 @endpush
 
 @section('content')
-<div class="page-header mb-5" style="margin-top: 76px;">
+<div class="page-header mb-5">
     <div class="container">
         <h1 class="fw-bold display-5 mb-3">Reservasi Meja & Ruang</h1>
         <p class="lead opacity-90 mx-auto" style="max-width: 600px;">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
@@ -109,19 +109,7 @@
 
 <main class="container mb-5 position-relative">
     
-    @guest
-    <div class="login-overlay text-center p-4" id="loginProtectOverlay">
-        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
-            <i class="bi bi-lock-fill fs-1 text-kopi"></i>
-        </div>
-        <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
-        <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan reservasi meja.</p>
-        <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
-        <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
-            [Mode Pratinjau: Sembunyikan Dialog]
-        </button>
-    </div>
-    @endguest
+
 
     <div class="row g-4">
         <div class="col-lg-7 col-xl-8">
@@ -144,7 +132,7 @@
                     <label class="table-card p-0 text-start border rounded-4 overflow-hidden position-relative shadow-sm" for="meja_{{ $meja->id }}">
                         <div class="check-icon shadow-sm"><i class="bi bi-check-lg fs-5"></i></div>
                         
-                        <img src="{{ $meja->foto ? asset('storage/' . $meja->foto) : 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80' }}" 
+                        <img src="{{ $meja->gambar_lokasi && file_exists(public_path($meja->gambar_lokasi)) ? asset($meja->gambar_lokasi) : 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80' }}" 
                              class="w-100 object-fit-cover" style="height: 160px;" alt="{{ $meja->nomor_meja }}">
                         
                         <div class="p-3 bg-white flex-grow-1 d-flex flex-column">
@@ -173,7 +161,7 @@
             
             @forelse($daftarMenu as $menu)
             <div class="product-card">
-                <img src="{{ $menu->foto ? asset('storage/' . $menu->foto) : 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80' }}" 
+                <img src="{{ $menu->gambar && file_exists(public_path('uploads/menus/' . $menu->gambar)) ? asset('uploads/menus/' . $menu->gambar) : 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80' }}" 
                      alt="{{ $menu->nama_menu }}" class="product-img">
                 <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                     <div>
@@ -230,6 +218,7 @@
                 <form id="reservationForm" action="{{ route('reservasi.checkout.proses') }}" method="POST">
                     @csrf
                     
+                    <input type="hidden" name="mejaSelect" id="inputMejaId" value="">
                     <input type="hidden" name="total_bayar" id="inputTotalBayar" value="0">
                     
                     <p class="fw-bold mb-3 d-block"><i class="bi bi-person-lines-fill me-2"></i> 3. Data Diri & Waktu</p>
@@ -276,15 +265,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const overlay = document.getElementById('loginProtectOverlay');
-        const isUserLoggedIn = '{{ Auth::check() ? "true" : "false" }}' === 'true';
-    
-        if (isUserLoggedIn) {
-            if (overlay) overlay.style.display = 'none';
-        } else {
-            if (overlay) overlay.style.display = 'flex';
-        }
-
         const radios = document.querySelectorAll('.table-radio');
         const sumMeja = document.getElementById('sumMeja');
         const sumMinDp = document.getElementById('sumMinDp');
@@ -302,7 +282,9 @@
             const selected = document.querySelector('.table-radio:checked');
             if(!selected) return;
 
-            // PERBAIKAN DI SINI: Ambil nama dari data-name
+            // Sync hidden input di dalam form agar meja_id ikut terkirim
+            document.getElementById('inputMejaId').value = selected.value;
+
             const name = selected.getAttribute('data-name');
             currentMinDP = parseInt(selected.getAttribute('data-min')) || 0;
             currentCap = parseInt(selected.getAttribute('data-cap')) || 4;

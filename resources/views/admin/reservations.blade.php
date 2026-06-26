@@ -69,7 +69,8 @@
             <div class="icon-box info"><i class="bi bi-journal-check"></i></div>
             <div>
                 <h6 class="text-muted text-uppercase small fw-bold mb-1">Total Reservasi Tanggal Ini</h6>
-                <h4 class="fw-bold mb-0">{{ $totalHariIni }} Meja</h4> </div>
+                <h4 class="fw-bold mb-0">{{ $totalHariIni }} Meja</h4> 
+            </div>
         </div>
     </div>
     <div class="col-md-4">
@@ -77,7 +78,8 @@
             <div class="icon-box warning"><i class="bi bi-clock-history"></i></div>
             <div>
                 <h6 class="text-muted text-uppercase small fw-bold mb-1">Menunggu Kedatangan</h6>
-                <h4 class="fw-bold mb-0">{{ $menunggu }} Meja</h4> </div>
+                <h4 class="fw-bold mb-0">{{ $menunggu }} Meja</h4> 
+            </div>
         </div>
     </div>
     <div class="col-md-4">
@@ -85,7 +87,8 @@
             <div class="icon-box success"><i class="bi bi-check2-circle"></i></div>
             <div>
                 <h6 class="text-muted text-uppercase small fw-bold mb-1">Telah Hadir</h6>
-                <h4 class="fw-bold mb-0">{{ $hadir }} Meja</h4> </div>
+                <h4 class="fw-bold mb-0">{{ $hadir }} Meja</h4> 
+            </div>
         </div>
     </div>
 </div>
@@ -125,14 +128,14 @@
                     </td>
                     
                     {{-- Lokasi Meja --}}
-                    <td class="text-white">{{ $reservasi->meja->nama ?? 'Belum Ditentukan' }}</td>
+                    <td class="text-white">{{ $reservasi->meja->nomor_meja ?? 'Belum Ditentukan' }}</td>
                     
                     {{-- Jumlah Orang (Pax) --}}
                     <td><i class="bi bi-people-fill text-muted me-1"></i> {{ $reservasi->total_tamu ?? 0 }} Orang</td>
                     
-                    {{-- DP Dibayar (Sementara statis atau ambil dari relasi pembayaran jika sudah ada) --}}
+                    {{-- DP Dibayar (Menggunakan total_harga dari database) --}}
                     <td class="fw-bold text-success">
-                        Rp {{ number_format($reservasi->ongkir ?? 0, 0, ',', '.') }} {{-- Asumsi DP masuk ke kolom ongkir sementara, sesuaikan dengan logicmu --}}
+                        Rp {{ number_format($reservasi->total_harga ?? 0, 0, ',', '.') }}
                     </td>
                     
                     {{-- Status Badge --}}
@@ -230,10 +233,9 @@
                             <label class="form-label text-white small mb-1">Pilih Meja</label>
                             <select name="meja_id" class="form-select bg-dark text-white border-secondary" required>
                                 <option value="" disabled selected>-- Pilih Lokasi Meja --</option>
-                                {{-- Melakukan looping data meja dari controller --}}
                                 @if(isset($dataMeja) && $dataMeja->count() > 0)
                                     @foreach($dataMeja as $meja)
-                                        <option value="{{ $meja->id }}">{{ $meja->nama }} (Kapasitas: {{ $meja->kapasitas }} Orang)</option>
+                                        <option value="{{ $meja->id }}">Meja {{ $meja->nomor_meja }} (Kapasitas: {{ $meja->kapasitas }} Orang)</option>
                                     @endforeach
                                 @else
                                     <option value="" disabled>Belum ada data meja di database</option>
@@ -248,12 +250,12 @@
                             </div>
                         </div>
                         
-                        {{-- DP / Nominal (Opsional) --}}
+                        {{-- DP / Nominal (Menggunakan name="total_harga") --}}
                         <div class="col-md-12 mb-2">
                             <label class="form-label text-white small mb-1">Uang Muka / DP (Opsional)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-secondary text-white border-secondary">Rp</span>
-                                <input type="number" name="dp_dibayar" class="form-control bg-dark text-white border-secondary" placeholder="0" min="0">
+                                <input type="number" name="total_harga" class="form-control bg-dark text-white border-secondary" placeholder="0" min="0">
                             </div>
                             <small class="text-muted" style="font-size: 0.7rem;">Kosongkan jika tamu tidak membayar DP (Walk-in).</small>
                         </div>
@@ -268,7 +270,7 @@
     </div>
 </div>
 
-{{-- MODAL DETAIL RESERVASI (Mata) --}}
+{{-- MODAL DETAIL RESERVASI --}}
 @foreach($dataReservasi as $reservasi)
 <div class="modal fade" id="detailReservasiModal{{ $reservasi->id }}" tabindex="-1" data-bs-theme="dark">
     <div class="modal-dialog modal-dialog-centered">
@@ -293,7 +295,7 @@
                     </li>
                     <li class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center">
                         <span class="small text-muted">Lokasi Meja</span>
-                        <span class="text-info">{{ $reservasi->meja->nama ?? 'Belum Ditentukan' }}</span>
+                        <span class="text-info">{{ $reservasi->meja->nomor_meja ?? 'Belum Ditentukan' }}</span>
                     </li>
                     <li class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center">
                         <span class="small text-muted">Kapasitas Tamu</span>
@@ -301,7 +303,7 @@
                     </li>
                     <li class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center">
                         <span class="small text-muted">Uang Muka (DP)</span>
-                        <span class="text-success fw-bold">Rp {{ number_format($reservasi->ongkir ?? 0, 0, ',', '.') }}</span>
+                        <span class="text-success fw-bold">Rp {{ number_format($reservasi->total_harga ?? 0, 0, ',', '.') }}</span>
                     </li>
                 </ul>
             </div>

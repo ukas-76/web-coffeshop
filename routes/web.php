@@ -16,6 +16,7 @@ use App\Http\Controllers\MejaController;
 use App\Http\Controllers\PembayaranController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Jalur Autentikasi (Login & Register)
@@ -44,11 +45,9 @@ Route::get('/', [HalamanUtamaController::class, 'index']);
 // Jika user mengakses namacoffeeshop.com/menu
 Route::get('/menu', [HalamanUtamaController::class, 'menu']);
 
-// Jika user mengakses namacoffeeshop.com/reservasi
-Route::get('/reservasi', [ReservasiController::class, 'index']);
 
 Route::get('/about', [HalamanUtamaController::class, 'about']);
-Route::get('/order', [PesananController::class, 'order'])->name('order.index');
+
 Route::get('/payment', [PesananController::class, 'payment'])->name('payment.index');
 
 
@@ -62,6 +61,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
     Route::post('/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/avatar', [\App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar');   
+
+    // Rute pemesanan dan reservasi yang membutuhkan login
+    Route::get('/order', [PesananController::class, 'order'])->name('order.index');
 
     Route::post('/order/checkout', [PesananController::class, 'prosesCheckout'])->name('order.checkout');
     Route::get('/reservasi', [ReservasiController::class, 'userIndex'])->name('reservasi.index');
@@ -136,4 +138,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/meja/store', [MejaController::class, 'store'])->name('meja.store');
     Route::put('/meja/update/{id}', [MejaController::class, 'update'])->name('meja.update');
     Route::delete('/meja/destroy/{id}', [MejaController::class, 'destroy'])->name('meja.destroy');
+
+    // 6. Manajemen Pengaturan
+    Route::get('/settings', [DashboardAdminController::class, 'settings']);
+    Route::put('/settings', [DashboardAdminController::class, 'updateSettings']);
 });

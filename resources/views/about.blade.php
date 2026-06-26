@@ -39,7 +39,7 @@
 
 @section('content')
 <!-- Header Halaman -->
-<div class="page-header mb-5" style="margin-top: 76px;">
+<div class="page-header mb-5">
     <div class="container header-content">
         <h1 class="display-4 fw-bold mb-3">Tentang Kami</h1>
         <p class="lead opacity-75 mx-auto" style="max-width: 600px;">Menyajikan cerita dalam setiap tegukan, menghadirkan kehangatan, inspirasi, dan kebersamaan di setiap cangkir.</p>
@@ -99,5 +99,80 @@
         </div>
     </div>
 
+    <!-- Peta Lokasi Section -->
+    <div class="mt-5 pt-5 pb-3 border-top">
+        <div class="row align-items-center g-5">
+            <div class="col-md-5">
+                <span class="badge bg-kopi text-white mb-2 px-3 py-2 rounded-pill shadow-sm">Kunjungi Kami</span>
+                <h3 class="fw-bold text-kopi mb-4">Lokasi Kami</h3>
+                <p class="text-secondary mb-4">Kami dengan senang hati menyambut Anda. Mampirlah untuk menikmati seduhan terbaik dalam suasana yang nyaman dan hangat.</p>
+                
+                <ul class="list-unstyled">
+                    <li class="d-flex align-items-start mb-3">
+                        <div class="feature-icon-wrapper" style="width: 45px; height: 45px; font-size: 1.2rem; margin: 0 15px 0 0;">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Alamat</h6>
+                            <p class="text-muted small mb-0">Jl. Sudirman No 123, Kota Kopi</p>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start mb-3">
+                        <div class="feature-icon-wrapper" style="width: 45px; height: 45px; font-size: 1.2rem; margin: 0 15px 0 0;">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Jam Operasional</h6>
+                            <p class="text-muted small mb-0">Setiap Hari: 08.00 - 23.00 WIB</p>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start mb-3">
+                        <div class="feature-icon-wrapper" style="width: 45px; height: 45px; font-size: 1.2rem; margin: 0 15px 0 0;">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Kontak</h6>
+                            <p class="text-muted small mb-0">+62 812 3456 7890</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7">
+                <div class="rounded-4 shadow-lg overflow-hidden position-relative" style="height: 400px; background-color: var(--bg-warm);">
+                    <div id="about-gmaps-container" class="w-100 h-100">
+                        <div class="d-flex align-items-center justify-content-center h-100 text-secondary">
+                            <div class="text-center">
+                                <div class="spinner-border text-kopi mb-3" role="status"></div>
+                                <div>Memuat peta interaktif...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch Google Maps Embed URL from API (Distributed System Approach)
+    fetch('/api/location')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('about-gmaps-container');
+            if(data.success && data.embed_url) {
+                container.innerHTML = `<iframe src="${data.embed_url}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+            } else {
+                container.innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-secondary"><i class="bi bi-exclamation-triangle me-2"></i> Peta tidak tersedia</div>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching location:', error);
+            document.getElementById('about-gmaps-container').innerHTML = `<div class="d-flex align-items-center justify-content-center h-100 text-secondary"><i class="bi bi-x-circle me-2"></i> Gagal memuat peta</div>`;
+        });
+});
+</script>
+@endpush
 @endsection

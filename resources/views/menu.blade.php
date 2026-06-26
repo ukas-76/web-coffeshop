@@ -45,7 +45,7 @@
 
 @section('content')
 <!-- Header Halaman -->
-<div class="page-header mb-5" style="margin-top: 76px;">
+<div class="page-header mb-5">
     <div class="container">
         <h1 class="fw-bold display-4 mb-3">Katalog Rasa</h1>
         <p class="lead opacity-90 mx-auto" style="max-width: 600px;">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>

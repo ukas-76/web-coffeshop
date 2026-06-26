@@ -298,6 +298,11 @@
             <i class="bi bi-table"></i> Manajemen Meja
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('admin/settings') ? 'active' : '' }}" href="{{ url('/admin/settings') }}">
+            <i class="bi bi-gear-fill"></i> Pengaturan
+        </a>
+    </li>
 </ul>
 
         <div class="position-absolute bottom-0 w-100 p-3">

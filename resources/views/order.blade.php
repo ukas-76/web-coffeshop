@@ -62,7 +62,7 @@
 
 
 @section('content')
-<div class="page-header mb-5" style="margin-top: 76px;">
+<div class="page-header mb-5">
     <div class="container">
         <h1 class="fw-bold display-5 mb-2">Layanan Delivery & Pick-Up</h1>
         <p class="lead opacity-75">Nikmati perpaduan rasa yang kaya dan aroma yang memikat dalam setiap cangkir, diseduh khusus untuk menemani setiap momen spesial Anda.</p>
@@ -70,18 +70,6 @@
 </div>
 
 <main class="container mb-5 position-relative">
-    <div class="login-overlay text-center p-4" id="loginProtectOverlay">
-        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm mx-auto mb-4" style="width: 80px; height: 80px;">
-            <i class="bi bi-lock-fill fs-1 text-kopi"></i>
-        </div>
-        <h3 class="fw-bold text-dark mb-3">Login Diperlukan</h3>
-        <p class="text-secondary mb-4" style="max-width: 400px;">Anda harus masuk ke akun Anda terlebih dahulu untuk dapat melakukan pemesanan online.</p>
-        <a href="{{ url('/login') }}" class="btn btn-kopi px-5 py-3 fw-bold rounded-pill btn-lg shadow-sm">Masuk Sekarang</a>
-        <button class="btn btn-link text-muted mt-3 small text-decoration-none" onclick="document.getElementById('loginProtectOverlay').style.display = 'none';">
-            [Mode Pratinjau: Sembunyikan Dialog]
-        </button>
-    </div>
-
     <div class="row g-4">
         
         <div class="col-lg-8">
@@ -178,15 +166,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-
-        const overlay = document.getElementById('loginProtectOverlay');
-        const isUserLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
-        
-        if (isUserLoggedIn) {
-            if (overlay) overlay.style.display = 'none';
-        } else {
-            if (overlay) overlay.style.display = 'flex';
-        }
 
         const products = document.querySelectorAll('.product-card');
         const cartItemsContainer = document.getElementById('cart-items');

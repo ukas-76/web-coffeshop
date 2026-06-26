@@ -166,7 +166,7 @@
 @endpush
 
 @section('content')
-<main style="padding-top: 76px;">
+<div>
     <!-- Hero Section Bergeser / Carousel -->
     <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-indicators">
@@ -275,7 +275,7 @@
     @foreach($promos as $promo)
     <div class="col-md-6 col-lg-4">
         <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-            <img src="{{ $promo->gambar ?? 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $promo->judul }}" style="height: 220px; object-fit: cover;">
+            <img src="{{ $promo->gambar ? asset('uploads/promo/' . $promo->gambar) : 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $promo->judul }}" style="height: 220px; object-fit: cover;">
             <div class="card-body p-4 position-relative bg-white pt-5">
                 <span class="badge bg-danger rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;">
                     <i class="bi bi-clock me-1"></i> {{ $promo->badge_teks }}
@@ -292,7 +292,7 @@
     @foreach($events as $event)
     <div class="col-md-6 col-lg-4">
         <div class="card h-100 border-0 rounded-4 shadow-sm overflow-hidden">
-            <img src="{{ $event->gambar ?? 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $event->judul }}" style="height: 220px; object-fit: cover;">
+            <img src="{{ $event->gambar ? asset('uploads/event/' . $event->gambar) : 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" class="card-img-top" alt="{{ $event->judul }}" style="height: 220px; object-fit: cover;">
             <div class="card-body p-4 position-relative bg-white pt-5">
                 <span class="badge bg-kopi rounded-pill px-3 py-2 position-absolute shadow-sm" style="top: -15px; left: 24px; font-size: 0.85rem;">
                     <i class="bi bi-calendar-event me-1"></i> {{ $event->badge_teks }}
@@ -325,5 +325,5 @@
             </div>
         </div>
     </div>
-</main>
+</div>
 @endsection
