@@ -18,3 +18,6 @@ Route::get('/location', function () {
     ]);
 });
 
+use App\Http\Controllers\ReservasiController;
+Route::get('/cek-ketersediaan-meja', [ReservasiController::class, 'cekKetersediaan']);
+

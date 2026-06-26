@@ -61,12 +61,14 @@ class ProfileController extends Controller
         // 3. Ambil riwayat Pesanan Online (Delivery & Pickup) untuk tabel
         $riwayatPesanan = Reservasi::where('pengguna_id', $user->id)
             ->whereIn('jenis_pesanan', ['delivery', 'pickup'])
+            ->with('detailReservasi.menu')
             ->orderBy('created_at', 'desc')
             ->get();
 
         // 4. Ambil riwayat Reservasi Meja (Dine-in) untuk tabel
         $riwayatReservasi = Reservasi::where('pengguna_id', $user->id)
             ->where('jenis_pesanan', 'dine_in')
+            ->with('detailReservasi.menu')
             ->orderBy('created_at', 'desc')
             ->get();
 

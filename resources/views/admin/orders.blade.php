@@ -60,6 +60,8 @@
             <option value="all">Semua Status</option>
             <option value="menunggu">Menunggu</option>
             <option value="diproses">Diproses</option>
+            <option value="ready_diambil">Ready (Siap Diambil)</option>
+            <option value="sedang_diantar">Sedang Diantar</option>
             <option value="selesai">Selesai</option>
             <option value="dibatalkan">Dibatalkan</option>
         </select>
@@ -104,8 +106,8 @@
                         @endif
                     </td>
                     
-                    {{-- Harga sementara menampilkan ongkir (nanti disambung ke tabel pembayaran) --}}
-                    <td class="fw-bold">Rp {{ number_format($pesanan->ongkir ?? 0, 0, ',', '.') }}</td>
+                    {{-- Harga pesanan --}}
+                    <td class="fw-bold">Rp {{ number_format($pesanan->total_harga ?? 0, 0, ',', '.') }}</td>
                     
                     {{-- Logika warna badge berdasarkan status --}}
                     <td>
@@ -113,6 +115,10 @@
                             <span class="badge-status badge-completed">Selesai</span>
                         @elseif($pesanan->status == 'dibatalkan')
                             <span class="badge bg-danger text-white border-0">Dibatalkan</span>
+                        @elseif($pesanan->status == 'ready_diambil')
+                            <span class="badge bg-success text-white border-0">Ready (Siap Diambil)</span>
+                        @elseif($pesanan->status == 'sedang_diantar')
+                            <span class="badge bg-primary text-white border-0">Sedang Diantar</span>
                         @else
                             {{-- Status menunggu / dikonfirmasi --}}
                             <span class="badge-status badge-pending">{{ ucfirst($pesanan->status ?? 'Diproses') }}</span>
@@ -171,6 +177,8 @@
                     <select name="status" class="form-select bg-dark text-white border-secondary">
                         <option value="menunggu" {{ $pesanan->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
                         <option value="diproses" {{ $pesanan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                        <option value="ready_diambil" {{ $pesanan->status == 'ready_diambil' ? 'selected' : '' }}>Ready (Siap Diambil)</option>
+                        <option value="sedang_diantar" {{ $pesanan->status == 'sedang_diantar' ? 'selected' : '' }}>Sedang Diantar</option>
                         <option value="selesai" {{ $pesanan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
                         <option value="dibatalkan" {{ $pesanan->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                     </select>
@@ -211,13 +219,38 @@
                             <span class="text-white">{{ $pesanan->alamat_pengiriman ?? 'Ambil di Toko (Pick-up)' }}</span>
                         </div>
                     </div>
+                    <hr class="border-secondary my-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted d-block">Metode Pembayaran</small>
+                            <span class="text-white fw-bold">{{ ucfirst($pesanan->pembayaran->metode_pembayaran ?? 'Belum Dibayar') }}</span>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Total Tagihan</small>
+                            <span class="text-info fw-bold fs-5">Rp {{ number_format($pesanan->total_harga ?? 0, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+                    </div>
                 </div>
                 
                 <h6 class="text-white mb-2">Daftar Menu:</h6>
-                <div class="text-center py-4 text-muted border border-secondary rounded mb-3" style="border-style: dashed !important;">
-                    <i class="bi bi-cart4 fs-3 d-block mb-2"></i>
-                    <small>Daftar pesanan menu akan segera disambungkan ke tabel detail_reservasi.</small>
-                </div>
+                @if($pesanan->detailReservasi->isNotEmpty())
+                    <div class="p-3 rounded mb-3" style="background-color: rgba(255,255,255,0.05);">
+                        <ul class="list-unstyled mb-0">
+                            @foreach($pesanan->detailReservasi as $detail)
+                            <li class="d-flex justify-content-between mb-2 pb-2 border-bottom border-secondary">
+                                <span class="text-white">{{ $detail->jumlah }}x {{ $detail->menu->nama ?? 'Menu Terhapus' }}</span>
+                                <span class="text-info">Rp {{ number_format($detail->subtotal ?? ($detail->jumlah * $detail->harga_saat_reservasi), 0, ',', '.') }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @else
+                    <div class="text-center py-4 text-muted border border-secondary rounded mb-3" style="border-style: dashed !important;">
+                        <i class="bi bi-cart4 fs-3 d-block mb-2"></i>
+                        <small>Tidak ada data detail pesanan.</small>
+                    </div>
+                @endif
             </div>
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>

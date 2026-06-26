@@ -189,7 +189,7 @@
                             
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 rounded-4 p-2" aria-labelledby="dropdownUser">
                                 <li><a class="dropdown-item rounded-3 mb-1 bg-kopi-light text-kopi fw-bold" href="{{ url('/profile') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a></li>
-                                <li><a class="dropdown-item rounded-3 mb-1" href="{{ url('/order') }}"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
+                                <li><a class="dropdown-item rounded-3 mb-1" href="{{ url('/pesanan-saya') }}"><i class="bi bi-bag-check me-2 text-secondary"></i>Pesanan Saya</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" id="logoutForm" class="d-none">

@@ -56,4 +56,37 @@ class ReservasiController extends Controller
         // 3. Redirect kembali dengan pesan sukses
         return redirect()->route('pembayaran.atau.riwayat')->with('success', 'Reservasi meja berhasil dibuat! Silakan lakukan pembayaran DP.');
     }
+
+    /**
+     * API Cek ketersediaan meja dinamis (AJAX)
+     */
+    public function cekKetersediaan(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $jam = $request->jam;
+        
+        if(!$tanggal || !$jam) {
+            return response()->json(['meja_terpakai' => []]);
+        }
+        
+        // Asumsi durasi reservasi adalah 2 jam (7200 detik)
+        $jamSelesaiReq = date('H:i', strtotime($jam) + 7200);
+
+        $mejaTerpakai = Reservasi::where('tanggal_reservasi', $tanggal)
+            ->where(function($query) use ($jam, $jamSelesaiReq) {
+                $query->whereBetween('jam_mulai', [$jam, $jamSelesaiReq])
+                      ->orWhereBetween('jam_selesai', [$jam, $jamSelesaiReq])
+                      ->orWhere(function($q) use ($jam, $jamSelesaiReq) {
+                          $q->where('jam_mulai', '<=', $jam)
+                            ->where('jam_selesai', '>=', $jamSelesaiReq);
+                      });
+            })
+            ->whereNotIn('status', ['dibatalkan'])
+            ->pluck('meja_id')
+            ->toArray();
+            
+        return response()->json([
+            'meja_terpakai' => $mejaTerpakai
+        ]);
+    }
 }
